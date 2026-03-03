@@ -3,18 +3,24 @@ import { useOutletContext } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Package, Clock } from "lucide-react";
+import { Package, Clock, RefreshCw, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { Order } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const statusGroups = [
+  { key: "new", label: "New", color: "bg-primary/10 text-primary" },
   { key: "in_progress", label: "In Progress", color: "bg-primary/10 text-primary" },
   { key: "waiting_review", label: "Waiting for Review", color: "bg-warning/10 text-warning" },
+  { key: "on_hold", label: "On Hold", color: "bg-muted text-muted-foreground" },
   { key: "completed", label: "Completed", color: "bg-success/10 text-success" },
-  { key: "canceled", label: "Canceled", color: "bg-muted text-muted-foreground" },
+  { key: "shipped", label: "Shipped", color: "bg-success/10 text-success" },
+  { key: "delivered", label: "Delivered", color: "bg-success/10 text-success" },
+  { key: "canceled", label: "Canceled", color: "bg-destructive/10 text-destructive" },
 ];
 
 function OrderRow({ order, index }: { order: Order; index: number }) {
@@ -29,19 +35,31 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       onClick={() => navigate(`/orders/${order.id}`)}
       className="flex items-center justify-between p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
-      <div className="flex items-center gap-3 min-w-0">
-        <div className="min-w-0">
-          <p className="text-sm font-medium truncate">{order.patient_name}</p>
-          <p className="text-xs text-muted-foreground">{order.case_type} • {order.lab_type}</p>
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 mb-0.5">
+            <p className="text-sm font-medium truncate">{order.patient_name}</p>
+            {order.is_resubmitted && (
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
+                <RefreshCw className="h-2.5 w-2.5" /> Resub
+              </Badge>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">{order.case_type} • {order.lab_type} • {order.crown_type}</p>
         </div>
       </div>
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <User className="h-3 w-3" />
+          <span>{order.designer_name || "—"}</span>
+        </div>
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <Clock className={`h-3 w-3 ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`} />
           <span className={isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}>{timeLeft}</span>
         </div>
+        <span className="text-xs text-muted-foreground">{order.shipping_type}</span>
         <PriorityBadge priority={order.priority} />
-        <span className="text-xs text-muted-foreground">{order.id}</span>
+        <span className="text-xs text-muted-foreground w-24 text-right">{order.id}</span>
       </div>
     </motion.div>
   );
@@ -52,21 +70,27 @@ export default function OrdersPage() {
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [labFilter, setLabFilter] = useState<string>("all");
+  const [priorityFilter, setPriorityFilter] = useState<string>("all");
+  const [resubFilter, setResubFilter] = useState<string>("all");
+  const [localSearch, setLocalSearch] = useState("");
 
   const labs = useMemo(() => [...new Set(orders.map((o) => o.lab_type))], [orders]);
 
   const filtered = useMemo(() => {
     let result = orders;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    const q = (searchQuery || localSearch).toLowerCase();
+    if (q) {
       result = result.filter(
         (o) => o.patient_name.toLowerCase().includes(q) || o.id.toLowerCase().includes(q)
       );
     }
     if (statusFilter !== "all") result = result.filter((o) => o.status === statusFilter);
     if (labFilter !== "all") result = result.filter((o) => o.lab_type === labFilter);
+    if (priorityFilter !== "all") result = result.filter((o) => o.priority === priorityFilter);
+    if (resubFilter === "yes") result = result.filter((o) => o.is_resubmitted);
+    if (resubFilter === "no") result = result.filter((o) => !o.is_resubmitted);
     return result;
-  }, [orders, searchQuery, statusFilter, labFilter]);
+  }, [orders, searchQuery, localSearch, statusFilter, labFilter, priorityFilter, resubFilter]);
 
   const grouped = useMemo(() => {
     return statusGroups.map((group) => ({
@@ -77,35 +101,55 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-xl font-bold">Orders</h1>
           <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} orders</p>
         </div>
-        <div className="flex gap-2">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[140px] h-8 text-xs">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              {statusGroups.map((s) => (
-                <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={labFilter} onValueChange={setLabFilter}>
-            <SelectTrigger className="w-[140px] h-8 text-xs">
-              <SelectValue placeholder="Lab" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Labs</SelectItem>
-              {labs.map((l) => (
-                <SelectItem key={l} value={l}>{l}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center gap-2 flex-wrap mb-4">
+        <div className="relative flex-1 min-w-[180px] max-w-xs">
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search patient, order ID..."
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            className="pl-8 h-8 text-xs bg-secondary border-0"
+          />
         </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            {statusGroups.map((s) => <SelectItem key={s.key} value={s.key}>{s.label}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={labFilter} onValueChange={setLabFilter}>
+          <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue placeholder="Lab" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Labs</SelectItem>
+            {labs.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+          <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue placeholder="Priority" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priority</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="low">Low</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={resubFilter} onValueChange={setResubFilter}>
+          <SelectTrigger className="w-[130px] h-8 text-xs"><SelectValue placeholder="Resubmitted" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="yes">Resubmitted</SelectItem>
+            <SelectItem value="no">Not Resubmitted</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {grouped.length === 0 ? (
