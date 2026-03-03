@@ -18,7 +18,7 @@ export default function CompletedPage() {
           <p className="font-medium">No completed tasks yet</p>
         </div>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {completed.map((task, i) => (
             <TaskCard key={task.id} task={task} index={i} />
           ))}
