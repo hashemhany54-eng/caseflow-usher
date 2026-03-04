@@ -3,11 +3,13 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
 interface TaskFiltersBarProps {
+  categoryFilter: string;
   taskTypeFilter: string;
   statusFilter: string;
   priorityFilter: string;
   labFilter: string;
   localSearch: string;
+  onCategoryChange: (v: string) => void;
   onTaskTypeChange: (v: string) => void;
   onStatusChange: (v: string) => void;
   onPriorityChange: (v: string) => void;
@@ -18,12 +20,22 @@ interface TaskFiltersBarProps {
 }
 
 export function TaskFiltersBar({
-  taskTypeFilter, statusFilter, priorityFilter, labFilter, localSearch,
-  onTaskTypeChange, onStatusChange, onPriorityChange, onLabChange, onLocalSearchChange,
+  categoryFilter, taskTypeFilter, statusFilter, priorityFilter, labFilter, localSearch,
+  onCategoryChange, onTaskTypeChange, onStatusChange, onPriorityChange, onLabChange, onLocalSearchChange,
   taskTypes, labs,
 }: TaskFiltersBarProps) {
   return (
     <div className="flex items-center gap-2 flex-wrap mb-4">
+      <Select value={categoryFilter} onValueChange={onCategoryChange}>
+        <SelectTrigger className="w-[180px] h-8 text-xs"><SelectValue placeholder="Task Category" /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="my_tasks">Your Tasks</SelectItem>
+          <SelectItem value="completed">Completed Tasks</SelectItem>
+          <SelectItem value="assigned_others">Assigned to Other</SelectItem>
+          <SelectItem value="all">All Assigned</SelectItem>
+          <SelectItem value="waiting_practice">Waiting on Practice</SelectItem>
+        </SelectContent>
+      </Select>
       <div className="relative flex-1 min-w-[180px] max-w-xs">
         <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
         <Input
