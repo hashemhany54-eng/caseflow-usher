@@ -1,6 +1,6 @@
 import { Task } from "@/types";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Scissors, RefreshCw, Check } from "lucide-react";
+import { Scissors, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { mockTimeline } from "@/data/mockData";
@@ -11,10 +11,10 @@ const stageLabels: Record<string, string> = {
   design: "Design",
   qc: "QC",
   preview: "Preview",
-  model: "Model"
+  model: "Model",
 };
 
-export function TaskCard({ task, index }: {task: Task;index: number;}) {
+export function TaskCard({ task, index }: { task: Task; index: number }) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
@@ -35,11 +35,11 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
     return "Just now";
   };
 
-  const priorityDot = order?.priority === "high" ?
-  "bg-destructive" :
-  order?.priority === "medium" ?
-  "bg-warning" :
-  "bg-muted-foreground/30";
+  const priorityDot = order?.priority === "high"
+    ? "bg-destructive"
+    : order?.priority === "medium"
+    ? "bg-warning"
+    : "bg-muted-foreground/30";
 
   // Extract design level number
   const designLevel = order?.design_level || "Standard";
@@ -51,17 +51,17 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02, duration: 0.15 }}
       onClick={() => navigate(`/tasks/${task.id}`)}
-      className={`group cursor-pointer rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 transition-all ${borderClass}`}>
-      
+      className={`group cursor-pointer rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 transition-all ${borderClass}`}
+    >
       {/* Desktop row */}
       <div className="hidden lg:flex items-stretch min-h-[72px]">
         {/* Designer Level */}
-        
-
-
-
-
-        
+        <div className="flex items-center justify-center px-3 py-2 w-[52px] shrink-0 border-r border-border/50">
+          <div className="flex flex-col items-center gap-0.5">
+            <span className="text-[10px] text-muted-foreground leading-none">LVL</span>
+            <span className="text-sm font-bold text-foreground">{levelNum}</span>
+          </div>
+        </div>
 
         {/* Task Type + Due + Flags */}
         <div className="flex flex-col justify-center gap-0.5 px-3 py-2 min-w-[164px] w-[180px] shrink-0 border-r border-border/50">
@@ -77,16 +77,16 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
             {isOverdue ? timeLeft : isUrgent ? timeLeft : "On schedule"}
           </p>
           <div className="flex items-center gap-1">
-            {order?.is_split &&
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
+            {order?.is_split && (
+              <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
                 <Scissors className="h-2.5 w-2.5" /> Split
               </span>
-            }
-            {order?.is_resubmitted &&
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
+            )}
+            {order?.is_resubmitted && (
+              <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
                 <RefreshCw className="h-2.5 w-2.5" /> Resub
               </span>
-            }
+            )}
           </div>
         </div>
 
@@ -97,14 +97,14 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
           </div>
           <div className="min-w-0">
             <p className="text-xs font-medium truncate">{order?.patient_name}</p>
-            {order?.patient_age &&
-            <p className="text-[10px] text-muted-foreground">{order.patient_age}y</p>
-            }
+            {order?.patient_age && (
+              <p className="text-[10px] text-muted-foreground">{order.patient_age}y</p>
+            )}
           </div>
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-3 py-2 min-w-[180px] flex-1 border-r border-border/50">
+        <div className="flex flex-col justify-center px-3 py-2 min-w-[148px] flex-1 border-r border-border/50">
           <span className="text-xs font-medium">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
@@ -118,46 +118,34 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
           <span className="text-[10px] text-muted-foreground font-medium">{order?.lab_type}</span>
         </div>
 
-        {/* Timeline Stepper - pill style */}
-        <div className="flex items-center px-3 py-2 min-w-[300px] flex-1">
-          <div className="flex items-center w-full">
-            {stages.map((stage, i) => {
+        {/* Timeline Stepper - bar style */}
+        <div className="flex items-center px-3 py-2 min-w-[340px] flex-[1.5]">
+          <div className="flex w-full gap-3">
+            {stages.map((stage) => {
               const done = completedStages.has(stage as any);
+              const stageEvent = timeline.find((t) => t.stage === stage);
               return (
-                <div key={stage} className="flex items-center flex-1">
-                  <div className="flex flex-col items-center gap-0.5 min-w-[44px]">
-                    <div
-                      className={`h-5 w-5 rounded-md flex items-center justify-center transition-colors ${
-                      done ?
-                      "bg-success text-success-foreground" :
-                      "bg-muted text-muted-foreground"}`
-                      }>
-                      
-                      {done ?
-                      <Check className="h-3 w-3" /> :
-
-                      <span className="text-[9px] font-medium">{i + 1}</span>
-                      }
-                    </div>
-                    <span className="text-[8px] text-muted-foreground text-center leading-tight whitespace-nowrap">
-                      {stageLabels[stage]}
+                <div key={stage} className="flex-1 flex flex-col gap-1">
+                  <div
+                    className={`h-[3px] w-full rounded-full ${
+                      done ? "bg-foreground" : "bg-muted"
+                    }`}
+                  />
+                  <span className="text-[11px] font-medium text-foreground leading-tight">
+                    {stageLabels[stage]}
+                  </span>
+                  {stage === "order_placed" && orderPlacedEvent && (
+                    <span className="text-[10px] text-muted-foreground leading-none">
+                      {formatRelativeTime(orderPlacedEvent.timestamp)}
                     </span>
-                    {stage === "order_placed" && orderPlacedEvent &&
-                    <span className="text-[8px] text-muted-foreground leading-none">
-                        {formatRelativeTime(orderPlacedEvent.timestamp)}
-                      </span>
-                    }
-                    {stage === "design" && order?.designer_name &&
-                    <span className="text-[8px] text-muted-foreground truncate max-w-[56px] leading-none">
-                        {order.designer_name}
-                      </span>
-                    }
-                  </div>
-                  {i < stages.length - 1 &&
-                  <div className={`flex-1 h-0.5 mx-0.5 rounded-full ${done ? "bg-success" : "bg-border"}`} />
-                  }
-                </div>);
-
+                  )}
+                  {stage === "design" && order?.designer_name && (
+                    <span className="text-[10px] text-muted-foreground leading-none truncate">
+                      {order.designer_name}
+                    </span>
+                  )}
+                </div>
+              );
             })}
           </div>
         </div>
@@ -196,31 +184,32 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
           </div>
         </div>
 
-        {/* Mini stepper */}
-        <div className="flex items-center gap-0.5">
-          {stages.map((stage, i) => {
+        {/* Mini stepper - bar style */}
+        <div className="flex gap-2">
+          {stages.map((stage) => {
             const done = completedStages.has(stage as any);
             return (
-              <div key={stage} className="flex items-center flex-1">
-                <div className={`h-1.5 flex-1 rounded-full ${done ? "bg-success" : "bg-border"}`} />
-              </div>);
-
+              <div key={stage} className="flex-1 flex flex-col gap-0.5">
+                <div className={`h-[2px] w-full rounded-full ${done ? "bg-foreground" : "bg-muted"}`} />
+                <span className="text-[9px] text-muted-foreground leading-tight">{stageLabels[stage]}</span>
+              </div>
+            );
           })}
         </div>
 
         <div className="flex items-center gap-1">
-          {order?.is_split &&
-          <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
+          {order?.is_split && (
+            <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
               <Scissors className="h-2.5 w-2.5" /> Split
             </span>
-          }
-          {order?.is_resubmitted &&
-          <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
+          )}
+          {order?.is_resubmitted && (
+            <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
               <RefreshCw className="h-2.5 w-2.5" /> Resub
             </span>
-          }
+          )}
         </div>
       </div>
-    </motion.div>);
-
+    </motion.div>
+  );
 }
