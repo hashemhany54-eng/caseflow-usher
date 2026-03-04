@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   role: "doctor" | "designer";
-  status: "active" | "offline";
+  status: "active" | "offline" | "away" | "pause" | "busy";
   avatar: string;
 }
 

@@ -7,6 +7,7 @@ interface AppState {
   tasks: Task[];
   orders: Order[];
   toggleStatus: () => void;
+  setStatus: (status: User["status"]) => void;
   completeTask: (taskId: string) => void;
   skipTask: (taskId: string) => void;
 }
@@ -22,6 +23,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUser((prev) => ({ ...prev, status: prev.status === "active" ? "offline" : "active" }));
   }, []);
 
+  const setStatus = useCallback((status: User["status"]) => {
+    setUser((prev) => ({ ...prev, status }));
+  }, []);
+
   const completeTask = useCallback((taskId: string) => {
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: "completed" as const } : t)));
   }, []);
@@ -31,7 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ user, tasks, orders, toggleStatus, completeTask, skipTask }}>
+    <AppContext.Provider value={{ user, tasks, orders, toggleStatus, setStatus, completeTask, skipTask }}>
       {children}
     </AppContext.Provider>
   );
