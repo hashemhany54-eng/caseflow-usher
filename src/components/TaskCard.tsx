@@ -104,11 +104,11 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-3 py-2 min-w-[120px] w-[140px] shrink-0 border-r border-border/50">
-          <span className="text-xs font-medium truncate">
+        <div className="flex flex-col justify-center px-3 py-2 min-w-[148px] flex-1 border-r border-border/50">
+          <span className="text-xs font-medium">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
-          <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
+          <p className="text-[10px] text-muted-foreground mt-0.5">
             {order?.case_type} • {order?.design_level || "Level 1"}
           </p>
         </div>
@@ -119,7 +119,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
         </div>
 
         {/* Timeline Stepper - bar style */}
-        <div className="flex items-center px-3 py-2 min-w-[300px] flex-1">
+        <div className="flex items-center px-3 py-2 min-w-[340px] flex-[1.5]">
           <div className="flex w-full gap-3">
             {stages.map((stage) => {
               const done = completedStages.has(stage as any);
