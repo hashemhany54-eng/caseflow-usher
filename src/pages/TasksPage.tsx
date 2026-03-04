@@ -19,7 +19,6 @@ export default function TasksPage() {
   const taskTypes = useMemo(() => [...new Set(tasks.map((t) => t.task_type).filter(Boolean) as string[])], [tasks]);
   const labs = useMemo(() => [...new Set(tasks.map((t) => t.order?.lab_type).filter(Boolean) as string[])], [tasks]);
 
-  // Category filtering
   const categoryFiltered = useMemo(() => {
     switch (activeCategory) {
       case "my_tasks": return tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
@@ -31,7 +30,6 @@ export default function TasksPage() {
     }
   }, [tasks, activeCategory]);
 
-  // Additional filters
   const sortedTasks = useMemo(() => {
     let filtered = categoryFiltered;
     const q = (searchQuery || localSearch).toLowerCase();
@@ -57,14 +55,12 @@ export default function TasksPage() {
   }, [categoryFiltered, searchQuery, localSearch, taskTypeFilter, statusFilter, priorityFilter, labFilter]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)]">
-      <div className="flex-1 overflow-auto p-4 md:p-6">
-        <div className="mb-4">
-          <h1 className="text-xl font-bold">Tasks</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {sortedTasks.length} {sortedTasks.length === 1 ? "task" : "tasks"}
-          </p>
-        </div>
+    <div className="flex flex-col h-[calc(100vh-3rem)]">
+      <div className="flex-1 overflow-auto px-4 py-4 md:px-6">
+        <h1 className="text-lg font-bold mb-1">Tasks</h1>
+        <p className="text-xs text-muted-foreground mb-4">
+          {sortedTasks.length} {sortedTasks.length === 1 ? "task" : "tasks"}
+        </p>
 
         <TaskFiltersBar
           categoryFilter={activeCategory}
@@ -84,10 +80,10 @@ export default function TasksPage() {
         />
 
         {sortedTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <ClipboardList className="h-12 w-12 mb-3 opacity-30" />
-            <p className="font-medium">No tasks found</p>
-            <p className="text-sm">Try adjusting your filters</p>
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+            <p className="font-medium text-sm">No tasks found</p>
+            <p className="text-xs">Try adjusting your filters</p>
           </div>
         ) : (
           <div className="flex flex-col gap-2">

@@ -27,7 +27,7 @@ export function TaskFiltersBar({
   return (
     <div className="flex items-center gap-2 flex-wrap mb-4">
       <Select value={categoryFilter} onValueChange={onCategoryChange}>
-        <SelectTrigger className="w-[180px] h-8 text-xs"><SelectValue placeholder="Task Category" /></SelectTrigger>
+        <SelectTrigger className="w-[168px] h-8 text-xs"><SelectValue placeholder="Task Category" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="my_tasks">Your Tasks</SelectItem>
           <SelectItem value="completed">Completed Tasks</SelectItem>
@@ -36,24 +36,24 @@ export function TaskFiltersBar({
           <SelectItem value="waiting_practice">Waiting on Practice</SelectItem>
         </SelectContent>
       </Select>
-      <div className="relative flex-1 min-w-[180px] max-w-xs">
-        <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+      <div className="relative flex-1 min-w-[160px] max-w-[240px]">
+        <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search patient..."
           value={localSearch}
           onChange={(e) => onLocalSearchChange(e.target.value)}
-          className="pl-8 h-8 text-xs bg-secondary border-0"
+          className="pl-7 h-8 text-xs bg-secondary border-0"
         />
       </div>
       <Select value={taskTypeFilter} onValueChange={onTaskTypeChange}>
-        <SelectTrigger className="w-[150px] h-8 text-xs"><SelectValue placeholder="Task Type" /></SelectTrigger>
+        <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue placeholder="Task Type" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Types</SelectItem>
           {taskTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
         </SelectContent>
       </Select>
       <Select value={statusFilter} onValueChange={onStatusChange}>
-        <SelectTrigger className="w-[130px] h-8 text-xs"><SelectValue placeholder="Status" /></SelectTrigger>
+        <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue placeholder="Status" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Status</SelectItem>
           <SelectItem value="pending">Pending</SelectItem>
@@ -63,7 +63,7 @@ export function TaskFiltersBar({
         </SelectContent>
       </Select>
       <Select value={priorityFilter} onValueChange={onPriorityChange}>
-        <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue placeholder="Priority" /></SelectTrigger>
+        <SelectTrigger className="w-[112px] h-8 text-xs"><SelectValue placeholder="Priority" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Priority</SelectItem>
           <SelectItem value="high">High</SelectItem>
@@ -72,7 +72,7 @@ export function TaskFiltersBar({
         </SelectContent>
       </Select>
       <Select value={labFilter} onValueChange={onLabChange}>
-        <SelectTrigger className="w-[120px] h-8 text-xs"><SelectValue placeholder="Lab" /></SelectTrigger>
+        <SelectTrigger className="w-[112px] h-8 text-xs"><SelectValue placeholder="Lab" /></SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Labs</SelectItem>
           {labs.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
