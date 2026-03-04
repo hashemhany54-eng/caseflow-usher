@@ -121,7 +121,7 @@ export default function TasksPage() {
             <p className="text-sm">Try adjusting your filters</p>
           </div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="flex flex-col gap-2">
             {sortedTasks.map((task, i) => (
               <TaskCard key={task.id} task={task} index={i} />
             ))}
