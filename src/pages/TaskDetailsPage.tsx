@@ -58,7 +58,10 @@ export default function TaskDetailsPage() {
   return (
     <Tabs defaultValue="order" className="flex flex-col h-[calc(100vh-3.5rem)] -m-4 md:-m-6">
       {/* Primary Tabs - Pinned at top */}
-      <div className="border-b bg-background px-4 md:px-6 shrink-0">
+      <div className="border-b bg-background px-4 md:px-6 shrink-0 flex items-center gap-3">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0">
+          <ArrowLeft className="h-4 w-4" /> Back
+        </button>
         <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0">
           <TabsTrigger value="order" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Order</TabsTrigger>
           <TabsTrigger value="scan" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Scan</TabsTrigger>
@@ -71,13 +74,6 @@ export default function TaskDetailsPage() {
       <div className="flex flex-1 overflow-hidden">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
           <div className="max-w-4xl mx-auto">
-            {/* Back + Flag Scan */}
-            <div className="flex items-center justify-between mb-4">
-              <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <ArrowLeft className="h-4 w-4" /> Back
-              </button>
-              <FlagScanModal />
-            </div>
 
             {/* Resubmitted Banner */}
             {order.is_resubmitted && (
@@ -123,8 +119,12 @@ export default function TaskDetailsPage() {
                   </TabsList>
 
                   <TabsContent value="tat" className="p-5 space-y-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2 className="text-sm font-semibold">Workflow Timeline</h2>
+                      <FlagScanModal />
+                    </div>
                     <DesignTimeline timeline={timeline} />
-                    <DesignReviewCard onReview={handleReview} onSkip={handleSkip} />
+                    <DesignReviewCard onReview={handleReview} />
                   </TabsContent>
 
                   <TabsContent value="status" className="p-5">

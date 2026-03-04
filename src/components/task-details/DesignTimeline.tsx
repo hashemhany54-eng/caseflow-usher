@@ -26,32 +26,24 @@ export function DesignTimeline({ timeline }: Props) {
   }
 
   return (
-    <div>
-      <h2 className="text-sm font-semibold mb-4">Workflow Timeline</h2>
-      <div className="flex items-center justify-between">
-        {stages.map((stage, i) => {
-          const done = completedStages.has(stage as any);
-          const event = timelineByStage[stage];
-          return (
-            <div key={stage} className="flex items-center flex-1">
-              <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors cursor-pointer hover:ring-2 hover:ring-primary/30 ${
-                  done ? "bg-success text-success-foreground" : "bg-muted text-muted-foreground"
-                }`}>
-                  {done ? "✓" : i + 1}
-                </div>
-                <span className="text-[10px] mt-1 text-muted-foreground">{stageLabels[stage]}</span>
-                {event && (
-                  <span className="text-[9px] text-muted-foreground">{event.action_by} • {relativeTime(event.timestamp)}</span>
-                )}
-              </div>
-              {i < stages.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-1 ${done ? "bg-success" : "bg-border"}`} />
-              )}
-            </div>
-          );
-        })}
-      </div>
+    <div className="flex w-full gap-3">
+      {stages.map((stage) => {
+        const done = completedStages.has(stage as any);
+        const event = timelineByStage[stage];
+        return (
+          <div key={stage} className="flex-1 flex flex-col gap-1">
+            <div className={`h-[3px] w-full rounded-full ${done ? "bg-foreground" : "bg-muted"}`} />
+            <span className="text-[11px] font-medium text-foreground leading-tight">
+              {stageLabels[stage]}
+            </span>
+            {event && (
+              <span className="text-[10px] text-muted-foreground leading-none">
+                {event.action_by} • {relativeTime(event.timestamp)}
+              </span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
