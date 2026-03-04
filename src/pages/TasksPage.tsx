@@ -1,7 +1,6 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskFiltersBar } from "@/components/TaskFiltersBar";
-import { TaskCategorySidebar } from "@/components/TaskCategorySidebar";
 import { useOutletContext } from "react-router-dom";
 import { ClipboardList } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -26,38 +25,11 @@ export default function TasksPage() {
       case "my_tasks": return tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
       case "completed": return tasks.filter((t) => t.status === "completed" || t.status === "skipped");
       case "assigned_others": return tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "");
-      case "unassigned": return tasks.filter((t) => !t.assigned_to);
       case "waiting_practice": return tasks.filter((t) => t.order?.status === "on_hold");
-      case "scan_review": return tasks.filter((t) => t.task_type === "Scan Review");
-      case "design_prep": return tasks.filter((t) => t.task_type === "Design Prep");
-      case "design_review": return tasks.filter((t) => t.task_type === "Design Review");
-      case "double_design_qc": return tasks.filter((t) => t.order?.double_qc);
-      case "design_preview_verification": return tasks.filter((t) => t.task_type === "Design Preview Verification");
-      case "order_review": return tasks.filter((t) => t.task_type === "Order Review");
-      case "resolve_hold": return tasks.filter((t) => t.task_type === "Resolve Hold");
-      case "resolve_flagged_scan": return tasks.filter((t) => t.task_type === "Resolve Flagged Scan");
+      case "all": return tasks;
       default: return tasks;
     }
   }, [tasks, activeCategory]);
-
-  // Category counts for sidebar
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    counts.my_tasks = tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped").length;
-    counts.completed = tasks.filter((t) => t.status === "completed" || t.status === "skipped").length;
-    counts.assigned_others = tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "").length;
-    counts.unassigned = tasks.filter((t) => !t.assigned_to).length;
-    counts.waiting_practice = tasks.filter((t) => t.order?.status === "on_hold").length;
-    counts.scan_review = tasks.filter((t) => t.task_type === "Scan Review").length;
-    counts.design_prep = tasks.filter((t) => t.task_type === "Design Prep").length;
-    counts.design_review = tasks.filter((t) => t.task_type === "Design Review").length;
-    counts.double_design_qc = tasks.filter((t) => t.order?.double_qc).length;
-    counts.design_preview_verification = tasks.filter((t) => t.task_type === "Design Preview Verification").length;
-    counts.order_review = tasks.filter((t) => t.task_type === "Order Review").length;
-    counts.resolve_hold = tasks.filter((t) => t.task_type === "Resolve Hold").length;
-    counts.resolve_flagged_scan = tasks.filter((t) => t.task_type === "Resolve Flagged Scan").length;
-    return counts;
-  }, [tasks]);
 
   // Additional filters
   const sortedTasks = useMemo(() => {
@@ -85,12 +57,7 @@ export default function TasksPage() {
   }, [categoryFiltered, searchQuery, localSearch, taskTypeFilter, statusFilter, priorityFilter, labFilter]);
 
   return (
-    <div className="flex -m-4 md:-m-6 h-[calc(100vh-3.5rem)]">
-      <TaskCategorySidebar
-        activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
-        categoryCounts={categoryCounts}
-      />
+    <div className="flex flex-col h-[calc(100vh-3.5rem)]">
       <div className="flex-1 overflow-auto p-4 md:p-6">
         <div className="mb-4">
           <h1 className="text-xl font-bold">Tasks</h1>
@@ -100,11 +67,13 @@ export default function TasksPage() {
         </div>
 
         <TaskFiltersBar
+          categoryFilter={activeCategory}
           taskTypeFilter={taskTypeFilter}
           statusFilter={statusFilter}
           priorityFilter={priorityFilter}
           labFilter={labFilter}
           localSearch={localSearch}
+          onCategoryChange={setActiveCategory}
           onTaskTypeChange={setTaskTypeFilter}
           onStatusChange={setStatusFilter}
           onPriorityChange={setPriorityFilter}
