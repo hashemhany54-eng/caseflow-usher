@@ -2,7 +2,7 @@ import { Order, Task, TimelineEvent, User, ChatMessage, ChatRoom } from "@/types
 
 export const mockUser: User = {
   id: "u1",
-  name: "Dr. Sarah Chen",
+  name: "Dr. Hashem",
   role: "doctor",
   status: "active",
   avatar: "",
