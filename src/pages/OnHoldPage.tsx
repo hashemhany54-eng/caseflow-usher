@@ -8,17 +8,15 @@ export default function OnHoldPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl font-bold">On Hold</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">{onHold.length} cases on hold</p>
-      </div>
+      <h1 className="text-lg font-bold mb-1">On Hold</h1>
+      <p className="text-xs text-muted-foreground mb-4">{onHold.length} cases on hold</p>
       {onHold.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-          <PauseCircle className="h-12 w-12 mb-3 opacity-30" />
-          <p className="font-medium">No cases on hold</p>
+        <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+          <PauseCircle className="h-10 w-10 mb-2 opacity-30" />
+          <p className="font-medium text-sm">No cases on hold</p>
         </div>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="flex flex-col gap-2">
           {onHold.map((task, i) => (
             <TaskCard key={task.id} task={task} index={i} />
           ))}
