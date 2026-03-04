@@ -11,10 +11,10 @@ const stageLabels: Record<string, string> = {
   design: "Design",
   qc: "QC",
   preview: "Preview",
-  model: "Model",
+  model: "Model"
 };
 
-export function TaskCard({ task, index }: { task: Task; index: number }) {
+export function TaskCard({ task, index }: {task: Task;index: number;}) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
@@ -35,11 +35,11 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
     return "Just now";
   };
 
-  const priorityDot = order?.priority === "high"
-    ? "bg-destructive"
-    : order?.priority === "medium"
-    ? "bg-warning"
-    : "bg-muted-foreground/30";
+  const priorityDot = order?.priority === "high" ?
+  "bg-destructive" :
+  order?.priority === "medium" ?
+  "bg-warning" :
+  "bg-muted-foreground/30";
 
   // Extract design level number
   const designLevel = order?.design_level || "Standard";
@@ -51,17 +51,17 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02, duration: 0.15 }}
       onClick={() => navigate(`/tasks/${task.id}`)}
-      className={`group cursor-pointer rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 transition-all ${borderClass}`}
-    >
+      className={`group cursor-pointer rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 transition-all ${borderClass}`}>
+      
       {/* Desktop row */}
       <div className="hidden lg:flex items-stretch min-h-[72px]">
         {/* Designer Level */}
-        <div className="flex items-center justify-center px-3 py-2 w-[52px] shrink-0 border-r border-border/50">
-          <div className="flex flex-col items-center gap-0.5">
-            <span className="text-[10px] text-muted-foreground leading-none">LVL</span>
-            <span className="text-sm font-bold text-foreground">{levelNum}</span>
-          </div>
-        </div>
+        
+
+
+
+
+        
 
         {/* Task Type + Due + Flags */}
         <div className="flex flex-col justify-center gap-0.5 px-3 py-2 min-w-[164px] w-[180px] shrink-0 border-r border-border/50">
@@ -77,16 +77,16 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
             {isOverdue ? timeLeft : isUrgent ? timeLeft : "On schedule"}
           </p>
           <div className="flex items-center gap-1">
-            {order?.is_split && (
-              <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
+            {order?.is_split &&
+            <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
                 <Scissors className="h-2.5 w-2.5" /> Split
               </span>
-            )}
-            {order?.is_resubmitted && (
-              <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
+            }
+            {order?.is_resubmitted &&
+            <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
                 <RefreshCw className="h-2.5 w-2.5" /> Resub
               </span>
-            )}
+            }
           </div>
         </div>
 
@@ -97,9 +97,9 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           </div>
           <div className="min-w-0">
             <p className="text-xs font-medium truncate">{order?.patient_name}</p>
-            {order?.patient_age && (
-              <p className="text-[10px] text-muted-foreground">{order.patient_age}y</p>
-            )}
+            {order?.patient_age &&
+            <p className="text-[10px] text-muted-foreground">{order.patient_age}y</p>
+            }
           </div>
         </div>
 
@@ -128,24 +128,24 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                 <div key={stage} className="flex-1 flex flex-col gap-1">
                   <div
                     className={`h-[3px] w-full rounded-full ${
-                      done ? "bg-foreground" : "bg-muted"
-                    }`}
-                  />
+                    done ? "bg-foreground" : "bg-muted"}`
+                    } />
+                  
                   <span className="text-[11px] font-medium text-foreground leading-tight">
                     {stageLabels[stage]}
                   </span>
-                  {stage === "order_placed" && orderPlacedEvent && (
-                    <span className="text-[10px] text-muted-foreground leading-none">
+                  {stage === "order_placed" && orderPlacedEvent &&
+                  <span className="text-[10px] text-muted-foreground leading-none">
                       {formatRelativeTime(orderPlacedEvent.timestamp)}
                     </span>
-                  )}
-                  {stage === "design" && order?.designer_name && (
-                    <span className="text-[10px] text-muted-foreground leading-none truncate">
+                  }
+                  {stage === "design" && order?.designer_name &&
+                  <span className="text-[10px] text-muted-foreground leading-none truncate">
                       {order.designer_name}
                     </span>
-                  )}
-                </div>
-              );
+                  }
+                </div>);
+
             })}
           </div>
         </div>
@@ -192,24 +192,24 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
               <div key={stage} className="flex-1 flex flex-col gap-0.5">
                 <div className={`h-[2px] w-full rounded-full ${done ? "bg-foreground" : "bg-muted"}`} />
                 <span className="text-[9px] text-muted-foreground leading-tight">{stageLabels[stage]}</span>
-              </div>
-            );
+              </div>);
+
           })}
         </div>
 
         <div className="flex items-center gap-1">
-          {order?.is_split && (
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
+          {order?.is_split &&
+          <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
               <Scissors className="h-2.5 w-2.5" /> Split
             </span>
-          )}
-          {order?.is_resubmitted && (
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
+          }
+          {order?.is_resubmitted &&
+          <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
               <RefreshCw className="h-2.5 w-2.5" /> Resub
             </span>
-          )}
+          }
         </div>
       </div>
-    </motion.div>
-  );
+    </motion.div>);
+
 }
