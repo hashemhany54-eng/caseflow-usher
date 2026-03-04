@@ -26,7 +26,7 @@ export function DesignTimeline({ timeline }: Props) {
   }
 
   return (
-    <div className="rounded-lg border bg-card p-5 mb-4">
+    <div>
       <h2 className="text-sm font-semibold mb-4">Workflow Timeline</h2>
       <div className="flex items-center justify-between">
         {stages.map((stage, i) => {
