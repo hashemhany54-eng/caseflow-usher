@@ -2,12 +2,10 @@ import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { TopBar } from "@/components/TopBar";
-import { ChatPanel } from "@/components/ChatPanel";
 import { useState } from "react";
 
 export function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [chatCollapsed, setChatCollapsed] = useState(false);
 
   return (
     <SidebarProvider>
@@ -20,12 +18,9 @@ export function DashboardLayout() {
               <TopBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
             </div>
           </div>
-          <div className="flex flex-1 min-h-0">
-            <main className="flex-1 overflow-auto p-4 md:p-6">
-              <Outlet context={{ searchQuery }} />
-            </main>
-            <ChatPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
-          </div>
+          <main className="flex-1 overflow-auto p-4 md:p-6">
+            <Outlet context={{ searchQuery }} />
+          </main>
         </div>
       </div>
     </SidebarProvider>
