@@ -103,57 +103,63 @@ export default function TaskDetailsPage() {
             </TabsList>
 
             {/* ORDER TAB */}
-            <TabsContent value="order" className="mt-4">
-              {/* Secondary Tabs */}
-              <Tabs defaultValue="tat">
-                <TabsList className="h-8 bg-transparent border-b rounded-none w-full justify-start gap-0 p-0">
-                  {["TAT", "Status", "Review", "Design", "Zendesk"].map((tab) => (
-                    <TabsTrigger
-                      key={tab}
-                      value={tab.toLowerCase()}
-                      className="text-xs h-8 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4"
-                    >
-                      {tab}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+            <TabsContent value="order" className="mt-4 space-y-4">
+              {/* Doctor & Practice + Order Details */}
+              <DoctorPracticeCard order={order} />
+              <OrderDetailsCard order={order} />
 
-                <TabsContent value="tat" className="mt-4 space-y-0">
-                  <DoctorPracticeCard order={order} />
-                  <OrderDetailsCard order={order} />
-                  <DesignTimeline timeline={timeline} />
-                  <DesignReviewCard onReview={handleReview} onSkip={handleSkip} />
-                  <CaseNoteSummary />
-                  <SummaryAndItems />
-                  <SplitOrdersSection />
-                  <BillingSection />
-                  <OrderScansSection />
-                </TabsContent>
+              {/* Combined Timeline + Review Card with Secondary Tabs */}
+              <div className="rounded-lg border bg-card">
+                <Tabs defaultValue="tat">
+                  <TabsList className="h-9 bg-transparent border-b rounded-none w-full justify-start gap-0 p-0 px-5">
+                    {["TAT", "Status", "Review", "Design", "Zendesk"].map((tab) => (
+                      <TabsTrigger
+                        key={tab}
+                        value={tab.toLowerCase()}
+                        className="text-xs h-9 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4"
+                      >
+                        {tab}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
 
-                <TabsContent value="status" className="mt-4">
-                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
-                    Status tracking view coming soon
-                  </div>
-                </TabsContent>
+                  <TabsContent value="tat" className="p-5 space-y-4">
+                    <DesignTimeline timeline={timeline} />
+                    <DesignReviewCard onReview={handleReview} onSkip={handleSkip} />
+                  </TabsContent>
 
-                <TabsContent value="review" className="mt-4">
-                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
-                    Review history coming soon
-                  </div>
-                </TabsContent>
+                  <TabsContent value="status" className="p-5">
+                    <div className="text-center text-muted-foreground text-sm py-6">
+                      Status tracking view coming soon
+                    </div>
+                  </TabsContent>
 
-                <TabsContent value="design" className="mt-4">
-                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
-                    Design iterations coming soon
-                  </div>
-                </TabsContent>
+                  <TabsContent value="review" className="p-5">
+                    <div className="text-center text-muted-foreground text-sm py-6">
+                      Review history coming soon
+                    </div>
+                  </TabsContent>
 
-                <TabsContent value="zendesk" className="mt-4">
-                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
-                    Zendesk integration coming soon
-                  </div>
-                </TabsContent>
-              </Tabs>
+                  <TabsContent value="design" className="p-5">
+                    <div className="text-center text-muted-foreground text-sm py-6">
+                      Design iterations coming soon
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="zendesk" className="p-5">
+                    <div className="text-center text-muted-foreground text-sm py-6">
+                      Zendesk integration coming soon
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              {/* Remaining sections */}
+              <CaseNoteSummary />
+              <SummaryAndItems />
+              <SplitOrdersSection />
+              <BillingSection />
+              <OrderScansSection />
             </TabsContent>
 
             {/* SCAN TAB */}

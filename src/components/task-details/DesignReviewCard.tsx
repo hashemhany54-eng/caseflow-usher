@@ -8,7 +8,7 @@ interface Props {
 
 export function DesignReviewCard({ onReview, onSkip }: Props) {
   return (
-    <div className="rounded-lg border bg-card p-5 mb-4">
+    <div>
       <h2 className="text-sm font-semibold mb-1">Design Review</h2>
       <p className="text-xs text-muted-foreground mb-3">Design completed by internal designer</p>
       <div className="flex gap-3">
