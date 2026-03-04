@@ -56,7 +56,7 @@ export default function TasksPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3rem)]">
-      <div className="flex-1 overflow-auto px-4 py-0 md:px-0">
+      <div className="flex-1 overflow-auto px-4 py-0 md:px-[4px] pr-0 pl-[4px] mx-0">
         <h1 className="text-lg font-bold mb-1">Tasks</h1>
         <p className="text-xs text-muted-foreground mb-4">
           {sortedTasks.length} {sortedTasks.length === 1 ? "task" : "tasks"}
