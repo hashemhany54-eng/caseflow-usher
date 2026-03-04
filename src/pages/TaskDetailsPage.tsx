@@ -1,26 +1,28 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { PriorityBadge } from "@/components/PriorityBadge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { ChatPanel } from "@/components/ChatPanel";
-import { ArrowLeft, RefreshCw, Calendar, CheckCircle2, SkipForward, Building, MapPin, Smartphone, ScanLine, Scissors, Monitor, Truck, FlaskConical, Layers, Eye, Tag } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useState } from "react";
 
-const stageLabels: Record<string, string> = {
-  order_placed: "Order Placed",
-  design: "Design",
-  qc: "QC",
-  preview: "Preview",
-  model: "Model",
-};
-const stages = ["order_placed", "design", "qc", "preview", "model"];
+import { PatientSummaryCard } from "@/components/task-details/PatientSummaryCard";
+import { DoctorPracticeCard } from "@/components/task-details/DoctorPracticeCard";
+import { OrderDetailsCard } from "@/components/task-details/OrderDetailsCard";
+import { DesignTimeline } from "@/components/task-details/DesignTimeline";
+import { DesignReviewCard } from "@/components/task-details/DesignReviewCard";
+import { FlagScanModal } from "@/components/task-details/FlagScanModal";
+import { CaseNoteSummary } from "@/components/task-details/CaseNoteSummary";
+import { SummaryAndItems } from "@/components/task-details/SummaryAndItems";
+import { SplitOrdersSection } from "@/components/task-details/SplitOrdersSection";
+import { BillingSection } from "@/components/task-details/BillingSection";
+import { OrderScansSection } from "@/components/task-details/OrderScansSection";
+import { ActivityPanel } from "@/components/task-details/ActivityPanel";
 
 export default function TaskDetailsPage() {
   const { taskId } = useParams();
@@ -40,7 +42,6 @@ export default function TaskDetailsPage() {
   const order = task.order;
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const timeline = mockTimeline[order.id] || [];
-  const completedStages = new Set(timeline.map((t) => t.stage));
 
   const handleReview = () => {
     completeTask(task.id);
@@ -54,26 +55,18 @@ export default function TaskDetailsPage() {
     navigate("/");
   };
 
-  const InfoRow = ({ label, value, icon: Icon }: { label: string; value?: string | boolean | null; icon?: any }) => {
-    if (value === undefined || value === null || value === "") return null;
-    const display = typeof value === "boolean" ? (value ? "Yes" : "No") : value;
-    return (
-      <div className="flex items-center gap-2 text-sm">
-        {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
-        <span className="text-muted-foreground">{label}:</span>
-        <span className="font-medium">{display}</span>
-      </div>
-    );
-  };
-
   return (
     <div className="flex h-[calc(100vh-3.5rem)] -m-4 md:-m-6">
       {/* Main content */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
-        <div className="max-w-3xl mx-auto">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
-            <ArrowLeft className="h-4 w-4" /> Back
-          </button>
+        <div className="max-w-4xl mx-auto">
+          {/* Back + Flag Scan */}
+          <div className="flex items-center justify-between mb-4">
+            <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-4 w-4" /> Back
+            </button>
+            <FlagScanModal />
+          </div>
 
           {/* Resubmitted Banner */}
           {order.is_resubmitted && (
@@ -97,133 +90,98 @@ export default function TaskDetailsPage() {
             </div>
           )}
 
-          {/* Patient & Order Header */}
-          <div className="rounded-lg border bg-card p-5 mb-4">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <h1 className="text-lg font-bold">{order.patient_name}</h1>
-                <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground flex-wrap">
-                  {order.patient_age && <span>{order.patient_age}y</span>}
-                  {order.patient_gender && <span>• {order.patient_gender}</span>}
-                  <span>• {order.id}</span>
-                  {order.is_split && (
-                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20 gap-0.5">
-                      <Scissors className="h-2.5 w-2.5" /> Split
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="text-xs">{order.case_type}</Badge>
-                {order.crown_type && <Badge variant="outline" className="text-xs">{order.crown_type}</Badge>}
-                <PriorityBadge priority={order.priority} />
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5 text-sm">
-              <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className={isOverdue ? "text-destructive font-medium" : isUrgent ? "text-warning font-medium" : "text-muted-foreground"}>
-                Due: {timeLeft}
-              </span>
-            </div>
-            {order.tags && order.tags.length > 0 && (
-              <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                <Tag className="h-3 w-3 text-muted-foreground" />
-                {order.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Patient Summary */}
+          <PatientSummaryCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
 
-          {/* Doctor & Practice */}
-          <div className="rounded-lg border bg-card p-5 mb-4">
-            <h2 className="text-sm font-semibold mb-3">Doctor & Practice</h2>
-            <div className="grid gap-2">
-              <InfoRow label="Doctor" value={order.doctor_name} />
-              <InfoRow label="Practice" value={order.practice} icon={Building} />
-              <InfoRow label="Address" value={order.address} icon={MapPin} />
-              <InfoRow label="Country" value={order.country} />
-            </div>
-          </div>
+          {/* Primary Workflow Tabs */}
+          <Tabs defaultValue="order" className="mb-4">
+            <TabsList className="w-full justify-start h-10 bg-muted/50 rounded-lg p-1">
+              <TabsTrigger value="order" className="text-xs">Order</TabsTrigger>
+              <TabsTrigger value="scan" className="text-xs">Scan</TabsTrigger>
+              <TabsTrigger value="editor" className="text-xs">Editor</TabsTrigger>
+              <TabsTrigger value="design" className="text-xs">Design</TabsTrigger>
+            </TabsList>
 
-          {/* Order Metadata */}
-          <div className="rounded-lg border bg-card p-5 mb-4">
-            <h2 className="text-sm font-semibold mb-3">Order Details</h2>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-              <InfoRow label="Production Order" value={order.production_order} />
-              <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
-              <InfoRow label="Design Preview" value={order.design_preview} icon={Eye} />
-              <InfoRow label="Designer" value={order.designer_name} />
-              <InfoRow label="Prep" value={order.prep} />
-              <InfoRow label="Separate Model" value={order.separate_model} />
-              <InfoRow label="QC Required" value={order.qc_required} />
-              <InfoRow label="Double QC" value={order.double_qc} />
-              <InfoRow label="Design Level" value={order.design_level} icon={Layers} />
-              <InfoRow label="Shipping" value={order.shipping_type} icon={Truck} />
-              <InfoRow label="App Source" value={order.app_source} icon={Smartphone} />
-              <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
-              <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
-            </div>
-          </div>
+            {/* ORDER TAB */}
+            <TabsContent value="order" className="mt-4">
+              {/* Secondary Tabs */}
+              <Tabs defaultValue="tat">
+                <TabsList className="h-8 bg-transparent border-b rounded-none w-full justify-start gap-0 p-0">
+                  {["TAT", "Status", "Review", "Design", "Zendesk"].map((tab) => (
+                    <TabsTrigger
+                      key={tab}
+                      value={tab.toLowerCase()}
+                      className="text-xs h-8 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4"
+                    >
+                      {tab}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
 
-          {/* Timeline */}
-          <div className="rounded-lg border bg-card p-5 mb-4">
-            <h2 className="text-sm font-semibold mb-4">Design Timeline</h2>
-            <div className="flex items-center justify-between">
-              {stages.map((stage, i) => {
-                const done = completedStages.has(stage as any);
-                return (
-                  <div key={stage} className="flex items-center flex-1">
-                    <div className="flex flex-col items-center">
-                      <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors cursor-pointer hover:ring-2 hover:ring-primary/30 ${
-                        done ? "bg-success text-success-foreground" : "bg-muted text-muted-foreground"
-                      }`}>
-                        {done ? "✓" : i + 1}
-                      </div>
-                      <span className="text-[10px] mt-1 text-muted-foreground">{stageLabels[stage]}</span>
-                    </div>
-                    {i < stages.length - 1 && (
-                      <div className={`flex-1 h-0.5 mx-1 ${done ? "bg-success" : "bg-border"}`} />
-                    )}
+                <TabsContent value="tat" className="mt-4 space-y-0">
+                  <DoctorPracticeCard order={order} />
+                  <OrderDetailsCard order={order} />
+                  <DesignTimeline timeline={timeline} />
+                  <DesignReviewCard onReview={handleReview} onSkip={handleSkip} />
+                  <CaseNoteSummary />
+                  <SummaryAndItems />
+                  <SplitOrdersSection />
+                  <BillingSection />
+                  <OrderScansSection />
+                </TabsContent>
+
+                <TabsContent value="status" className="mt-4">
+                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                    Status tracking view coming soon
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </TabsContent>
 
-          {/* Actions */}
-          <div className="rounded-lg border bg-card p-5 mb-4">
-            <h2 className="text-sm font-semibold mb-3">Design Review</h2>
-            <div className="flex gap-3">
-              <Button onClick={handleReview} className="flex-1 gap-2">
-                <CheckCircle2 className="h-4 w-4" /> Review Design
-              </Button>
-              <Button onClick={handleSkip} variant="outline" className="gap-2">
-                <SkipForward className="h-4 w-4" /> Skip Review
-              </Button>
-            </div>
-          </div>
+                <TabsContent value="review" className="mt-4">
+                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                    Review history coming soon
+                  </div>
+                </TabsContent>
 
-          {/* Additional Info Accordion */}
-          <Accordion type="single" collapsible className="rounded-lg border bg-card mb-4">
-            <AccordionItem value="info" className="border-0">
-              <AccordionTrigger className="px-5 text-sm font-semibold hover:no-underline">
-                Additional Information
-              </AccordionTrigger>
-              <AccordionContent className="px-5 pb-4">
-                <div className="grid gap-2 text-sm">
-                  <InfoRow label="Crown Type" value={order.crown_type} />
-                  <InfoRow label="Case Type" value={order.case_type} />
-                  <InfoRow label="Split Case" value={order.is_split} />
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                <TabsContent value="design" className="mt-4">
+                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                    Design iterations coming soon
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="zendesk" className="mt-4">
+                  <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                    Zendesk integration coming soon
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+
+            {/* SCAN TAB */}
+            <TabsContent value="scan" className="mt-4">
+              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                Scan viewer coming soon
+              </div>
+            </TabsContent>
+
+            {/* EDITOR TAB */}
+            <TabsContent value="editor" className="mt-4">
+              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                3D Editor coming soon
+              </div>
+            </TabsContent>
+
+            {/* DESIGN TAB */}
+            <TabsContent value="design" className="mt-4">
+              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">
+                Design workspace coming soon
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </motion.div>
 
-      {/* Chat Panel - only on task details */}
-      <ChatPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
+      {/* Right Activity Panel */}
+      <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
     </div>
   );
 }
