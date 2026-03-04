@@ -104,11 +104,11 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-3 py-2 min-w-[180px] flex-1 border-r border-border/50">
-          <span className="text-xs font-medium">
+        <div className="flex flex-col justify-center px-3 py-2 min-w-[120px] w-[140px] shrink-0 border-r border-border/50">
+          <span className="text-xs font-medium truncate">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
-          <p className="text-[10px] text-muted-foreground mt-0.5">
+          <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
             {order?.case_type} • {order?.design_level || "Level 1"}
           </p>
         </div>
