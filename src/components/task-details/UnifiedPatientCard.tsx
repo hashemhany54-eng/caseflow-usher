@@ -62,6 +62,17 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
 
       {/* Doctor & Practice + Order Details side by side */}
       <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Doctor & Practice */}
+        <div>
+          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Doctor & Practice</h2>
+          <div className="grid gap-2">
+            <InfoRow label="Doctor" value={order.doctor_name} />
+            <InfoRow label="Practice" value={order.practice} icon={Building} />
+            <InfoRow label="Address" value={order.address} icon={MapPin} />
+            <InfoRow label="Country" value={order.country} />
+          </div>
+        </div>
+
         {/* Order Details */}
         <div>
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Order Details</h2>
@@ -79,17 +90,6 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
             <InfoRow label="App Source" value={order.app_source} icon={Smartphone} />
             <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
             <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
-          </div>
-        </div>
-
-        {/* Doctor & Practice */}
-        <div>
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Doctor & Practice</h2>
-          <div className="grid gap-2">
-            <InfoRow label="Doctor" value={order.doctor_name} />
-            <InfoRow label="Practice" value={order.practice} icon={Building} />
-            <InfoRow label="Address" value={order.address} icon={MapPin} />
-            <InfoRow label="Country" value={order.country} />
           </div>
         </div>
       </div>
