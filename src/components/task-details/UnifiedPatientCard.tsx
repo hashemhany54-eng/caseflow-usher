@@ -61,7 +61,7 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       <div className="border-t border-border" />
 
       {/* Doctor & Practice + Order Details side by side */}
-      <div className="p-5 grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">
+      <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Doctor & Practice */}
         <div>
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Doctor & Practice</h2>
@@ -76,7 +76,7 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
         {/* Order Details */}
         <div>
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Order Details</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 min-w-0">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2">
             <InfoRow label="Production Order" value={order.production_order} />
             <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
             <InfoRow label="Design Preview" value={order.design_preview} icon={Eye} />
