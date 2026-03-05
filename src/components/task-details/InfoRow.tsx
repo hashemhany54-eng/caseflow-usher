@@ -11,7 +11,6 @@ export function InfoRow({ label, value, icon: Icon }: InfoRowProps) {
   const display = typeof value === "boolean" ? value ? "Yes" : "No" : value;
   return (
     <div className="flex items-center gap-2 text-sm">
-      {Icon}
       <span className="text-muted-foreground">{label}:</span>
       <span className="font-medium">{display}</span>
     </div>);
