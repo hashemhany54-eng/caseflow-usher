@@ -6,56 +6,55 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-  useSidebar } from
-"@/components/ui/sidebar";
+  useSidebar,
+} from "@/components/ui/sidebar";
 
 const navItems = [
-{ title: "Tasks", url: "/", icon: ClipboardList },
-{ title: "Orders", url: "/orders", icon: Package },
-{ title: "Completed", url: "/completed", icon: CheckCircle2 },
-{ title: "On Hold", url: "/on-hold", icon: PauseCircle }];
-
+  { title: "Tasks", url: "/", icon: ClipboardList },
+  { title: "Orders", url: "/orders", icon: Package },
+  { title: "Completed", url: "/completed", icon: CheckCircle2 },
+  { title: "On Hold", url: "/on-hold", icon: PauseCircle },
+];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const location = useLocation();
 
   return (
-    <Sidebar collapsible="icon" className="border-r-0">
+    <Sidebar collapsible="icon">
       <div className="flex h-14 items-center px-4 border-b border-sidebar-border">
-        {!collapsed &&
-        <span className="text-sm font-bold tracking-tight text-sidebar-primary-foreground">3Sixty
-
-        </span>
-        }
-        {collapsed &&
-        <span className="text-sm font-bold text-sidebar-primary-foreground mx-auto">D</span>
-        }
+        {!collapsed && (
+          <span className="text-sm font-bold tracking-tight">3Sixty</span>
+        )}
+        {collapsed && (
+          <span className="text-sm font-bold mx-auto">3S</span>
+        )}
       </div>
       <SidebarContent className="pt-2">
         <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) =>
-              <SidebarMenuItem key={item.title}>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink
-                    to={item.url}
-                    end={item.url === "/"}
-                    className="hover:bg-sidebar-accent transition-colors"
-                    activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium">
-                    
+                      to={item.url}
+                      end={item.url === "/"}
+                      className="hover:bg-sidebar-accent transition-colors"
+                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                    >
                       <item.icon className="h-4 w-4 shrink-0" />
                       {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              )}
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -70,6 +69,6 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
-    </Sidebar>);
-
+    </Sidebar>
+  );
 }
