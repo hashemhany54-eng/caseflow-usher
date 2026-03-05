@@ -64,15 +64,15 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       <div className="p-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2.5">
           <div className="col-span-full">
-            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Doctor & Practice</h2>
+            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Doctor & Practice</h2>
           </div>
           <InfoRow label="Doctor" value={order.doctor_name} />
           <InfoRow label="Practice" value={order.practice} icon={Building} />
           <InfoRow label="Address" value={order.address} icon={MapPin} />
           <InfoRow label="Country" value={order.country} />
 
-          <div className="col-span-full mt-2">
-            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Order Details</h2>
+          <div className="col-span-full mt-1">
+            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Order Details</h2>
           </div>
           <InfoRow label="Production" value={order.production_order} />
           <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
