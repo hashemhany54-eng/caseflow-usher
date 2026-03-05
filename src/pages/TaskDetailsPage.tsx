@@ -106,23 +106,24 @@ export default function TaskDetailsPage() {
               {/* Combined Timeline + Review Card with Secondary Tabs */}
               <div className="rounded-lg border bg-card">
                 <Tabs defaultValue="tat">
-                  <TabsList className="h-9 bg-transparent border-b rounded-none w-full justify-start gap-0 p-0 px-5">
-                    {["TAT", "Status", "Review", "Design", "Zendesk"].map((tab) => (
-                      <TabsTrigger
-                        key={tab}
-                        value={tab.toLowerCase()}
-                        className="text-xs h-9 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4"
-                      >
-                        {tab}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-
-                  <TabsContent value="tat" className="p-5 space-y-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h2 className="text-sm font-semibold">Workflow Timeline</h2>
+                  <div className="flex items-center border-b">
+                    <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
+                      {["TAT", "Status", "Tickets", "Review", "Design", "Zendesk"].map((tab) => (
+                        <TabsTrigger
+                          key={tab}
+                          value={tab.toLowerCase()}
+                          className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-success data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
+                        >
+                          {tab}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                    <div className="pr-5 shrink-0">
                       <FlagScanModal />
                     </div>
+                  </div>
+
+                  <TabsContent value="tat" className="p-5 space-y-4">
                     <DesignTimeline timeline={timeline} />
                     <DesignReviewCard onReview={handleReview} />
                   </TabsContent>
