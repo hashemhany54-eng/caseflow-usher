@@ -18,7 +18,7 @@ export function DashboardLayout() {
               <TopBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
             </div>
           </div>
-          <main className="flex-1 overflow-auto bg-muted p-2 md:p-3">
+          <main className="flex-1 overflow-auto p-4 md:p-6">
             <Outlet context={{ searchQuery }} />
           </main>
         </div>
