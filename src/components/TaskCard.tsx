@@ -139,10 +139,10 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
                       {formatRelativeTime(orderPlacedEvent.timestamp)}
                     </span>
                   }
-                  {stage === "design" && order?.designer_name &&
-                  <span className="text-[10px] text-muted-foreground leading-none truncate">
-                      {order.designer_name}
-                    </span>
+                  {stage === "design" && order?.designer_name
+
+
+
                   }
                 </div>);
 
