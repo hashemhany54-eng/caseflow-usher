@@ -11,9 +11,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useState } from "react";
 
-import { PatientSummaryCard } from "@/components/task-details/PatientSummaryCard";
-import { DoctorPracticeCard } from "@/components/task-details/DoctorPracticeCard";
-import { OrderDetailsCard } from "@/components/task-details/OrderDetailsCard";
+import { UnifiedPatientCard } from "@/components/task-details/UnifiedPatientCard";
 import { DesignTimeline } from "@/components/task-details/DesignTimeline";
 import { DesignReviewCard } from "@/components/task-details/DesignReviewCard";
 import { FlagScanModal } from "@/components/task-details/FlagScanModal";
@@ -99,9 +97,7 @@ export default function TaskDetailsPage() {
 
             {/* ORDER TAB */}
             <TabsContent value="order" className="mt-0 space-y-4">
-              <PatientSummaryCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
-              <DoctorPracticeCard order={order} />
-              <OrderDetailsCard order={order} />
+              <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
 
               {/* Combined Timeline + Review Card with Secondary Tabs */}
               <div className="rounded-lg border bg-card">
