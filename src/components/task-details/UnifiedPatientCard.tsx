@@ -60,12 +60,12 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
 
       <div className="border-t border-border" />
 
-      {/* Doctor & Practice + Order Details side by side */}
-      <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Doctor & Practice + Order Details */}
+      <div className="p-4 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-4">
         {/* Doctor & Practice */}
-        <div>
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Doctor & Practice</h2>
-          <div className="grid gap-2">
+        <div className="min-w-0">
+          <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Doctor & Practice</h2>
+          <div className="grid gap-1.5">
             <InfoRow label="Doctor" value={order.doctor_name} />
             <InfoRow label="Practice" value={order.practice} icon={Building} />
             <InfoRow label="Address" value={order.address} icon={MapPin} />
@@ -74,20 +74,20 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
         </div>
 
         {/* Order Details */}
-        <div>
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Order Details</h2>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-            <InfoRow label="Production Order" value={order.production_order} />
+        <div className="min-w-0">
+          <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Order Details</h2>
+          <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-1.5">
+            <InfoRow label="Production" value={order.production_order} />
             <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
-            <InfoRow label="Design Preview" value={order.design_preview} icon={Eye} />
+            <InfoRow label="Preview" value={order.design_preview} icon={Eye} />
             <InfoRow label="Designer" value={order.designer_name} />
             <InfoRow label="Prep" value={order.prep} />
-            <InfoRow label="Separate Model" value={order.separate_model} />
-            <InfoRow label="QC Required" value={order.qc_required} />
+            <InfoRow label="Sep. Model" value={order.separate_model} />
+            <InfoRow label="QC" value={order.qc_required} />
             <InfoRow label="Double QC" value={order.double_qc} />
-            <InfoRow label="Design Level" value={order.design_level} icon={Layers} />
+            <InfoRow label="Level" value={order.design_level} icon={Layers} />
             <InfoRow label="Shipping" value={order.shipping_type} icon={Truck} />
-            <InfoRow label="App Source" value={order.app_source} icon={Smartphone} />
+            <InfoRow label="Source" value={order.app_source} icon={Smartphone} />
             <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
             <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
           </div>
