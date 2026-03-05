@@ -95,7 +95,7 @@ export const mockOrders: Order[] = [
     app_source: "Desktop",
     laptop: "MacBook Pro 14",
     shipping_type: "Standard",
-    designer_name: "Sam Chen",
+    designer_name: "",
     qc_required: false,
     double_qc: false,
     design_level: "Basic",
