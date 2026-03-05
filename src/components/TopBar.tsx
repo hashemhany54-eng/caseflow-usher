@@ -14,7 +14,7 @@ export function TopBar({ searchQuery, onSearchChange }: TopBarProps) {
   const initials = user.name.split(" ").map((n) => n[0]).join("");
 
   return (
-    <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b bg-card px-4 gap-4">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-card px-4 gap-4">
       {/* Left: Avatar + Name + Notification + Status */}
       <div className="flex items-center gap-3">
         <Avatar className="h-8 w-8">

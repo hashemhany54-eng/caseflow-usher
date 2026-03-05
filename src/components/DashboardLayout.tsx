@@ -12,7 +12,7 @@ export function DashboardLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex items-center border-b bg-card">
+          <div className="flex items-center h-14 border-b bg-card">
             <SidebarTrigger className="ml-2 mr-0" />
             <div className="flex-1">
               <TopBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
