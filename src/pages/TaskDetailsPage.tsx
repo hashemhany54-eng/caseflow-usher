@@ -123,8 +123,9 @@ export default function TaskDetailsPage() {
                     </div>
                   </div>
 
-                  <TabsContent value="tat" className="p-5 space-y-4">
+                  <TabsContent value="tat" className="p-5 space-y-6">
                     <DesignTimeline timeline={timeline} />
+                    <div className="border-t border-border" />
                     <DesignReviewCard onReview={handleReview} />
                   </TabsContent>
 
