@@ -60,37 +60,33 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
 
       <div className="border-t border-border" />
 
-      {/* Doctor & Practice + Order Details */}
-      <div className="p-4 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-4">
-        {/* Doctor & Practice */}
-        <div className="min-w-0">
-          <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Doctor & Practice</h2>
-          <div className="grid gap-1.5">
-            <InfoRow label="Doctor" value={order.doctor_name} />
-            <InfoRow label="Practice" value={order.practice} icon={Building} />
-            <InfoRow label="Address" value={order.address} icon={MapPin} />
-            <InfoRow label="Country" value={order.country} />
+      {/* All Details in one dense grid */}
+      <div className="p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2.5">
+          <div className="col-span-full">
+            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Doctor & Practice</h2>
           </div>
-        </div>
+          <InfoRow label="Doctor" value={order.doctor_name} />
+          <InfoRow label="Practice" value={order.practice} icon={Building} />
+          <InfoRow label="Address" value={order.address} icon={MapPin} />
+          <InfoRow label="Country" value={order.country} />
 
-        {/* Order Details */}
-        <div className="min-w-0">
-          <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Order Details</h2>
-          <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-1.5">
-            <InfoRow label="Production" value={order.production_order} />
-            <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
-            <InfoRow label="Preview" value={order.design_preview} icon={Eye} />
-            <InfoRow label="Designer" value={order.designer_name} />
-            <InfoRow label="Prep" value={order.prep} />
-            <InfoRow label="Sep. Model" value={order.separate_model} />
-            <InfoRow label="QC" value={order.qc_required} />
-            <InfoRow label="Double QC" value={order.double_qc} />
-            <InfoRow label="Level" value={order.design_level} icon={Layers} />
-            <InfoRow label="Shipping" value={order.shipping_type} icon={Truck} />
-            <InfoRow label="Source" value={order.app_source} icon={Smartphone} />
-            <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
-            <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
+          <div className="col-span-full mt-2">
+            <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">Order Details</h2>
           </div>
+          <InfoRow label="Production" value={order.production_order} />
+          <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
+          <InfoRow label="Preview" value={order.design_preview} icon={Eye} />
+          <InfoRow label="Designer" value={order.designer_name} />
+          <InfoRow label="Prep" value={order.prep} />
+          <InfoRow label="Sep. Model" value={order.separate_model} />
+          <InfoRow label="QC" value={order.qc_required} />
+          <InfoRow label="Double QC" value={order.double_qc} />
+          <InfoRow label="Level" value={order.design_level} icon={Layers} />
+          <InfoRow label="Shipping" value={order.shipping_type} icon={Truck} />
+          <InfoRow label="Source" value={order.app_source} icon={Smartphone} />
+          <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
+          <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
         </div>
       </div>
     </div>
