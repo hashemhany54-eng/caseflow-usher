@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import {
   Calendar, Scissors, Tag, Building, MapPin,
-  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor
-} from "lucide-react";
+  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor } from
+"lucide-react";
 import { InfoRow } from "./InfoRow";
 
 interface Props {
@@ -26,11 +26,11 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
               {order.patient_age && <span>{order.patient_age}y</span>}
               {order.patient_gender && <span>• {order.patient_gender}</span>}
               <span>• {order.id}</span>
-              {order.is_split && (
-                <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20 gap-0.5">
+              {order.is_split &&
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20 gap-0.5">
                   <Scissors className="h-2.5 w-2.5" /> Split
                 </Badge>
-              )}
+              }
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -47,21 +47,21 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
               Due: {timeLeft}
             </span>
           </div>
-          {order.tags && order.tags.length > 0 && (
-            <div className="flex items-center gap-1.5 flex-wrap">
+          {order.tags && order.tags.length > 0 &&
+          <div className="flex items-center gap-1.5 flex-wrap">
               <Tag className="h-3 w-3 text-muted-foreground" />
-              {order.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
-              ))}
+              {order.tags.map((tag) =>
+            <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">{tag}</Badge>
+            )}
             </div>
-          )}
+          }
         </div>
       </div>
 
       <div className="border-t border-border" />
 
       {/* Doctor & Practice */}
-      <div className="px-4 pt-3 pb-2">
+      <div className="px-4 pt-3 pb-2 py-[8px]">
         <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Doctor & Practice</h2>
         <div className="flex flex-wrap gap-x-6 gap-y-1">
           <InfoRow label="Doctor" value={order.doctor_name} />
@@ -74,7 +74,7 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       <div className="border-t border-border mx-4" />
 
       {/* Order Details */}
-      <div className="px-4 pt-3 pb-3">
+      <div className="px-4 pt-3 pb-3 py-[11px]">
         <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Order Details</h2>
         <div className="flex flex-wrap gap-x-6 gap-y-1">
           <InfoRow label="Production" value={order.production_order} />
@@ -92,6 +92,6 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
           <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
