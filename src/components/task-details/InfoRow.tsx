@@ -10,9 +10,9 @@ export function InfoRow({ label, value, icon: Icon }: InfoRowProps) {
   if (value === undefined || value === null || value === "") return null;
   const display = typeof value === "boolean" ? value ? "Yes" : "No" : value;
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <span className="text-muted-foreground">{label}:</span>
-      <span className="font-medium">{display}</span>
+    <div className="flex items-start gap-1.5 text-sm min-w-0">
+      <span className="text-muted-foreground shrink-0 whitespace-nowrap">{label}:</span>
+      <span className="font-medium break-words min-w-0">{display}</span>
     </div>);
 
 }
