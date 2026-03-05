@@ -31,7 +31,7 @@ export function SummaryAndItems() {
   return (
     <div className="grid grid-cols-2 gap-4 mb-4">
       {/* Summary - Dental Arch */}
-      <div className="rounded-lg border bg-card p-5">
+      <div className="rounded-lg border bg-card p-5 pb-[24px] pt-[20px]">
         <h2 className="text-sm font-semibold mb-4">Summary</h2>
         <img src={dentalArchSvg} alt="Dental arch diagram" className="w-full max-w-[260px] mx-auto" />
         
