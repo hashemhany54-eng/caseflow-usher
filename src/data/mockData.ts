@@ -35,6 +35,7 @@ export const mockOrders: Order[] = [
     shipping_type: "Express",
     designer_name: "Alex Rivera",
     qc_required: true,
+    qc_reviewer: "Dr. Maria Santos",
     double_qc: true,
     design_level: "Advanced",
     design_preview: true,

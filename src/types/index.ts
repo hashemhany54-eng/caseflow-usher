@@ -28,6 +28,7 @@ export interface Order {
   laptop?: string;
   shipping_type?: string;
   designer_name?: string;
+  qc_reviewer?: string;
   qc_required?: boolean;
   double_qc?: boolean;
   design_level?: string;
