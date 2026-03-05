@@ -108,7 +108,7 @@ export default function TaskDetailsPage() {
                 <Tabs defaultValue="tat">
                   <div className="flex items-center border-b">
                     <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
-                      {["TAT", "Status", "Tickets", "Review", "Design", "Zendesk"].map((tab) => (
+                      {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
                         <TabsTrigger
                           key={tab}
                           value={tab.toLowerCase()}
@@ -137,9 +137,6 @@ export default function TaskDetailsPage() {
                   </TabsContent>
                   <TabsContent value="design" className="p-5">
                     <div className="text-center text-muted-foreground text-sm py-6">Design iterations coming soon</div>
-                  </TabsContent>
-                  <TabsContent value="zendesk" className="p-5">
-                    <div className="text-center text-muted-foreground text-sm py-6">Zendesk integration coming soon</div>
                   </TabsContent>
                 </Tabs>
               </div>
