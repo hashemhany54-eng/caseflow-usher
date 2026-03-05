@@ -101,7 +101,6 @@ export default function TaskDetailsPage() {
 
             {/* ORDER TAB */}
             <TabsContent value="order" className="mt-0 space-y-4">
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
               <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
 
               {/* Combined Timeline + Review Card with Secondary Tabs */}
@@ -143,7 +142,6 @@ export default function TaskDetailsPage() {
                     <div className="text-center text-muted-foreground text-sm py-6">Zendesk integration coming soon</div>
                   </TabsContent>
                 </Tabs>
-              </div>
               </div>
 
               <CaseNoteSummary />
