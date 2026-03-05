@@ -69,9 +69,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
       </div>
 
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
-        <TabsList className="mx-3 mt-2 h-8 shrink-0">
-          <TabsTrigger value="activity" className="text-xs h-6">Activity</TabsTrigger>
-          <TabsTrigger value="chat" className="text-xs h-6">Chat</TabsTrigger>
+        <TabsList className="mx-3 mt-2 h-8 shrink-0 w-[calc(100%-1.5rem)]">
+          <TabsTrigger value="activity" className="text-xs h-6 flex-1">Activity</TabsTrigger>
+          <TabsTrigger value="chat" className="text-xs h-6 flex-1">Chat</TabsTrigger>
         </TabsList>
 
         <TabsContent value="activity" className="flex-1 overflow-y-auto m-0 mt-1 p-3 space-y-1">
