@@ -5,7 +5,7 @@ const stageLabels: Record<string, string> = {
   design: "Design",
   qc: "QC",
   preview: "Design Preview",
-  model: "Model",
+  model: "Model"
 };
 const stages = ["order_placed", "design", "qc", "preview", "model"];
 
@@ -26,7 +26,7 @@ export function DesignTimeline({ timeline }: Props) {
   }
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-3 py-[24px]">
       {stages.map((stage) => {
         const done = completedStages.has(stage as any);
         const event = timelineByStage[stage];
@@ -36,14 +36,14 @@ export function DesignTimeline({ timeline }: Props) {
             <span className="text-[11px] font-medium text-foreground leading-tight">
               {stageLabels[stage]}
             </span>
-            {event && (
-              <span className="text-[10px] text-muted-foreground leading-none">
+            {event &&
+            <span className="text-[10px] text-muted-foreground leading-none">
                 {event.action_by} • {relativeTime(event.timestamp)}
               </span>
-            )}
-          </div>
-        );
+            }
+          </div>);
+
       })}
-    </div>
-  );
+    </div>);
+
 }
