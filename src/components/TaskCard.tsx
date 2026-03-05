@@ -144,6 +144,11 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
                       {order.designer_name}
                     </span>
                   }
+                  {stage === "qc" && order?.qc_reviewer &&
+                  <span className="text-[10px] text-muted-foreground leading-none truncate">
+                      {order.qc_reviewer}
+                    </span>
+                  }
                 </div>);
 
             })}
