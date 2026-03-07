@@ -1,4 +1,4 @@
-import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings } from "lucide-react";
+import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings, ChevronsUpDown } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
