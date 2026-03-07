@@ -2,7 +2,7 @@ import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RefreshCw, ArrowLeft } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
@@ -27,8 +27,6 @@ interface OutletCtx {
   setActiveTab: (tab: string) => void;
 }
 
-const detailTabs = ["Order", "Scan", "Editor", "Design"];
-
 export default function TaskDetailsPage() {
   const { taskId } = useParams();
   const navigate = useNavigate();
@@ -41,8 +39,8 @@ export default function TaskDetailsPage() {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
         Task not found
-      </div>);
-
+      </div>
+    );
   }
 
   const order = task.order;
@@ -62,59 +60,20 @@ export default function TaskDetailsPage() {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Left: TaskListSidebar with its own header row */}
+    <div className="flex h-full">
+      {/* Left: TaskListSidebar */}
       <div className="w-64 border-r bg-card shrink-0 flex flex-col">
-        {/* Top header area - aligned with tabs bar */}
-        <div className="h-14 px-3 flex items-center gap-2 border-b shrink-0">
-          <button
-            onClick={() => navigate("/")}
-            className="p-1 text-muted-foreground hover:text-foreground transition-colors shrink-0">
-            
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <div>
-            <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
-            <p className="text-xs text-muted-foreground">{tasks.length} tasks</p>
-          </div>
-          <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
-            <RefreshCw className="h-3.5 w-3.5" />
-          </button>
-        </div>
-        {/* Task list */}
         <TaskListSidebar />
       </div>
 
-      {/* Right: Tabs header + content */}
+      {/* Right: Content area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Tabs header bar - same h-14 */}
-        <div className="h-14 flex items-center border-b bg-card shrink-0">
-          {detailTabs.map((tab) => {
-            const value = tab.toLowerCase();
-            const isActive = activeTab === value;
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(value)}
-                className={`text-sm px-5 h-full border-b-2 transition-colors ${
-                isActive ?
-                "border-primary text-foreground font-medium" :
-                "border-transparent text-muted-foreground hover:text-foreground"}`
-                }>
-                
-                {tab}
-              </button>);
-
-          })}
-        </div>
-
-        {/* Content area */}
         <div className="flex flex-1 overflow-hidden">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6 pr-0 pl-[24px]">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
             <div className="max-w-5xl mx-auto">
               {/* Resubmitted Banner */}
-              {order.is_resubmitted &&
-              <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 p-3 flex items-center justify-between">
+              {order.is_resubmitted && (
+                <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 p-3 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-destructive text-sm font-medium">
                     <RefreshCw className="h-4 w-4" />
                     This order was resubmitted
@@ -132,24 +91,24 @@ export default function TaskDetailsPage() {
                     </SheetContent>
                   </Sheet>
                 </div>
-              }
+              )}
 
-              {activeTab === "order" &&
-              <div className="space-y-4">
+              {activeTab === "order" && (
+                <div className="space-y-4">
                   <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
                   <div className="rounded-lg border bg-card">
                     <Tabs defaultValue="tat">
-                      <div className="flex items-center border-b">
-                        <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
-                          {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) =>
-                        <TabsTrigger
-                          key={tab}
-                          value={tab.toLowerCase()}
-                          className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-success data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground">
-                          
+                      <div className="flex items-center border-b overflow-x-auto">
+                        <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1 min-w-0">
+                          {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
+                            <TabsTrigger
+                              key={tab}
+                              value={tab.toLowerCase()}
+                              className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
+                            >
                               {tab}
                             </TabsTrigger>
-                        )}
+                          ))}
                         </TabsList>
                         <div className="pr-5 shrink-0">
                           <FlagScanModal />
@@ -177,23 +136,23 @@ export default function TaskDetailsPage() {
                   <BillingSection />
                   <OrderScansSection />
                 </div>
-              }
+              )}
 
-              {activeTab === "scan" &&
-              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Scan viewer coming soon</div>
-              }
-              {activeTab === "editor" &&
-              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">3D Editor coming soon</div>
-              }
-              {activeTab === "design" &&
-              <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Design workspace coming soon</div>
-              }
+              {activeTab === "scan" && (
+                <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Scan viewer coming soon</div>
+              )}
+              {activeTab === "editor" && (
+                <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">3D Editor coming soon</div>
+              )}
+              {activeTab === "design" && (
+                <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Design workspace coming soon</div>
+              )}
             </div>
           </motion.div>
 
           <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
         </div>
       </div>
-    </div>);
-
+    </div>
+  );
 }
