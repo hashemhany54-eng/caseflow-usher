@@ -131,7 +131,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border px-3 py-0">
         <div className="h-[60px] flex items-center justify-center">
           {collapsed ? (
-            <img src={logoIcon} alt="3Sixty" className="w-8 opacity-50" />
+            <img src={logoIcon} alt="3Sixty" className="w-10 opacity-50" />
           ) : (
             <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
           )}
