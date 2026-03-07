@@ -7,6 +7,8 @@ import { useState } from "react";
 export function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("order");
+  const location = useLocation();
+  const isTaskDetail = location.pathname.startsWith("/tasks/");
 
   return (
     <SidebarProvider>
@@ -14,8 +16,8 @@ export function DashboardLayout() {
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
           <div className="flex items-center h-14 border-b bg-card">
-            <SidebarTrigger className="ml-2 mr-0" />
-            <div className="flex-1">
+            {!isTaskDetail && <SidebarTrigger className="ml-2 mr-0" />}
+            <div className="flex-1 h-full">
               <TopBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
