@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Search, RefreshCw } from "lucide-react";
+import { Search, RefreshCw, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useApp } from "@/context/AppContext";
 
 interface TopBarProps {
   searchQuery: string;
@@ -21,14 +22,32 @@ const detailTabs = ["Order", "Scan", "Editor", "Design"];
 
 export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: TopBarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
   const pageTitle = pageTitles[location.pathname] || "Your Tasks";
 
   if (isTaskDetail) {
+    const { tasks } = useApp();
     return (
-      <header className="flex h-14 items-center bg-card">
-        {/* Tabs only - the "Your tasks" title moved to TaskListSidebar */}
-        <div className="flex items-center h-full pl-4">
+      <header className="flex h-full items-center bg-card">
+        {/* Left section: back + title */}
+        <div className="flex items-center gap-2 px-3 h-full border-r border-border shrink-0 w-64">
+          <button
+            onClick={() => navigate("/")}
+            className="p-1 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <div>
+            <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
+            <p className="text-[11px] text-muted-foreground">{tasks.length} tasks</p>
+          </div>
+          <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
+            <RefreshCw className="h-3.5 w-3.5" />
+          </button>
+        </div>
+        {/* Tabs */}
+        <div className="flex items-center h-full">
           {detailTabs.map((tab) => {
             const value = tab.toLowerCase();
             const isActive = activeTab === value;
