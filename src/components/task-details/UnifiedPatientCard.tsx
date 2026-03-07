@@ -76,7 +76,7 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       {/* Order Details */}
       <div className="pt-3 py-[11px] pb-[20px] px-[20px]">
         <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Order Details</h2>
-        <div className="grid grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1">
           <InfoRow label="Production" value={order.production_order} />
           <InfoRow label="Lab" value={order.lab_type} />
           <InfoRow label="Preview" value={order.design_preview} />
