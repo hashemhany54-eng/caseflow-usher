@@ -122,15 +122,15 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
               <LogOut className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="ml-2">Logout</span>}
+              <span className="ml-2">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
         <div className="mt-1 px-2 pb-1 flex justify-center">
           {collapsed ? (
-            <img src={logoIcon} alt="3Sixty" className="h-4 opacity-40" />
+            <img src={logoIcon} alt="3Sixty" className="h-5 opacity-40" />
           ) : (
-            <img src={logo} alt="3Sixty Aligners" className="h-4 opacity-40" />
+            <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
           )}
         </div>
       </SidebarFooter>
