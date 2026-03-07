@@ -63,10 +63,10 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       {/* Doctor & Practice */}
       <div className="pt-3 pb-2 py-[8px] px-[20px]">
         <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Doctor & Practice</h2>
-        <div className="flex flex-wrap gap-x-6 gap-y-1">
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-1">
           <InfoRow label="Doctor" value={order.doctor_name} />
-          <InfoRow label="Practice" value={order.practice} icon={Building} />
-          <InfoRow label="Address" value={order.address} icon={MapPin} />
+          <InfoRow label="Practice" value={order.practice} />
+          <InfoRow label="Address" value={order.address} />
           <InfoRow label="Country" value={order.country} />
         </div>
       </div>
@@ -76,20 +76,20 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
       {/* Order Details */}
       <div className="pt-3 py-[11px] pb-[20px] px-[20px]">
         <h2 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Order Details</h2>
-        <div className="flex flex-wrap gap-x-6 gap-y-1">
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-1">
           <InfoRow label="Production" value={order.production_order} />
-          <InfoRow label="Lab" value={order.lab_type} icon={FlaskConical} />
-          <InfoRow label="Preview" value={order.design_preview} icon={Eye} />
+          <InfoRow label="Lab" value={order.lab_type} />
+          <InfoRow label="Preview" value={order.design_preview} />
           <InfoRow label="Designer" value={order.designer_name} />
           <InfoRow label="Prep" value={order.prep} />
           <InfoRow label="Sep. Model" value={order.separate_model} />
           <InfoRow label="QC" value={order.qc_required} />
           <InfoRow label="Double QC" value={order.double_qc} />
-          <InfoRow label="Level" value={order.design_level} icon={Layers} />
-          <InfoRow label="Shipping" value={order.shipping_type} icon={Truck} />
-          <InfoRow label="Source" value={order.app_source} icon={Smartphone} />
-          <InfoRow label="Scanner" value={order.scanner} icon={ScanLine} />
-          <InfoRow label="Laptop" value={order.laptop} icon={Monitor} />
+          <InfoRow label="Level" value={order.design_level} />
+          <InfoRow label="Shipping" value={order.shipping_type} />
+          <InfoRow label="Source" value={order.app_source} />
+          <InfoRow label="Scanner" value={order.scanner} />
+          <InfoRow label="Laptop" value={order.laptop} />
         </div>
       </div>
     </div>);
