@@ -52,10 +52,10 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* Top: User avatar + name with status dropdown */}
-      <div className="flex h-14 items-center px-3 border-b border-sidebar-border">
+      <div className={`flex h-14 items-center px-3 border-b border-sidebar-border ${collapsed ? 'justify-center' : ''}`}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors w-full">
+            <button className={`flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors ${collapsed ? 'justify-center' : 'w-full'}`}>
               <div className="relative shrink-0">
                 <Avatar className="h-7 w-7">
                   <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-semibold">
@@ -131,7 +131,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border p-2">
         <div className="px-2 py-1 flex justify-center">
           {collapsed ? (
-            <img src={logoIcon} alt="3Sixty" className="h-6 opacity-40" />
+            <img src={logoIcon} alt="3Sixty" className="h-8 opacity-40" />
           ) : (
             <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
           )}
