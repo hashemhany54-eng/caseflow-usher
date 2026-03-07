@@ -3,6 +3,7 @@ import { NavLink } from "@/components/NavLink";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.svg";
+import logoIcon from "@/assets/logo-icon.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -51,10 +52,10 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* Top: User avatar + name with status dropdown */}
-      <div className="flex h-14 items-center justify-center px-3 border-b border-sidebar-border">
+      <div className="flex h-14 items-center px-3 border-b border-sidebar-border">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors w-full justify-center">
+            <button className="flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors w-full">
               <div className="relative shrink-0">
                 <Avatar className="h-7 w-7">
                   <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-semibold">
@@ -126,10 +127,10 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
         <div className="mt-1 px-2 pb-1 flex justify-center">
-          {!collapsed ? (
-            <img src={logo} alt="3Sixty Aligners" className="h-4 opacity-40" />
+          {collapsed ? (
+            <img src={logoIcon} alt="3Sixty" className="h-4 opacity-40" />
           ) : (
-            <img src={logo} alt="3Sixty Aligners" className="h-3 opacity-40" />
+            <img src={logo} alt="3Sixty Aligners" className="h-4 opacity-40" />
           )}
         </div>
       </SidebarFooter>
