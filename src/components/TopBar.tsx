@@ -40,7 +40,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
           </button>
           <div>
             <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
-            <p className="text-[11px] text-muted-foreground">{tasks.length} tasks</p>
+            
           </div>
           <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
             <RefreshCw className="h-3.5 w-3.5" />
