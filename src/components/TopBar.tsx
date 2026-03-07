@@ -75,7 +75,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
     <header className="flex h-full items-center bg-card px-4 gap-4">
       <div>
         <h1 className="text-base font-bold leading-tight text-foreground">{pageTitle}</h1>
-        <p className="text-xs text-muted-foreground">{tasks.filter(t => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped").length} tasks</p>
+        
       </div>
       <div className="flex-1" />
       <div className="relative w-full max-w-xs">
