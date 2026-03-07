@@ -72,7 +72,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
   }
 
   return (
-    <header className="flex h-14 items-center bg-card px-4 gap-4">
+    <header className="flex h-full items-center bg-card px-4 gap-4">
       <div>
         <h1 className="text-base font-bold leading-tight text-foreground">{pageTitle}</h1>
         <p className="text-xs text-muted-foreground">{tasks.length} tasks</p>
