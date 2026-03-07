@@ -117,7 +117,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
+      <div className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
@@ -126,9 +126,12 @@ export function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-        <div className="mt-1 px-2 pb-1 flex justify-center">
+      </div>
+
+      <SidebarFooter className="border-t border-sidebar-border p-2">
+        <div className="px-2 py-1 flex justify-center">
           {collapsed ? (
-            <img src={logoIcon} alt="3Sixty" className="h-5 opacity-40" />
+            <img src={logoIcon} alt="3Sixty" className="h-6 opacity-40" />
           ) : (
             <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
           )}
