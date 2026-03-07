@@ -1,11 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface TopBarProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
+  activeTab: string;
+  onTabChange: (tab: string) => void;
 }
 
 const pageTitles: Record<string, string> = {
@@ -16,7 +17,9 @@ const pageTitles: Record<string, string> = {
   "/settings": "Settings",
 };
 
-export function TopBar({ searchQuery, onSearchChange }: TopBarProps) {
+const detailTabs = ["Order", "Scan", "Editor", "Design"];
+
+export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: TopBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
@@ -33,16 +36,25 @@ export function TopBar({ searchQuery, onSearchChange }: TopBarProps) {
             <ArrowLeft className="h-4 w-4" />
             <span>Back</span>
           </button>
-          <span className="text-sm font-medium text-foreground">Your Tasks</span>
+          <span className="text-sm font-medium text-foreground shrink-0">Your Tasks</span>
           <div className="flex items-center gap-0 ml-2">
-            {["Order", "Scan", "Editor", "Design"].map((tab) => (
-              <button
-                key={tab}
-                className="text-sm px-4 h-14 border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors data-[active=true]:border-primary data-[active=true]:text-foreground"
-              >
-                {tab}
-              </button>
-            ))}
+            {detailTabs.map((tab) => {
+              const value = tab.toLowerCase();
+              const isActive = activeTab === value;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => onTabChange(value)}
+                  className={`text-sm px-4 h-14 border-b-2 transition-colors ${
+                    isActive
+                      ? "border-primary text-foreground font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {tab}
+                </button>
+              );
+            })}
           </div>
           <div className="flex-1" />
         </>
