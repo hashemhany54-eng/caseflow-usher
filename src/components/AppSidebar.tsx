@@ -122,7 +122,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
               <LogOut className="h-4 w-4 shrink-0" />
-              {!collapsed && <span className="ml-2">Logout</span>}
+              <span className="ml-2">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
