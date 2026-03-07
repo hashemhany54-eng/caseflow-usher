@@ -60,7 +60,7 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
   const chatMessages = messages.filter((m) => m.type !== "system");
 
   return (
-    <div className="w-80 border-l bg-card flex flex-col shrink-0">
+    <div className="w-80 border-l bg-card flex flex-col shrink-0 h-full max-h-[calc(100vh-3.5rem)]">
       <div className="h-14 flex items-center justify-between px-3 border-b shrink-0">
         <span className="text-sm font-semibold">Activity</span>
         <button onClick={onToggle} className="p-1.5 hover:bg-secondary rounded transition-colors">
