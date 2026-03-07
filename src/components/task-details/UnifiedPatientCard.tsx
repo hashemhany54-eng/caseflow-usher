@@ -19,8 +19,8 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
     <div className="rounded-lg border bg-card overflow-hidden">
       {/* Patient Header */}
       <div className="p-5 pb-4">
-        <div className="flex items-start justify-between mb-2">
-          <div>
+        <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+          <div className="min-w-0">
             <h1 className="text-lg font-bold">{order.patient_name}</h1>
             <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground flex-wrap">
               {order.patient_age && <span>{order.patient_age}y</span>}
@@ -33,9 +33,9 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
               }
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs">{order.case_type}</Badge>
-            {order.crown_type && <Badge variant="outline" className="text-xs">{order.crown_type}</Badge>}
+          <div className="flex items-center gap-2 flex-wrap shrink-0">
+            <Badge variant="secondary" className="text-xs whitespace-nowrap">{order.case_type}</Badge>
+            {order.crown_type && <Badge variant="outline" className="text-xs whitespace-nowrap">{order.crown_type}</Badge>}
             <PriorityBadge priority={order.priority} />
           </div>
         </div>

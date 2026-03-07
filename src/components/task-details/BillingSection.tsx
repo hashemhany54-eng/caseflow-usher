@@ -5,7 +5,7 @@ export function BillingSection() {
   return (
     <div className="rounded-lg border bg-card p-5 mb-4">
       <h2 className="text-sm font-semibold mb-3">Billing</h2>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <DollarSign className="h-4 w-4 text-muted-foreground" />
           <div>

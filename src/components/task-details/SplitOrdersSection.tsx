@@ -5,7 +5,7 @@ import { Scissors, GitMerge } from "lucide-react";
 export function SplitOrdersSection() {
   return (
     <div className="rounded-lg border bg-card p-5 mb-4">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
         <h2 className="text-sm font-semibold">Split Orders</h2>
         <Button variant="outline" size="sm" className="text-xs h-7 gap-1">
           <GitMerge className="h-3 w-3" /> Merge and Stitch

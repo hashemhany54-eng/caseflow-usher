@@ -29,7 +29,7 @@ const mockItems = [
 
 export function SummaryAndItems() {
   return (
-    <div className="grid grid-cols-2 gap-4 mb-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
       {/* Summary - Dental Arch */}
       <div className="rounded-lg border bg-card p-5 pb-[24px] pt-[20px]">
         <h2 className="text-sm font-semibold mb-4">Summary</h2>
@@ -61,10 +61,10 @@ export function SummaryAndItems() {
             </div>
           )}
         </div>
-        <div className="flex gap-2 mt-3">
-          <Button variant="outline" size="sm" className="text-xs h-7">Modify Rx</Button>
-          <Button variant="outline" size="sm" className="text-xs h-7">New Item</Button>
-          <Button variant="outline" size="sm" className="text-xs h-7">Manage Splits</Button>
+        <div className="flex gap-2 mt-3 flex-wrap">
+          <Button variant="outline" size="sm" className="text-xs h-7 whitespace-nowrap">Modify Rx</Button>
+          <Button variant="outline" size="sm" className="text-xs h-7 whitespace-nowrap">New Item</Button>
+          <Button variant="outline" size="sm" className="text-xs h-7 whitespace-nowrap">Manage Splits</Button>
         </div>
       </div>
     </div>);

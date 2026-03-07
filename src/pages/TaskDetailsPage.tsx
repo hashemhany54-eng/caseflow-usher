@@ -98,8 +98,8 @@ export default function TaskDetailsPage() {
                   <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
                   <div className="rounded-lg border bg-card">
                     <Tabs defaultValue="tat">
-                      <div className="flex items-center border-b">
-                        <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
+                      <div className="flex items-center border-b overflow-x-auto">
+                        <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1 min-w-0">
                           {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
                             <TabsTrigger
                               key={tab}
