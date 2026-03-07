@@ -121,7 +121,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
-              <LogIn className="h-4 w-4 shrink-0 scale-x-[-1]" />
+              <LogIn className="h-4 w-4 shrink-0 rotate-180" />
               <span className="ml-2">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
