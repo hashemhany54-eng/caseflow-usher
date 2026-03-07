@@ -128,8 +128,8 @@ export function AppSidebar() {
         </SidebarMenu>
       </div>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
-        <div className="py-2 flex justify-center">
+      <SidebarFooter className="border-t border-sidebar-border px-3 py-0">
+        <div className="h-[60px] flex items-center justify-center">
           {collapsed ? (
             <img src={logoIcon} alt="3Sixty" className="w-8 opacity-50" />
           ) : (
