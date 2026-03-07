@@ -104,7 +104,7 @@ export default function TaskDetailsPage() {
                             <TabsTrigger
                               key={tab}
                               value={tab.toLowerCase()}
-                              className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-success data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
+                              className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
                             >
                               {tab}
                             </TabsTrigger>
