@@ -133,7 +133,7 @@ export function AppSidebar() {
           {collapsed ? (
             <img src={logoIcon} alt="3Sixty" className="w-14 opacity-50" />
           ) : (
-            <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
+            <img src={logo} alt="3Sixty Aligners" className="h-4 opacity-40" />
           )}
         </div>
       </SidebarFooter>
