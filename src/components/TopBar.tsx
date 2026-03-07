@@ -1,8 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, RefreshCw, Menu } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 
 interface TopBarProps {
   searchQuery: string;
@@ -23,29 +21,14 @@ const detailTabs = ["Order", "Scan", "Editor", "Design"];
 
 export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: TopBarProps) {
   const location = useLocation();
-  const navigate = useNavigate();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
   const pageTitle = pageTitles[location.pathname] || "Your Tasks";
 
   if (isTaskDetail) {
     return (
-      <header className="sticky top-0 z-30 flex h-14 items-center bg-card">
-        {/* Left section: back + title + refresh + sidebar trigger */}
-        <div className="flex items-center gap-2 px-3 h-full border-r border-border shrink-0">
-          <button
-            onClick={() => navigate("/")}
-            className="p-1 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <span className="text-sm font-semibold text-foreground whitespace-nowrap">Your tasks</span>
-          <button className="p-1 text-muted-foreground hover:text-foreground transition-colors">
-            <RefreshCw className="h-3.5 w-3.5" />
-          </button>
-        </div>
-
-        {/* Tabs section */}
-        <div className="flex items-center h-full">
+      <header className="flex h-14 items-center bg-card">
+        {/* Tabs only - the "Your tasks" title moved to TaskListSidebar */}
+        <div className="flex items-center h-full pl-4">
           {detailTabs.map((tab) => {
             const value = tab.toLowerCase();
             const isActive = activeTab === value;
@@ -55,7 +38,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
                 onClick={() => onTabChange(value)}
                 className={`text-sm px-5 h-full border-b-2 transition-colors ${
                   isActive
-                    ? "border-primary text-primary font-medium"
+                    ? "border-primary text-foreground font-medium"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -70,7 +53,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
   }
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center bg-card px-4 gap-4">
+    <header className="flex h-14 items-center bg-card px-4 gap-4">
       <span className="text-sm font-medium text-foreground">{pageTitle}</span>
       <div className="flex-1" />
       <div className="relative w-full max-w-xs">
