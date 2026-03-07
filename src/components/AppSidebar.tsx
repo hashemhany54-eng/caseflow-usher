@@ -1,4 +1,4 @@
-import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings } from "lucide-react";
+import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings, ChevronsUpDown } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
@@ -69,9 +69,12 @@ export function AppSidebar() {
                 />
               </div>
               {!collapsed && (
-                <div className="flex flex-col items-start min-w-0">
-                  <span className="text-sm font-semibold text-sidebar-foreground truncate">{user.name}</span>
-                  <span className="text-[10px] text-sidebar-foreground/60">{current.label}</span>
+                <div className="flex items-center gap-1 min-w-0 flex-1">
+                  <div className="flex flex-col items-start min-w-0">
+                    <span className="text-sm font-semibold text-sidebar-foreground truncate">{user.name}</span>
+                    <span className="text-[10px] text-sidebar-foreground/60">{current.label}</span>
+                  </div>
+                  <ChevronsUpDown className="h-3.5 w-3.5 text-sidebar-foreground/40 shrink-0 ml-auto" />
                 </div>
               )}
             </button>
