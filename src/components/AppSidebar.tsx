@@ -128,9 +128,9 @@ export function AppSidebar() {
         </SidebarMenu>
         <div className="mt-1 px-2 pb-1 flex justify-center">
           {collapsed ? (
-            <img src={logoIcon} alt="3Sixty" className="h-4 opacity-40" />
+            <img src={logoIcon} alt="3Sixty" className="h-5 opacity-40" />
           ) : (
-            <img src={logo} alt="3Sixty Aligners" className="h-4 opacity-40" />
+            <img src={logo} alt="3Sixty Aligners" className="h-5 opacity-40" />
           )}
         </div>
       </SidebarFooter>
