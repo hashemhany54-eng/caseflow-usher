@@ -1,4 +1,4 @@
-import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings } from "lucide-react";
+import { ClipboardList, Package, CheckCircle2, PauseCircle, LogIn, Settings } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
@@ -121,7 +121,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
-              <LogOut className="h-4 w-4 shrink-0" />
+              <LogIn className="h-4 w-4 shrink-0 rotate-180" />
               <span className="ml-2">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
