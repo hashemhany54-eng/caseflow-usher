@@ -52,10 +52,10 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       {/* Top: User avatar + name with status dropdown */}
-      <div className="flex h-14 items-center px-3 border-b border-sidebar-border">
+      <div className={`flex h-14 items-center px-3 border-b border-sidebar-border ${collapsed ? 'justify-center' : ''}`}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors w-full">
+            <button className={`flex items-center gap-2.5 hover:bg-sidebar-accent rounded-md px-1.5 py-1.5 transition-colors ${collapsed ? 'justify-center' : 'w-full'}`}>
               <div className="relative shrink-0">
                 <Avatar className="h-7 w-7">
                   <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-semibold">
