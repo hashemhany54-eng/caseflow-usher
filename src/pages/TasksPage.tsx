@@ -55,44 +55,36 @@ export default function TasksPage() {
   }, [categoryFiltered, searchQuery, localSearch, taskTypeFilter, statusFilter, priorityFilter, labFilter]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3rem)]">
-      <div className="flex-1 overflow-auto px-4 py-0 md:px-[4px] pr-0 pl-[4px] mx-0">
-        <h1 className="text-lg font-bold mb-1">Tasks</h1>
-        <p className="text-xs text-muted-foreground mb-4">
-          {sortedTasks.length} {sortedTasks.length === 1 ? "task" : "tasks"}
-        </p>
+    <div className="flex flex-col">
+      <TaskFiltersBar
+        categoryFilter={activeCategory}
+        taskTypeFilter={taskTypeFilter}
+        statusFilter={statusFilter}
+        priorityFilter={priorityFilter}
+        labFilter={labFilter}
+        localSearch={localSearch}
+        onCategoryChange={setActiveCategory}
+        onTaskTypeChange={setTaskTypeFilter}
+        onStatusChange={setStatusFilter}
+        onPriorityChange={setPriorityFilter}
+        onLabChange={setLabFilter}
+        onLocalSearchChange={setLocalSearch}
+        taskTypes={taskTypes}
+        labs={labs} />
 
-        <TaskFiltersBar
-          categoryFilter={activeCategory}
-          taskTypeFilter={taskTypeFilter}
-          statusFilter={statusFilter}
-          priorityFilter={priorityFilter}
-          labFilter={labFilter}
-          localSearch={localSearch}
-          onCategoryChange={setActiveCategory}
-          onTaskTypeChange={setTaskTypeFilter}
-          onStatusChange={setStatusFilter}
-          onPriorityChange={setPriorityFilter}
-          onLabChange={setLabFilter}
-          onLocalSearchChange={setLocalSearch}
-          taskTypes={taskTypes}
-          labs={labs} />
-        
+      {sortedTasks.length === 0 ?
+      <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+          <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+          <p className="font-medium text-sm">No tasks found</p>
+          <p className="text-xs">Try adjusting your filters</p>
+        </div> :
 
-        {sortedTasks.length === 0 ?
-        <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-            <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
-            <p className="font-medium text-sm">No tasks found</p>
-            <p className="text-xs">Try adjusting your filters</p>
-          </div> :
-
-        <div className="flex flex-col gap-2">
-            {sortedTasks.map((task, i) =>
-          <TaskCard key={task.id} task={task} index={i} />
-          )}
-          </div>
-        }
-      </div>
-    </div>);
-
+      <div className="flex flex-col gap-2">
+          {sortedTasks.map((task, i) =>
+        <TaskCard key={task.id} task={task} index={i} />
+        )}
+        </div>
+      }
+    </div>
+  );
 }
