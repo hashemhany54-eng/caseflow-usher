@@ -11,7 +11,7 @@ interface TopBarProps {
 }
 
 const pageTitles: Record<string, string> = {
-  "/": "Your Tasks",
+  "/": "Tasks",
   "/orders": "Orders",
   "/completed": "Completed",
   "/on-hold": "On Hold",
@@ -23,11 +23,11 @@ const detailTabs = ["Order", "Scan", "Editor", "Design"];
 export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: TopBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { tasks } = useApp();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
-  const pageTitle = pageTitles[location.pathname] || "Your Tasks";
+  const pageTitle = pageTitles[location.pathname] || "Tasks";
 
   if (isTaskDetail) {
-    const { tasks } = useApp();
     return (
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
@@ -73,7 +73,10 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
 
   return (
     <header className="flex h-14 items-center bg-card px-4 gap-4">
-      <span className="text-sm font-medium text-foreground">{pageTitle}</span>
+      <div>
+        <h1 className="text-base font-bold leading-tight text-foreground">{pageTitle}</h1>
+        <p className="text-xs text-muted-foreground">{tasks.length} tasks</p>
+      </div>
       <div className="flex-1" />
       <div className="relative w-full max-w-xs">
         <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
