@@ -1,10 +1,9 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
 import { motion } from "framer-motion";
@@ -23,10 +22,16 @@ import { BillingSection } from "@/components/task-details/BillingSection";
 import { OrderScansSection } from "@/components/task-details/OrderScansSection";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
 
+interface OutletCtx {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
 export default function TaskDetailsPage() {
   const { taskId } = useParams();
   const navigate = useNavigate();
   const { tasks, completeTask, skipTask } = useApp();
+  const { activeTab } = useOutletContext<OutletCtx>();
   const task = tasks.find((t) => t.id === taskId);
   const [chatCollapsed, setChatCollapsed] = useState(false);
 
@@ -55,21 +60,7 @@ export default function TaskDetailsPage() {
   };
 
   return (
-    <Tabs defaultValue="order" className="flex flex-col h-[calc(100vh-3.5rem)] -m-4 md:-m-6">
-      {/* Primary Tabs - Pinned at top */}
-      <div className="border-b bg-background px-4 md:px-6 shrink-0 flex items-center gap-3">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors shrink-0">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </button>
-        <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0">
-          <TabsTrigger value="order" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Order</TabsTrigger>
-          <TabsTrigger value="scan" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Scan</TabsTrigger>
-          <TabsTrigger value="editor" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Editor</TabsTrigger>
-          <TabsTrigger value="design" className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-5">Design</TabsTrigger>
-        </TabsList>
-      </div>
-
-      {/* Content area with sidebar */}
+    <div className="flex flex-col h-[calc(100vh-3.5rem)] -m-4 md:-m-6">
       <div className="flex flex-1 overflow-hidden">
         {/* Task List Sidebar */}
         <TaskListSidebar />
@@ -100,69 +91,70 @@ export default function TaskDetailsPage() {
             )}
 
             {/* ORDER TAB */}
-            <TabsContent value="order" className="mt-0 space-y-4">
-              <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
+            {activeTab === "order" && (
+              <div className="space-y-4">
+                <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
 
-              {/* Combined Timeline + Review Card with Secondary Tabs */}
-              <div className="rounded-lg border bg-card">
-                <Tabs defaultValue="tat">
-                  <div className="flex items-center border-b">
-                    <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
-                      {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
-                        <TabsTrigger
-                          key={tab}
-                          value={tab.toLowerCase()}
-                          className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-success data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
-                        >
-                          {tab}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    <div className="pr-5 shrink-0">
-                      <FlagScanModal />
+                <div className="rounded-lg border bg-card">
+                  <Tabs defaultValue="tat">
+                    <div className="flex items-center border-b">
+                      <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1">
+                        {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
+                          <TabsTrigger
+                            key={tab}
+                            value={tab.toLowerCase()}
+                            className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-success data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
+                          >
+                            {tab}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      <div className="pr-5 shrink-0">
+                        <FlagScanModal />
+                      </div>
                     </div>
-                  </div>
 
-                  <TabsContent value="tat" className="p-5 space-y-6">
-                    <DesignTimeline timeline={timeline} />
-                    <div className="border-t border-border" />
-                    <DesignReviewCard onReview={handleReview} />
-                  </TabsContent>
+                    <TabsContent value="tat" className="p-5 space-y-6">
+                      <DesignTimeline timeline={timeline} />
+                      <div className="border-t border-border" />
+                      <DesignReviewCard onReview={handleReview} />
+                    </TabsContent>
 
-                  <TabsContent value="status" className="p-5">
-                    <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
-                  </TabsContent>
-                  <TabsContent value="review" className="p-5">
-                    <div className="text-center text-muted-foreground text-sm py-6">Review history coming soon</div>
-                  </TabsContent>
-                  <TabsContent value="design" className="p-5">
-                    <div className="text-center text-muted-foreground text-sm py-6">Design iterations coming soon</div>
-                  </TabsContent>
-                </Tabs>
+                    <TabsContent value="status" className="p-5">
+                      <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
+                    </TabsContent>
+                    <TabsContent value="review" className="p-5">
+                      <div className="text-center text-muted-foreground text-sm py-6">Review history coming soon</div>
+                    </TabsContent>
+                    <TabsContent value="design" className="p-5">
+                      <div className="text-center text-muted-foreground text-sm py-6">Design iterations coming soon</div>
+                    </TabsContent>
+                  </Tabs>
+                </div>
+
+                <CaseNoteSummary />
+                <SummaryAndItems />
+                <SplitOrdersSection />
+                <BillingSection />
+                <OrderScansSection />
               </div>
+            )}
 
-              <CaseNoteSummary />
-              <SummaryAndItems />
-              <SplitOrdersSection />
-              <BillingSection />
-              <OrderScansSection />
-            </TabsContent>
-
-            <TabsContent value="scan" className="mt-0">
+            {activeTab === "scan" && (
               <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Scan viewer coming soon</div>
-            </TabsContent>
-            <TabsContent value="editor" className="mt-0">
+            )}
+            {activeTab === "editor" && (
               <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">3D Editor coming soon</div>
-            </TabsContent>
-            <TabsContent value="design" className="mt-0">
+            )}
+            {activeTab === "design" && (
               <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Design workspace coming soon</div>
-            </TabsContent>
+            )}
           </div>
         </motion.div>
 
         {/* Right Activity Panel */}
         <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
       </div>
-    </Tabs>
+    </div>
   );
 }
