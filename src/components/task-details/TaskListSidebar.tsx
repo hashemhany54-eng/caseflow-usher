@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Scissors } from "lucide-react";
+import { Scissors, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export function TaskListSidebar() {
@@ -13,9 +13,18 @@ export function TaskListSidebar() {
 
   return (
     <div className="w-64 border-r bg-card shrink-0 flex flex-col h-full">
-      <div className="px-4 py-3 border-b">
-        <h2 className="text-sm font-semibold">Your Tasks</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">{tasks.length} tasks</p>
+      {/* Header aligned with top bar */}
+      <div className="px-3 py-3 border-b flex items-start gap-2">
+        <button
+          onClick={() => navigate("/")}
+          className="p-1 mt-0.5 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </button>
+        <div>
+          <h2 className="text-sm font-semibold">Your Tasks</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">{tasks.length} tasks</p>
+        </div>
       </div>
       <ScrollArea className="flex-1">
         <div className="py-1">

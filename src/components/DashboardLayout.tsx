@@ -15,17 +15,31 @@ export function DashboardLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex items-center h-14 border-b bg-card">
-            {!isTaskDetail && <SidebarTrigger className="ml-2 mr-0" />}
-            <div className="flex-1 h-full">
-              <TopBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-              />
+          {!isTaskDetail && (
+            <div className="flex items-center h-14 border-b bg-card">
+              <SidebarTrigger className="ml-2 mr-0" />
+              <div className="flex-1 h-full">
+                <TopBar
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                />
+              </div>
             </div>
-          </div>
+          )}
+          {isTaskDetail && (
+            <div className="flex items-center h-14 border-b bg-card">
+              <div className="flex-1 h-full">
+                <TopBar
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                />
+              </div>
+            </div>
+          )}
           <main className="flex-1 overflow-auto p-4 md:p-6">
             <Outlet context={{ searchQuery, activeTab, setActiveTab }} />
           </main>
