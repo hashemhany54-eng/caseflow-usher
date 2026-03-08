@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
