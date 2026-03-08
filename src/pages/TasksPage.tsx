@@ -21,7 +21,7 @@ const taskTypeMap: Record<string, string> = {
 
 export default function TasksPage() {
   const { tasks } = useApp();
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = "";
   const [activeTab, setActiveTab] = useState("my_tasks");
 
   // Compute counts for each tab
