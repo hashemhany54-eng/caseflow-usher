@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import {
   Calendar, Scissors, Tag, Building, MapPin,
-  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor } from
+  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor, Copy } from
 "lucide-react";
 import { InfoRow } from "./InfoRow";
+import { toast } from "sonner";
 
 interface Props {
   order: Order;
@@ -25,7 +26,15 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
             <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground flex-wrap">
               {order.patient_age && <span>{order.patient_age}y</span>}
               {order.patient_gender && <span>• {order.patient_gender}</span>}
-              <span>• {order.id}</span>
+              <span className="inline-flex items-center gap-1">
+                • {order.id}
+                <button
+                  onClick={() => { navigator.clipboard.writeText(order.id); toast.success("Order ID copied"); }}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Copy className="h-3 w-3" />
+                </button>
+              </span>
               {order.is_split &&
               <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20 gap-0.5">
                   <Scissors className="h-2.5 w-2.5" /> Split
