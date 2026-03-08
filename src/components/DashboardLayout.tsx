@@ -9,23 +9,30 @@ export function DashboardLayout() {
   const [activeTab, setActiveTab] = useState("order");
   const location = useLocation();
   const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
+  const isTasksRoot = location.pathname === "/";
 
   return (
     <SidebarProvider>
       <div className="h-screen flex w-full overflow-hidden">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 h-full">
-          <div className="flex items-center h-14 border-b bg-card shrink-0">
-            <div className="flex-1 h-full">
-              <TopBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-              />
+          {!isTasksRoot && (
+            <div className="flex items-center h-14 border-b bg-card shrink-0">
+              <div className="flex-1 h-full">
+                <TopBar
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                />
+              </div>
             </div>
-          </div>
-          {isTaskDetail ? (
+          )}
+          {isTasksRoot ? (
+            <main className="flex-1 overflow-hidden">
+              <Outlet context={{ searchQuery, activeTab, setActiveTab }} />
+            </main>
+          ) : isTaskDetail ? (
             <main className="flex-1 overflow-hidden">
               <Outlet context={{ searchQuery, activeTab, setActiveTab }} />
             </main>
