@@ -72,7 +72,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center px-4 py-3 sm:min-w-[120px] sm:w-[140px] md:w-[160px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
+        <div className="flex flex-col justify-start px-4 py-3 sm:min-w-[120px] sm:w-[140px] md:w-[160px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
           <p className="text-sm truncate">{order.doctor_name || "—"}</p>
           <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
         </div>
