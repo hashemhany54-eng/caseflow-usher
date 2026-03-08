@@ -76,7 +76,7 @@ export default function TaskDetailsPage() {
                 <Alert variant="destructive" className="flex items-center justify-between py-2.5 px-4 mb-4">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="h-4 w-4" />
-                    <AlertTitle className="mb-0">This order was resubmitted</AlertTitle>
+                    <AlertTitle className="mb-0 text-sm font-medium">This order was resubmitted</AlertTitle>
                   </div>
                   <Button
                     variant="destructive"
