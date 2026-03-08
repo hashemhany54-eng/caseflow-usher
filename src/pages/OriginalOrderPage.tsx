@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InfoRow } from "@/components/task-details/InfoRow";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
