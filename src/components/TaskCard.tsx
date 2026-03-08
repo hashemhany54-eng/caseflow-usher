@@ -95,7 +95,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-4 py-2.5 flex-1 min-w-[180px] border-r border-border/50">
+        <div className="flex flex-col justify-center px-4 py-2.5 flex-[2] min-w-0 border-r border-border/50">
           <span className="text-sm font-medium">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
