@@ -46,7 +46,7 @@ export function FlagScanModal() {
             </Select>
           </div>
           <div>
-            <label className="text-sm font-medium mb-1.5 block">Comments</label>
+            <Label className="text-sm font-medium mb-1.5 block">Comments</Label>
             <Textarea
               placeholder="Describe the scan issue..."
               value={comments}
