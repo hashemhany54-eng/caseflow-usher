@@ -205,7 +205,8 @@ export default function OrdersPage() {
           tabCounts={tabCounts}
         />
 
-        <div className="flex-1 min-w-0 overflow-auto p-3 md:p-4">
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 overflow-auto p-3 md:p-4">
             {grouped.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                 <Package className="h-12 w-12 mb-3 opacity-30" />
@@ -228,6 +229,7 @@ export default function OrdersPage() {
                 ))}
               </div>
             )}
+          </div>
         </div>
       </div>
     </div>
