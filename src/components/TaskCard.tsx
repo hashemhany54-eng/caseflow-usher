@@ -55,7 +55,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
       {/* Desktop row */}
       <div className="hidden lg:flex items-stretch min-h-[80px]">
         {/* Task Type + Due + Flags */}
-        <div className="flex flex-col justify-center gap-0.5 px-4 py-2.5 w-[200px] shrink-0 border-r border-border/50">
+        <div className="flex flex-col justify-center gap-0.5 px-4 py-2.5 flex-[2] min-w-0 border-r border-border/50">
           <div className="flex items-center gap-1.5">
             <span className={`h-2 w-2 rounded-full shrink-0 ${priorityDot}`} />
             <span className="font-semibold text-sm text-foreground">{task.task_type || "Task"}</span>
@@ -82,7 +82,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Patient */}
-        <div className="flex items-center gap-2.5 px-4 py-2.5 w-[170px] shrink-0 border-r border-border/50">
+        <div className="flex items-center gap-2.5 px-4 py-2.5 flex-[1.5] min-w-0 border-r border-border/50">
           <div className="h-8 w-8 rounded-full bg-success/20 text-success flex items-center justify-center text-[11px] font-semibold shrink-0">
             {order?.patient_name?.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
           </div>
@@ -95,7 +95,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-4 py-2.5 flex-1 min-w-[180px] border-r border-border/50">
+        <div className="flex flex-col justify-center px-4 py-2.5 flex-[2] min-w-0 border-r border-border/50">
           <span className="text-sm font-medium">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
@@ -105,12 +105,12 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Lab */}
-        <div className="flex items-center justify-center px-3 py-2.5 w-[80px] shrink-0 border-r border-border/50">
+        <div className="flex items-center justify-center px-3 py-2.5 flex-[0.7] min-w-0 border-r border-border/50">
           <span className="text-[11px] text-muted-foreground font-medium">{order?.lab_type}</span>
         </div>
 
         {/* Timeline Stepper */}
-        <div className="flex items-center px-4 py-2.5 flex-[2] min-w-[380px]">
+        <div className="flex items-center px-4 py-2.5 flex-[4] min-w-0">
           <div className="flex w-full gap-4">
             {stages.map((stage) => {
               const done = completedStages.has(stage as any);
