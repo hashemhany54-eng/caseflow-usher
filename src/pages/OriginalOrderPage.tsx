@@ -109,29 +109,20 @@ export default function OriginalOrderPage() {
     <div className="flex h-full">
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
-        <div className="h-14 border-b flex items-center px-4 gap-3 shrink-0">
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm font-medium">Original Order</span>
-          <span className="text-xs text-muted-foreground">#{order.id}</span>
-        </div>
-
         <div className="flex flex-1 overflow-hidden">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
             <div className="max-w-5xl mx-auto space-y-4">
-              {/* Resubmitted banner */}
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-destructive font-medium flex items-center gap-1.5">
-                  <RefreshCw className="h-3.5 w-3.5" />
+              {/* Resubmitted banner - same style as TaskDetailsPage */}
+              <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-destructive text-sm font-medium">
+                  <RefreshCw className="h-4 w-4" />
                   This order was canceled & resubmitted
-                </span>
+                </div>
                 <Button
-                  variant="link"
+                  variant="outline"
                   size="sm"
-                  className="text-xs text-primary p-0 h-auto"
-                  onClick={() => navigate(`/orders/${order.resubmitted_order_id}`)}
+                  className="text-xs h-7"
+                  onClick={() => navigate(-1)}
                 >
                   View new
                 </Button>
