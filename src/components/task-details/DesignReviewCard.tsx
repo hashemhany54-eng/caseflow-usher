@@ -15,9 +15,11 @@ import {
 
 interface Props {
   onReview: () => void;
+  taskType?: string;
 }
 
-export function DesignReviewCard({ onReview }: Props) {
+export function DesignReviewCard({ onReview, taskType }: Props) {
+  const isReview = taskType === "Design Review";
   const [open, setOpen] = useState(false);
   const [scanQuality, setScanQuality] = useState(false);
   const [file, setFile] = useState<File | null>(null);
