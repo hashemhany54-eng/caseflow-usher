@@ -1,5 +1,5 @@
-import { useState, Suspense, useRef } from "react";
-import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame } from "lucide-react";
+import { useState, Suspense, useRef, useMemo, useEffect } from "react";
+import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -10,9 +10,107 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 
-function TeethModel() {
+// Heatmap shader material
+const heatmapVertexShader = `
+  varying vec3 vPosition;
+  varying vec3 vNormal;
+  void main() {
+    vPosition = position;
+    vNormal = normalize(normalMatrix * normal);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const heatmapFragmentShader = `
+  varying vec3 vPosition;
+  varying vec3 vNormal;
+
+  // Simulated contact points (in local model space)
+  uniform vec3 contactPoints[8];
+  uniform int numContacts;
+  uniform float contactRadii[8];
+
+  vec3 heatColor(float t) {
+    // Green -> Yellow -> Orange -> Red
+    if (t < 0.25) return mix(vec3(0.0, 0.8, 0.0), vec3(0.5, 0.9, 0.0), t / 0.25);
+    if (t < 0.5) return mix(vec3(0.5, 0.9, 0.0), vec3(1.0, 1.0, 0.0), (t - 0.25) / 0.25);
+    if (t < 0.75) return mix(vec3(1.0, 1.0, 0.0), vec3(1.0, 0.5, 0.0), (t - 0.5) / 0.25);
+    return mix(vec3(1.0, 0.5, 0.0), vec3(1.0, 0.0, 0.0), (t - 0.75) / 0.25);
+  }
+
+  void main() {
+    vec3 baseColor = vec3(0.85, 0.82, 0.78); // tooth color
+    float maxHeat = 0.0;
+
+    for (int i = 0; i < 8; i++) {
+      if (i >= numContacts) break;
+      float dist = distance(vPosition, contactPoints[i]);
+      float radius = contactRadii[i];
+      float heat = 1.0 - smoothstep(0.0, radius, dist);
+      maxHeat = max(maxHeat, heat);
+    }
+
+    vec3 color = baseColor;
+    if (maxHeat > 0.05) {
+      vec3 heat = heatColor(maxHeat);
+      color = mix(baseColor, heat, maxHeat * 0.9);
+    }
+
+    // Simple lighting
+    vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+    float diff = max(dot(vNormal, lightDir), 0.0) * 0.6 + 0.4;
+    gl_FragColor = vec4(color * diff, 1.0);
+  }
+`;
+
+function TeethModel({ heatmap }: { heatmap: boolean }) {
   const geometry = useLoader(STLLoader, "/models/Upper_teeth.stl");
   const meshRef = useRef<THREE.Mesh>(null);
+
+  // Compute contact points based on geometry bounding box
+  const { contactPoints, contactRadii } = useMemo(() => {
+    geometry.computeBoundingBox();
+    const bb = geometry.boundingBox!;
+    const cx = (bb.min.x + bb.max.x) / 2;
+    const cy = (bb.min.y + bb.max.y) / 2;
+    const cz = (bb.min.z + bb.max.z) / 2;
+    const sx = bb.max.x - bb.min.x;
+    const sy = bb.max.y - bb.min.y;
+
+    // Simulate contact points on occlusal surfaces
+    const points = [
+      new THREE.Vector3(cx - sx * 0.3, cy + sy * 0.1, cz),
+      new THREE.Vector3(cx - sx * 0.15, cy + sy * 0.15, cz),
+      new THREE.Vector3(cx + sx * 0.05, cy + sy * 0.12, cz),
+      new THREE.Vector3(cx + sx * 0.2, cy + sy * 0.1, cz),
+      new THREE.Vector3(cx + sx * 0.35, cy + sy * 0.05, cz),
+      new THREE.Vector3(cx - sx * 0.35, cy - sy * 0.1, cz),
+      new THREE.Vector3(cx + sx * 0.15, cy - sy * 0.15, cz),
+      new THREE.Vector3(cx - sx * 0.05, cy - sy * 0.05, cz),
+    ];
+    const radii = [4.0, 3.5, 5.0, 3.0, 4.5, 3.5, 4.0, 3.0];
+    return { contactPoints: points, contactRadii: radii };
+  }, [geometry]);
+
+  const shaderUniforms = useMemo(() => ({
+    contactPoints: { value: contactPoints },
+    numContacts: { value: contactPoints.length },
+    contactRadii: { value: contactRadii },
+  }), [contactPoints, contactRadii]);
+
+  if (heatmap) {
+    return (
+      <Center>
+        <mesh ref={meshRef} geometry={geometry} rotation={[-Math.PI / 2, 0, 0]}>
+          <shaderMaterial
+            vertexShader={heatmapVertexShader}
+            fragmentShader={heatmapFragmentShader}
+            uniforms={shaderUniforms}
+          />
+        </mesh>
+      </Center>
+    );
+  }
 
   return (
     <Center>
@@ -23,6 +121,28 @@ function TeethModel() {
   );
 }
 
+function HeatmapLegend() {
+  return (
+    <div className="absolute top-3 left-[280px] z-10 bg-card/90 backdrop-blur-sm rounded-lg border shadow-sm p-2 flex flex-col items-center gap-1">
+      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+        <ArrowUp className="h-3 w-3" />
+        <ZoomIn className="h-3 w-3" />
+      </div>
+      <div className="text-[10px] text-muted-foreground font-medium">0.4mm</div>
+      <div
+        className="w-4 h-[120px] rounded-sm"
+        style={{
+          background: "linear-gradient(to bottom, #ff0000, #ff8800, #ffff00, #88dd00, #00cc00)",
+        }}
+      />
+      <div className="text-[10px] text-muted-foreground font-medium">0.0mm</div>
+      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+        <ArrowDown className="h-3 w-3" />
+        <ZoomIn className="h-3 w-3" />
+      </div>
+    </div>
+  );
+}
 interface ViewItem {
   label: string;
   icons: { icon: React.ElementType; active?: boolean }[];
