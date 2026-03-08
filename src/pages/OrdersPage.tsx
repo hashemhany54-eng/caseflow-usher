@@ -117,7 +117,7 @@ function OrderRow({ order, index }: {order: Order;index: number;}) {
 
           {/* Original ETA as last step - part of the stepper */}
           <div className="flex-1 flex flex-col gap-1">
-            <div className={`h-[1.5px] w-full rounded-full bg-muted`} />
+            <div className={`h-[3px] w-full rounded-full bg-muted`} />
             <span className="text-[10px] sm:text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
             <span className={`text-[9px] sm:text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
               {formattedTime}
