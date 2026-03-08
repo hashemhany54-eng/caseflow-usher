@@ -10,6 +10,8 @@ export function DashboardLayout() {
   const location = useLocation();
   const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
   const isTasksRoot = location.pathname === "/";
+  const isOrdersRoot = location.pathname === "/orders";
+  const isFullPageLayout = isTasksRoot || isOrdersRoot;
 
   return (
     <SidebarProvider>
