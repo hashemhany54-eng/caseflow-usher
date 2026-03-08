@@ -216,10 +216,6 @@ export default function OrdersPage() {
               <div className="space-y-6">
                 {grouped.map((group) => (
                   <div key={group.key}>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Badge variant="secondary" className={`text-xs ${group.color}`}>{group.label}</Badge>
-                      <span className="text-xs text-muted-foreground">{group.orders.length}</span>
-                    </div>
                     <div className="space-y-2">
                       {group.orders.map((order, i) => (
                         <OrderRow key={order.id} order={order} index={i} />
