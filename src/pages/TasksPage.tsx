@@ -1,10 +1,12 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
-import { ClipboardList, Search } from "lucide-react";
+import { ClipboardList, Search, RefreshCw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 // Map sidebar tab keys to task_type values
 const taskTypeMap: Record<string, string> = {
@@ -89,15 +91,17 @@ export default function TasksPage() {
   }, [tasks, activeTab, searchQuery]);
 
   return (
-    <div className="flex h-full">
-      <TaskFiltersSidebar
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        tabCounts={tabCounts}
-      />
-
-      <div className="flex-1 flex flex-col min-w-0">
-        <div className="flex items-center h-14 border-b bg-card shrink-0 px-4 gap-4">
+    <div className="flex flex-col h-full">
+      {/* Unified top bar */}
+      <div className="flex items-center h-14 border-b bg-card shrink-0">
+        <div className="flex items-center gap-2 px-3 w-64 shrink-0 border-r h-full">
+          <SidebarTrigger className="shrink-0" />
+          <h2 className="text-sm font-semibold leading-tight flex-1">Tasks</h2>
+          <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
+            <RefreshCw className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+        <div className="flex items-center flex-1 px-4 gap-4">
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <span>Focusing On:</span>
             <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5">Design Anterior C&B Level 4</Badge>
@@ -113,20 +117,32 @@ export default function TasksPage() {
             />
           </div>
         </div>
-        <div className="flex-1 overflow-auto p-3 md:p-4">
-          {filteredTasks.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-              <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
-              <p className="font-medium text-sm">No tasks found</p>
-              <p className="text-xs">Try adjusting your filters</p>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {filteredTasks.map((task, i) => (
-                <TaskCard key={task.id} task={task} index={i} />
-              ))}
-            </div>
-          )}
+      </div>
+
+      {/* Content area */}
+      <div className="flex flex-1 min-h-0">
+        <TaskFiltersSidebar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          tabCounts={tabCounts}
+        />
+
+        <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 overflow-auto p-3 md:p-4">
+            {filteredTasks.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+                <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+                <p className="font-medium text-sm">No tasks found</p>
+                <p className="text-xs">Try adjusting your filters</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {filteredTasks.map((task, i) => (
+                  <TaskCard key={task.id} task={task} index={i} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
