@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Link, X, FileUp } from "lucide-react";
+import { Upload, Link, X, FileUp, CheckCircle2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -15,9 +15,11 @@ import {
 
 interface Props {
   onReview: () => void;
+  taskType?: string;
 }
 
-export function DesignReviewCard({ onReview }: Props) {
+export function DesignReviewCard({ onReview, taskType }: Props) {
+  const isReview = taskType === "Design Review";
   const [open, setOpen] = useState(false);
   const [scanQuality, setScanQuality] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -49,7 +51,8 @@ export function DesignReviewCard({ onReview }: Props) {
       <h2 className="text-sm font-semibold mb-1">Design Review</h2>
       <p className="text-xs text-muted-foreground mb-3">Design completed by internal designer</p>
       <Button onClick={() => setOpen(true)} className="gap-2">
-        <Upload className="h-4 w-4" /> Upload Design
+        {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
+        {isReview ? "Review Design" : "Upload Design"}
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>

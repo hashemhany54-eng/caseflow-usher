@@ -117,7 +117,7 @@ export default function TaskDetailsPage() {
                           <TabsContent value="tat" className="p-5 space-y-6">
                             <DesignTimeline timeline={timeline} />
                             <div className="border-t border-border" />
-                            <DesignReviewCard onReview={handleReview} />
+                            <DesignReviewCard onReview={handleReview} taskType={task.task_type} />
                           </TabsContent>
                           <TabsContent value="status" className="p-5">
                             <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
