@@ -1,7 +1,6 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
-import { useOutletContext } from "react-router-dom";
 import { ClipboardList, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
