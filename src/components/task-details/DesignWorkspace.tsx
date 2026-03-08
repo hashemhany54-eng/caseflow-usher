@@ -249,15 +249,17 @@ export function DesignWorkspace() {
         <div className="bg-card rounded-lg border shadow-sm flex flex-col items-center py-1.5 px-1 gap-0.5">
           <Tooltip>
             <TooltipTrigger asChild>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setHeatmapEnabled(!heatmapEnabled)}
                 className={cn(
-                  "p-1.5 rounded transition-colors",
-                  heatmapEnabled ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  "h-8 w-8",
+                  heatmapEnabled && "bg-primary text-primary-foreground hover:bg-primary/90"
                 )}
               >
                 <Flame className="h-4 w-4" />
-              </button>
+              </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p className="text-xs">Toggle Heatmap</p>
