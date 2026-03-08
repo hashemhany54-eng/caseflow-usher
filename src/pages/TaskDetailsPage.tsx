@@ -80,15 +80,11 @@ export default function TaskDetailsPage() {
                   </div>
                   <Sheet>
                     <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="text-xs h-7">View Original Order</Button>
+                      <Button variant="outline" size="sm" className="text-xs h-7" onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/orders/${order.original_order_id}/original`);
+                      }}>View Original Order</Button>
                     </SheetTrigger>
-                    <SheetContent>
-                      <SheetHeader><SheetTitle>Original Order</SheetTitle></SheetHeader>
-                      <div className="mt-4 space-y-3 text-sm">
-                        <p className="text-muted-foreground">Order ID: {order.original_order_id}</p>
-                        <p className="text-muted-foreground">This order was previously submitted and returned for revision.</p>
-                      </div>
-                    </SheetContent>
                   </Sheet>
                 </div>
               )}
