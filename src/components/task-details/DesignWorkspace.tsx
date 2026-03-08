@@ -208,9 +208,10 @@ export function DesignWorkspace() {
               <div className="px-1 pb-2 space-y-0.5">
                 {viewGroups.map((group) => (
                   <div key={group.label}>
-                    <button
+                    <Button
+                      variant="ghost"
                       onClick={() => toggleSection(group.label)}
-                      className="flex items-center gap-1.5 w-full px-2 py-1.5 text-xs font-medium text-foreground hover:bg-accent/50 rounded"
+                      className="flex items-center gap-1.5 w-full px-2 py-1.5 text-xs font-medium text-foreground h-auto justify-start"
                     >
                       {openSections[group.label] ? (
                         <ChevronDown className="h-3 w-3 text-muted-foreground" />
@@ -218,7 +219,7 @@ export function DesignWorkspace() {
                         <ChevronRight className="h-3 w-3 text-muted-foreground" />
                       )}
                       {group.label}
-                    </button>
+                    </Button>
                     {openSections[group.label] && (
                       <div className="ml-5 space-y-0.5">
                         {group.items.map((item) => (
@@ -249,15 +250,17 @@ export function DesignWorkspace() {
         <div className="bg-card rounded-lg border shadow-sm flex flex-col items-center py-1.5 px-1 gap-0.5">
           <Tooltip>
             <TooltipTrigger asChild>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setHeatmapEnabled(!heatmapEnabled)}
                 className={cn(
-                  "p-1.5 rounded transition-colors",
-                  heatmapEnabled ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  "h-8 w-8",
+                  heatmapEnabled && "bg-primary text-primary-foreground hover:bg-primary/90"
                 )}
               >
                 <Flame className="h-4 w-4" />
-              </button>
+              </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p className="text-xs">Toggle Heatmap</p>
@@ -269,17 +272,17 @@ export function DesignWorkspace() {
           {toolbarItems.map((tool) => (
             <Tooltip key={tool.id}>
               <TooltipTrigger asChild>
-                <button
+              <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setActiveTool(tool.id)}
                   className={cn(
-                    "p-1.5 rounded transition-colors",
-                    activeTool === tool.id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    "h-8 w-8",
+                    activeTool === tool.id && "bg-primary text-primary-foreground hover:bg-primary/90"
                   )}
                 >
                   <tool.icon className="h-4 w-4" />
-                </button>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <p className="text-xs">{tool.label}</p>

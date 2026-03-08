@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Search, RefreshCw, ArrowLeft, Download, Zap, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/context/AppContext";
@@ -63,18 +64,20 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
         <div className="flex items-center gap-2 px-3 h-full border-r border-border shrink-0 w-64">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 shrink-0"
             onClick={() => navigate("/")}
-            className="p-1 text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
-          </button>
+          </Button>
           <div>
             <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
           </div>
-          <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
+          <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto shrink-0">
             <RefreshCw className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
         {/* Tabs */}
         <div className="flex items-center h-full">
@@ -82,17 +85,19 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
             const value = tab.toLowerCase();
             const isActive = activeTab === value;
             return (
-              <button
+              <Button
                 key={tab}
+                variant="ghost"
                 onClick={() => onTabChange(value)}
-                className={`text-sm px-5 h-full border-b-2 transition-colors ${
+                className={cn(
+                  "text-sm px-5 h-full rounded-none border-b-2 transition-colors",
                   isActive
                     ? "border-primary text-foreground font-medium"
                     : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
+                )}
               >
                 {tab}
-              </button>
+              </Button>
             );
           })}
         </div>

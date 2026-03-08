@@ -50,9 +50,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
   if (collapsed) {
     return (
       <div className="w-12 border-l bg-card flex flex-col items-center py-3 gap-3 shrink-0">
-        <button onClick={onToggle} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+        <Button variant="ghost" size="icon" className="h-9 w-9" onClick={onToggle}>
           <MessageSquare className="h-5 w-5 text-muted-foreground" />
-        </button>
+        </Button>
       </div>
     );
   }
@@ -63,9 +63,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
     <div className="w-80 border-l bg-card flex flex-col shrink-0 overflow-hidden">
       <div className="h-14 flex items-center justify-between px-3 border-b shrink-0">
         <span className="text-sm font-semibold">Activity</span>
-        <button onClick={onToggle} className="p-1.5 hover:bg-secondary rounded transition-colors">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onToggle}>
           <X className="h-4 w-4 text-muted-foreground" />
-        </button>
+        </Button>
       </div>
 
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
@@ -119,9 +119,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
           </div>
           <div className="h-[60px] px-3 border-t shrink-0 flex items-center">
             <div className="flex gap-2 w-full">
-              <button className="p-2 hover:bg-secondary rounded transition-colors shrink-0">
+              <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0">
                 <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </button>
+              </Button>
               <Input
                 placeholder="Type a message..."
                 value={message}

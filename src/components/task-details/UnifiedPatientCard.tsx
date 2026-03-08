@@ -1,6 +1,7 @@
 import { Order } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
+import { Button } from "@/components/ui/button";
 import {
   Calendar, Scissors, Tag, Building, MapPin,
   FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor, Copy } from
@@ -28,12 +29,14 @@ export function UnifiedPatientCard({ order, timeLeft, isOverdue, isUrgent }: Pro
               {order.patient_gender && <span>• {order.patient_gender}</span>}
               <span className="inline-flex items-center gap-1">
                 • {order.id}
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5"
                   onClick={() => { navigator.clipboard.writeText(order.id); toast.success("Order ID copied"); }}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Copy className="h-3 w-3" />
-                </button>
+                </Button>
               </span>
               {order.is_split &&
               <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-warning/10 text-warning border-warning/20 gap-0.5">

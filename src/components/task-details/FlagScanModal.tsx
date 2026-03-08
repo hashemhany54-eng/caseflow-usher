@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Flag } from "lucide-react";
 import { toast } from "sonner";
 
@@ -31,7 +32,7 @@ export function FlagScanModal() {
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
-            <label className="text-sm font-medium mb-1.5 block">Issue Type</label>
+            <Label className="text-sm font-medium mb-1.5 block">Issue Type</Label>
             <Select value={reason} onValueChange={setReason}>
               <SelectTrigger>
                 <SelectValue placeholder="Select issue type" />
@@ -46,7 +47,7 @@ export function FlagScanModal() {
             </Select>
           </div>
           <div>
-            <label className="text-sm font-medium mb-1.5 block">Comments</label>
+            <Label className="text-sm font-medium mb-1.5 block">Comments</Label>
             <Textarea
               placeholder="Describe the scan issue..."
               value={comments}
