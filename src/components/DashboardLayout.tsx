@@ -8,7 +8,7 @@ export function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("order");
   const location = useLocation();
-  const isTaskDetail = location.pathname.startsWith("/tasks/");
+  const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
 
   return (
     <SidebarProvider>
