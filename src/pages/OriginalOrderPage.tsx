@@ -114,8 +114,7 @@ export default function OriginalOrderPage() {
             <div className="max-w-5xl mx-auto space-y-4">
               {/* Resubmitted banner */}
               <Alert variant="destructive" className="flex items-center justify-between py-2.5 px-4">
-                <div className="flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4" />
+                <div className="flex items-center">
                   <AlertTitle className="mb-0 text-sm font-medium">This order was canceled & resubmitted</AlertTitle>
                 </div>
                 <Button
