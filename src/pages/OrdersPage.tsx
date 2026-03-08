@@ -3,14 +3,14 @@ import { useOutletContext } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Package, Clock, RefreshCw, User } from "lucide-react";
+import { Package, Clock, RefreshCw, User, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { Order } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { mockTimeline } from "@/data/mockData";
 
 const statusGroups = [
   { key: "new", label: "New", color: "bg-primary/10 text-primary" },
@@ -23,6 +23,15 @@ const statusGroups = [
   { key: "canceled", label: "Canceled", color: "bg-destructive/10 text-destructive" },
 ];
 
+const orderStages = ["order_placed", "design", "qc", "preview", "model"] as const;
+const orderStageLabels: Record<string, string> = {
+  order_placed: "Placed",
+  design: "Fabrication",
+  qc: "QC",
+  preview: "Shipped",
+  model: "Delivered",
+};
+
 function OrderRow({ order, index }: { order: Order; index: number }) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(order.due_date);
@@ -30,16 +39,26 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
   const dueDate = new Date(order.due_date);
   const formattedDue = dueDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
+  const timeline = mockTimeline[order.id] || [];
+  const completedStages = new Set(timeline.map((t) => t.stage));
+
+  const formatDate = (timestamp: string) => {
+    return new Date(timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
+  // Check if any stage is overdue (red bar)
+  const hasOverdueStage = isOverdue;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="grid grid-cols-[1fr_1fr_1.5fr_auto] items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
+      className="flex items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
       {/* Patient Name */}
-      <div className="min-w-0">
+      <div className="min-w-[160px] w-[180px] shrink-0">
         <div className="flex items-center gap-2 mb-0.5">
           <p className="text-sm font-medium truncate">{order.patient_name}</p>
           {order.is_resubmitted && (
@@ -51,31 +70,56 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       </div>
 
       {/* Doctor & Practice */}
-      <div className="min-w-0">
+      <div className="min-w-[140px] w-[160px] shrink-0">
         <p className="text-sm truncate">{order.doctor_name || "—"}</p>
         <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
       </div>
 
       {/* Case Type & Lab */}
-      <div className="min-w-0">
+      <div className="min-w-[160px] flex-1">
         <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
         <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
       </div>
 
-      {/* ETA & Priority */}
-      <div className="flex items-center gap-3 shrink-0">
-        <div className="text-right">
-          <p className="text-xs font-medium">Original ETA</p>
-          <p className={`text-sm font-semibold ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
-            {formattedDue}
-          </p>
+      {/* Timeline Stepper */}
+      <div className="flex items-center min-w-[340px] flex-[1.5]">
+        <div className="flex w-full gap-3">
+          {orderStages.map((stage) => {
+            const done = completedStages.has(stage as any);
+            const stageEvent = timeline.find((t) => t.stage === stage);
+            return (
+              <div key={stage} className="flex-1 flex flex-col gap-1">
+                <div
+                  className={`h-[3px] w-full rounded-full ${
+                    done
+                      ? hasOverdueStage ? "bg-destructive" : "bg-foreground"
+                      : "bg-muted"
+                  }`}
+                />
+                <span className="text-[11px] font-medium text-foreground leading-tight">
+                  {orderStageLabels[stage]}
+                </span>
+                {stageEvent && (
+                  <span className="text-[10px] text-muted-foreground leading-none">
+                    {formatDate(stageEvent.timestamp)}
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </div>
-        <PriorityBadge priority={order.priority} />
+      </div>
+
+      {/* ETA */}
+      <div className="shrink-0 text-right min-w-[90px]">
+        <p className="text-[10px] text-muted-foreground">Original ETA</p>
+        <p className={`text-sm font-semibold ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
+          {formattedDue}
+        </p>
       </div>
     </motion.div>
   );
 }
-
 export default function OrdersPage() {
   const { orders } = useApp();
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
