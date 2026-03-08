@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useState, Suspense, useRef } from "react";
 import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Center } from "@react-three/drei";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { useLoader } from "@react-three/fiber";
+import * as THREE from "three";
+
+function TeethModel() {
+  const geometry = useLoader(STLLoader, "/models/Upper_teeth.stl");
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  return (
+    <Center>
+      <mesh ref={meshRef} geometry={geometry} rotation={[-Math.PI / 2, 0, 0]}>
+        <meshStandardMaterial color="hsl(40, 20%, 88%)" roughness={0.3} metalness={0.1} />
+      </mesh>
+    </Center>
+  );
+}
 
 interface ViewItem {
   label: string;
@@ -110,7 +127,6 @@ export function DesignWorkspace() {
       {/* Toolbar */}
       <div className="absolute top-3 left-[240px] z-10">
         <div className="bg-card rounded-lg border shadow-sm flex flex-col items-center py-1.5 px-1 gap-0.5">
-          {/* Heatmap toggle */}
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -153,16 +169,20 @@ export function DesignWorkspace() {
         </div>
       </div>
 
-      {/* Main 3D Viewer Placeholder */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          <Box className="h-16 w-16 mx-auto mb-3 opacity-20" />
-          <p className="text-sm font-medium">3D Design Viewer</p>
-          <p className="text-xs mt-1">3D model will render here</p>
-          {heatmapEnabled && (
-            <p className="text-xs mt-2 text-primary font-medium">Heatmap mode active</p>
-          )}
-        </div>
+      {/* 3D Viewer */}
+      <div className="flex-1">
+        <Canvas
+          camera={{ position: [0, 0, 120], fov: 45 }}
+          style={{ background: "transparent" }}
+        >
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[10, 10, 10]} intensity={0.8} />
+          <directionalLight position={[-10, -5, -10]} intensity={0.3} />
+          <Suspense fallback={null}>
+            <TeethModel />
+          </Suspense>
+          <OrbitControls enableDamping dampingFactor={0.1} />
+        </Canvas>
       </div>
 
       {/* Top-right actions */}
