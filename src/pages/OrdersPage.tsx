@@ -59,35 +59,38 @@ function OrderRow({ order, index }: {order: Order;index: number;}) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all">
+      className="flex flex-col md:flex-row md:items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all">
       
-      {/* Patient Name */}
-      <div className="flex items-center min-w-[160px] w-[180px] shrink-0 px-3 py-2 border-r border-border/50">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium truncate">{order.patient_name}</p>
-          {order.is_resubmitted &&
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
-              <RefreshCw className="h-2.5 w-2.5" /> Resub
-            </Badge>
-          }
+      {/* Top row on mobile: Patient + Doctor + Case */}
+      <div className="flex flex-col sm:flex-row sm:items-stretch flex-1 min-w-0">
+        {/* Patient Name */}
+        <div className="flex items-center px-3 py-2 sm:min-w-[140px] sm:w-[160px] md:w-[180px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
+          <div className="flex items-center gap-2 min-w-0">
+            <p className="text-sm font-medium truncate">{order.patient_name}</p>
+            {order.is_resubmitted &&
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
+                <RefreshCw className="h-2.5 w-2.5" /> Resub
+              </Badge>
+            }
+          </div>
+        </div>
+
+        {/* Doctor & Practice */}
+        <div className="flex flex-col justify-center px-3 py-2 sm:min-w-[120px] sm:w-[140px] md:w-[160px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
+          <p className="text-sm truncate">{order.doctor_name || "—"}</p>
+          <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
+        </div>
+
+        {/* Case Type & Lab */}
+        <div className="flex flex-col justify-center px-3 py-2 flex-1 min-w-0 border-b md:border-b-0 md:border-r border-border/50">
+          <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
+          <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
         </div>
       </div>
 
-      {/* Doctor & Practice */}
-      <div className="flex flex-col justify-center min-w-[140px] w-[160px] shrink-0 px-3 py-2 border-r border-border/50">
-        <p className="text-sm truncate">{order.doctor_name || "—"}</p>
-        <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
-      </div>
-
-      {/* Case Type & Lab */}
-      <div className="flex flex-col justify-center min-w-[160px] flex-1 px-3 py-2 border-r border-border/50">
-        <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
-        <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
-      </div>
-
       {/* Timeline Stepper: Placed, Fabrication, Shipped + Original ETA */}
-      <div className="flex items-center px-3 py-2 min-w-[420px] flex-[1.5]">
-        <div className="flex w-full gap-3">
+      <div className="flex items-center px-3 py-2 md:min-w-[320px] lg:min-w-[420px] md:flex-[1.5]">
+        <div className="flex w-full gap-2 sm:gap-3">
           {orderStages.map((stage) => {
             const done = completedStages.has(stage as any);
             const stageEvent = timeline.find((t) => t.stage === stage);
@@ -100,11 +103,11 @@ function OrderRow({ order, index }: {order: Order;index: number;}) {
                   "bg-muted"}`
                   } />
                 
-                <span className="text-[11px] font-medium text-foreground leading-tight">
+                <span className="text-[10px] sm:text-[11px] font-medium text-foreground leading-tight">
                   {orderStageLabels[stage]}
                 </span>
                 {stageEvent &&
-                <span className="text-[10px] text-muted-foreground leading-none">
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground leading-none">
                     {formatDate(stageEvent.timestamp)}
                   </span>
                 }
@@ -115,12 +118,12 @@ function OrderRow({ order, index }: {order: Order;index: number;}) {
           {/* Original ETA as last step - part of the stepper */}
           <div className="flex-1 flex flex-col gap-1">
             <div className={`h-[3px] w-full rounded-full bg-muted`} />
-            <span className="text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
-            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
+            <span className="text-[10px] sm:text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
+            <span className={`text-[9px] sm:text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
               {formattedTime}
             </span>
-            <span className="text-[10px] text-primary leading-none">Practice Sees</span>
-            <span className="text-[10px] font-semibold text-foreground leading-none">{practiceSees}</span>
+            <span className="text-[9px] sm:text-[10px] text-primary leading-none">Practice Sees</span>
+            <span className="text-[9px] sm:text-[10px] font-semibold text-foreground leading-none">{practiceSees}</span>
           </div>
         </div>
       </div>
