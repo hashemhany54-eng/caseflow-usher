@@ -271,17 +271,17 @@ export function DesignWorkspace() {
           {toolbarItems.map((tool) => (
             <Tooltip key={tool.id}>
               <TooltipTrigger asChild>
-                <button
+              <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setActiveTool(tool.id)}
                   className={cn(
-                    "p-1.5 rounded transition-colors",
-                    activeTool === tool.id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    "h-8 w-8",
+                    activeTool === tool.id && "bg-primary text-primary-foreground hover:bg-primary/90"
                   )}
                 >
                   <tool.icon className="h-4 w-4" />
-                </button>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <p className="text-xs">{tool.label}</p>
