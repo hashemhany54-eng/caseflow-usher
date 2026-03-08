@@ -110,7 +110,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Timeline Stepper */}
-        <div className="flex items-center px-4 py-2.5 flex-[2] min-w-[380px]">
+        <div className="flex items-center px-4 py-2.5 flex-[4] min-w-0">
           <div className="flex w-full gap-4">
             {stages.map((stage) => {
               const done = completedStages.has(stage as any);
