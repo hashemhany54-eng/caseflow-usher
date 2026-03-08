@@ -109,25 +109,26 @@ export default function TasksPage() {
             <Input
               placeholder="Filter by task"
               value={searchQuery}
-              onChange={(e) => setLocalSearch(e.target.value)}
+              onChange={(e) => onSearchChange(e.target.value)}
               className="pl-8 h-8 bg-secondary border-0 text-sm"
             />
           </div>
         </div>
         <div className="flex-1 overflow-auto p-3 md:p-4">
-        {filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-            <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
-            <p className="font-medium text-sm">No tasks found</p>
-            <p className="text-xs">Try adjusting your filters</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {filteredTasks.map((task, i) => (
-              <TaskCard key={task.id} task={task} index={i} />
-            ))}
-          </div>
-        )}
+          {filteredTasks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+              <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+              <p className="font-medium text-sm">No tasks found</p>
+              <p className="text-xs">Try adjusting your filters</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {filteredTasks.map((task, i) => (
+                <TaskCard key={task.id} task={task} index={i} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
