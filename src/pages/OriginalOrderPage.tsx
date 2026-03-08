@@ -113,13 +113,10 @@ export default function OriginalOrderPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
             <div className="max-w-5xl mx-auto space-y-4">
               {/* Resubmitted banner */}
-              <Alert variant="destructive" className="flex items-center justify-between">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 mt-0.5" />
-                  <div>
-                    <AlertTitle>This order was canceled & resubmitted</AlertTitle>
-                    <AlertDescription>This order was previously submitted and returned for revision.</AlertDescription>
-                  </div>
+              <Alert variant="destructive" className="flex items-center justify-between py-2.5 px-4">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle className="mb-0">This order was canceled & resubmitted</AlertTitle>
                 </div>
                 <Button
                   variant="destructive"
