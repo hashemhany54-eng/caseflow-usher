@@ -73,13 +73,10 @@ export default function TaskDetailsPage() {
             <div className="max-w-5xl mx-auto">
               {/* Resubmitted Banner */}
               {order.is_resubmitted && (
-                <Alert variant="destructive" className="flex items-center justify-between">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 mt-0.5" />
-                    <div>
-                      <AlertTitle>This order was resubmitted</AlertTitle>
-                      <AlertDescription>This order was previously submitted and returned for revision.</AlertDescription>
-                    </div>
+                <Alert variant="destructive" className="flex items-center justify-between py-2.5 px-4 mb-4">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle className="mb-0">This order was resubmitted</AlertTitle>
                   </div>
                   <Button
                     variant="destructive"
