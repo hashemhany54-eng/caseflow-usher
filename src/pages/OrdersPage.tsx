@@ -115,37 +115,42 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
 export default function OrdersPage() {
   const { orders } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("unsubmitted_scans");
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     counts.all = orders.length;
-    statusGroups.forEach((s) => {
-      counts[s.key] = orders.filter((o) => o.status === s.key).length;
-    });
-    counts.p_all = orders.length;
-    counts.p_high = orders.filter((o) => o.priority === "high").length;
-    counts.p_medium = orders.filter((o) => o.priority === "medium").length;
-    counts.p_low = orders.filter((o) => o.priority === "low").length;
-    counts.l_all = orders.length;
-    counts["l_Zircon"] = orders.filter((o) => o.lab_type === "Zircon").length;
-    counts["l_E.Max"] = orders.filter((o) => o.lab_type === "E.Max").length;
-    counts["l_PFM"] = orders.filter((o) => o.lab_type === "PFM").length;
+    // Review tabs
+    counts.unsubmitted_scans = orders.filter((o) => o.status === "new").length;
+    counts.needs_review = orders.filter((o) => o.status === "waiting_review").length;
+    counts.design_preview_review = orders.filter((o) => o.status === "in_progress").length;
+    counts.on_hold = orders.filter((o) => o.status === "on_hold").length;
+    // Status tabs
+    counts.new = orders.filter((o) => o.status === "new").length;
+    counts.fabrication = orders.filter((o) => o.status === "in_progress").length;
+    counts.shipped = orders.filter((o) => o.status === "shipped").length;
+    counts.delivered = orders.filter((o) => o.status === "delivered").length;
+    counts.canceled = orders.filter((o) => o.status === "canceled").length;
     return counts;
   }, [orders]);
+
+  const statusMap: Record<string, string> = {
+    unsubmitted_scans: "new",
+    needs_review: "waiting_review",
+    design_preview_review: "in_progress",
+    on_hold: "on_hold",
+    new: "new",
+    fabrication: "in_progress",
+    shipped: "shipped",
+    delivered: "delivered",
+    canceled: "canceled",
+  };
 
   const filtered = useMemo(() => {
     let result = orders;
 
-    // Status filter
-    if (activeTab.startsWith("p_")) {
-      const priority = activeTab.replace("p_", "");
-      if (priority !== "all") result = result.filter((o) => o.priority === priority);
-    } else if (activeTab.startsWith("l_")) {
-      const lab = activeTab.replace("l_", "");
-      if (lab !== "all") result = result.filter((o) => o.lab_type === lab);
-    } else if (activeTab !== "all") {
-      result = result.filter((o) => o.status === activeTab);
+    if (activeTab !== "all" && statusMap[activeTab]) {
+      result = result.filter((o) => o.status === statusMap[activeTab]);
     }
 
     const q = searchQuery.toLowerCase();
