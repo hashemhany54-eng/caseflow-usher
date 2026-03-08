@@ -105,7 +105,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Lab */}
-        <div className="flex items-center justify-center px-3 py-2.5 w-[80px] shrink-0 border-r border-border/50">
+        <div className="flex items-center justify-center px-3 py-2.5 flex-[0.7] min-w-0 border-r border-border/50">
           <span className="text-[11px] text-muted-foreground font-medium">{order?.lab_type}</span>
         </div>
 
