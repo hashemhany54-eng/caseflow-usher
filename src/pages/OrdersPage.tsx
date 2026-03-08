@@ -58,9 +58,9 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex flex-col md:flex-row md:items-start rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all min-h-[72px]"
+      className="flex flex-col md:flex-row md:items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all min-h-[72px]"
     >
-      <div className="flex flex-col sm:flex-row sm:items-start flex-1 min-w-0">
+      <div className="flex flex-col sm:flex-row sm:items-stretch flex-1 min-w-0">
         <div className="flex items-center px-4 py-3 sm:min-w-[140px] sm:w-[160px] md:w-[180px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
           <div className="flex items-center gap-2 min-w-0">
             <p className="text-sm font-medium truncate">{order.patient_name}</p>
