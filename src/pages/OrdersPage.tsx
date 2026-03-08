@@ -97,7 +97,7 @@ function OrderRow({ order, index }: {order: Order;index: number;}) {
             return (
               <div key={stage} className="flex-1 flex flex-col gap-1">
                 <div
-                  className={`h-[3px] w-full rounded-full ${
+                  className={`h-[1.5px] w-full rounded-full ${
                   done ?
                   hasOverdueStage ? "bg-destructive" : "bg-foreground" :
                   "bg-muted"}`
