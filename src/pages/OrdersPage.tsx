@@ -58,10 +58,10 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex flex-col md:flex-row md:items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
+      className="flex flex-col md:flex-row md:items-start rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
-      <div className="flex flex-col sm:flex-row sm:items-stretch flex-1 min-w-0">
-        <div className="flex items-center px-3 py-2 sm:min-w-[140px] sm:w-[160px] md:w-[180px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
+      <div className="flex flex-col sm:flex-row sm:items-start flex-1 min-w-0">
+        <div className="flex items-start px-3 py-2 sm:min-w-[140px] sm:w-[160px] md:w-[180px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
           <div className="flex items-center gap-2 min-w-0">
             <p className="text-sm font-medium truncate">{order.patient_name}</p>
             {order.is_resubmitted && (
@@ -72,18 +72,18 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center px-3 py-2 sm:min-w-[120px] sm:w-[140px] md:w-[160px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
+        <div className="flex flex-col justify-start px-3 py-2 sm:min-w-[120px] sm:w-[140px] md:w-[160px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
           <p className="text-sm truncate">{order.doctor_name || "—"}</p>
           <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
         </div>
 
-        <div className="flex flex-col justify-center px-3 py-2 flex-1 min-w-0 border-b md:border-b-0 md:border-r border-border/50">
+        <div className="flex flex-col justify-start px-3 py-2 flex-1 min-w-0 border-b md:border-b-0 md:border-r border-border/50">
           <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
           <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
         </div>
       </div>
 
-      <div className="flex items-center px-3 py-2 md:max-w-[360px] lg:max-w-[450px] md:flex-1 shrink-0">
+      <div className="flex items-start px-3 py-2 md:max-w-[360px] lg:max-w-[450px] md:flex-1 shrink-0">
         <div className="flex w-full gap-2 sm:gap-3">
           {orderStages.map((stage) => {
             const done = completedStages.has(stage as any);
