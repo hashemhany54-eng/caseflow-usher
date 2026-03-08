@@ -141,7 +141,7 @@ export default function TaskDetailsPage() {
                 <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">3D Editor coming soon</div>
               )}
               {activeTab === "design" && (
-                <div className="rounded-lg border bg-card p-8 text-center text-muted-foreground text-sm">Design workspace coming soon</div>
+                <DesignWorkspace />
               )}
             </div>
           </motion.div>
