@@ -77,7 +77,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
           <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
         </div>
 
-        <div className="flex flex-col justify-center px-4 py-3 flex-1 min-w-0 border-b md:border-b-0 md:border-r border-border/50">
+        <div className="flex flex-col justify-start px-4 py-3 flex-1 min-w-0 border-b md:border-b-0 md:border-r border-border/50">
           <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
           <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
         </div>
