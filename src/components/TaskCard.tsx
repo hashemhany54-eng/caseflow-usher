@@ -55,7 +55,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
       {/* Desktop row */}
       <div className="hidden lg:flex items-stretch min-h-[80px]">
         {/* Task Type + Due + Flags */}
-        <div className="flex flex-col justify-center gap-0.5 px-4 py-2.5 w-[200px] shrink-0 border-r border-border/50">
+        <div className="flex flex-col justify-center gap-0.5 px-4 py-2.5 flex-[2] min-w-0 border-r border-border/50">
           <div className="flex items-center gap-1.5">
             <span className={`h-2 w-2 rounded-full shrink-0 ${priorityDot}`} />
             <span className="font-semibold text-sm text-foreground">{task.task_type || "Task"}</span>
