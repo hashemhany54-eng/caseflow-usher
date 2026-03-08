@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SidebarTab {
   key: string;
@@ -70,7 +73,14 @@ function TabButton({
 
 export function TaskFiltersSidebar({ activeTab, onTabChange, tabCounts }: TaskFiltersSidebarProps) {
   return (
-    <div className="w-56 border-r shrink-0 hidden lg:flex flex-col h-full bg-card">
+    <div className="w-64 border-r shrink-0 hidden lg:flex flex-col h-full bg-card">
+      <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
+        <SidebarTrigger className="shrink-0" />
+        <h2 className="text-sm font-semibold leading-tight flex-1">Your Tasks</h2>
+        <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
+          <RefreshCw className="h-3.5 w-3.5" />
+        </Button>
+      </div>
       <ScrollArea className="flex-1">
         <div className="py-1">
           {categoryTabs.map((tab) => (
