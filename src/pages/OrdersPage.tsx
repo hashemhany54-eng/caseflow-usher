@@ -216,7 +216,7 @@ export default function OrdersPage() {
               <div className="flex flex-col gap-2">
                 {grouped.map((group) => (
                   <div key={group.key}>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                       {group.orders.map((order, i) => (
                         <OrderRow key={order.id} order={order} index={i} />
                       ))}
