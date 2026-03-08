@@ -1,6 +1,9 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SidebarTab {
   key: string;
