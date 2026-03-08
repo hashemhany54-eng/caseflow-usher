@@ -109,7 +109,7 @@ export default function TasksPage() {
             <Input
               placeholder="Filter by task"
               value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 h-8 bg-secondary border-0 text-sm"
             />
           </div>
