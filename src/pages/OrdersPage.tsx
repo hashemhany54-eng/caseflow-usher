@@ -27,39 +27,50 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(order.due_date);
 
+  const dueDate = new Date(order.due_date);
+  const formattedDue = dueDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex items-center justify-between p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
+      className="grid grid-cols-[1fr_1fr_1.5fr_auto] items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
-      <div className="flex items-center gap-3 min-w-0 flex-1">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 mb-0.5">
-            <p className="text-sm font-medium truncate">{order.patient_name}</p>
-            {order.is_resubmitted && (
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
-                <RefreshCw className="h-2.5 w-2.5" /> Resub
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground">{order.case_type} • {order.lab_type} • {order.crown_type}</p>
+      {/* Patient Name */}
+      <div className="min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <p className="text-sm font-medium truncate">{order.patient_name}</p>
+          {order.is_resubmitted && (
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
+              <RefreshCw className="h-2.5 w-2.5" /> Resub
+            </Badge>
+          )}
         </div>
       </div>
-      <div className="flex items-center gap-4 shrink-0">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <User className="h-3 w-3" />
-          <span>{order.designer_name || "—"}</span>
+
+      {/* Doctor & Practice */}
+      <div className="min-w-0">
+        <p className="text-sm truncate">{order.doctor_name || "—"}</p>
+        <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
+      </div>
+
+      {/* Case Type & Lab */}
+      <div className="min-w-0">
+        <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
+        <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
+      </div>
+
+      {/* ETA & Priority */}
+      <div className="flex items-center gap-3 shrink-0">
+        <div className="text-right">
+          <p className="text-xs font-medium">Original ETA</p>
+          <p className={`text-sm font-semibold ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
+            {formattedDue}
+          </p>
         </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Clock className={`h-3 w-3 ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`} />
-          <span className={isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}>{timeLeft}</span>
-        </div>
-        <span className="text-xs text-muted-foreground">{order.shipping_type}</span>
         <PriorityBadge priority={order.priority} />
-        <span className="text-xs text-muted-foreground w-24 text-right">{order.id}</span>
       </div>
     </motion.div>
   );
