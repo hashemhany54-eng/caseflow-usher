@@ -48,8 +48,8 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
 
   return (
     <div>
-      <h2 className="text-sm font-semibold mb-1">Design Review</h2>
-      <p className="text-xs text-muted-foreground mb-3">Design completed by internal designer</p>
+      <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : "Internal Design"}</h2>
+      <p className="text-xs text-muted-foreground mb-3">{isReview ? "Design completed by internal designer" : "Upload completed design files"}</p>
       <Button onClick={() => setOpen(true)} className="gap-2">
         {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
         {isReview ? "Review Design" : "Upload Design"}
