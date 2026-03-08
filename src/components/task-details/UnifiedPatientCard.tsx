@@ -1,6 +1,7 @@
 import { Order } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
+import { Button } from "@/components/ui/button";
 import {
   Calendar, Scissors, Tag, Building, MapPin,
   FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor, Copy } from

@@ -119,9 +119,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
           </div>
           <div className="h-[60px] px-3 border-t shrink-0 flex items-center">
             <div className="flex gap-2 w-full">
-              <button className="p-2 hover:bg-secondary rounded transition-colors shrink-0">
+              <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0">
                 <Paperclip className="h-4 w-4 text-muted-foreground" />
-              </button>
+              </Button>
               <Input
                 placeholder="Type a message..."
                 value={message}

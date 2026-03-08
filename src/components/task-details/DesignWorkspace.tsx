@@ -208,9 +208,10 @@ export function DesignWorkspace() {
               <div className="px-1 pb-2 space-y-0.5">
                 {viewGroups.map((group) => (
                   <div key={group.label}>
-                    <button
+                    <Button
+                      variant="ghost"
                       onClick={() => toggleSection(group.label)}
-                      className="flex items-center gap-1.5 w-full px-2 py-1.5 text-xs font-medium text-foreground hover:bg-accent/50 rounded"
+                      className="flex items-center gap-1.5 w-full px-2 py-1.5 text-xs font-medium text-foreground h-auto justify-start"
                     >
                       {openSections[group.label] ? (
                         <ChevronDown className="h-3 w-3 text-muted-foreground" />
@@ -218,7 +219,7 @@ export function DesignWorkspace() {
                         <ChevronRight className="h-3 w-3 text-muted-foreground" />
                       )}
                       {group.label}
-                    </button>
+                    </Button>
                     {openSections[group.label] && (
                       <div className="ml-5 space-y-0.5">
                         {group.items.map((item) => (
