@@ -101,12 +101,12 @@
 
 @layer utilities {
   .priority-overdue {
-    @apply border-l-4 border-l-destructive;
+    @apply border-l-2 border-l-destructive;
   }
   .priority-urgent {
-    @apply border-l-4 border-l-warning;
+    @apply border-l-2 border-l-warning;
   }
   .priority-normal {
-    @apply border-l-4 border-l-transparent;
+    @apply border-l-2 border-l-muted-foreground/20;
   }
 }
