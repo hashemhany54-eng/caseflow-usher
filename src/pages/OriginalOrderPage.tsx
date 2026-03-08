@@ -218,7 +218,7 @@ export default function OriginalOrderPage() {
                           <div
                             className={`h-[3px] w-full rounded-full ${
                               step.isCancelled
-                                ? "bg-transparent"
+                                ? "bg-destructive"
                                 : step.completed
                                 ? "bg-foreground"
                                 : "bg-muted"
