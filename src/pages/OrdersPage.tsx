@@ -112,11 +112,11 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
             );
           })}
 
-          {/* Original ETA as last step */}
-          <div className="flex-1 flex flex-col gap-1 text-right">
-            <div className="h-[3px] w-0" />
+          {/* Original ETA as last step - part of the stepper */}
+          <div className="flex-1 flex flex-col gap-1">
+            <div className={`h-[3px] w-full rounded-full bg-muted`} />
             <span className="text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
-            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
+            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
               {formattedTime}
             </span>
             <span className="text-[10px] text-primary leading-none">Practice Sees</span>
