@@ -55,11 +55,11 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex items-center gap-4 p-3 rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
+      className="flex items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
       {/* Patient Name */}
-      <div className="min-w-[160px] w-[180px] shrink-0">
-        <div className="flex items-center gap-2 mb-0.5">
+      <div className="flex items-center min-w-[160px] w-[180px] shrink-0 px-3 py-2 border-r border-border/50">
+        <div className="flex items-center gap-2">
           <p className="text-sm font-medium truncate">{order.patient_name}</p>
           {order.is_resubmitted && (
             <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
@@ -70,19 +70,19 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       </div>
 
       {/* Doctor & Practice */}
-      <div className="min-w-[140px] w-[160px] shrink-0">
+      <div className="flex flex-col justify-center min-w-[140px] w-[160px] shrink-0 px-3 py-2 border-r border-border/50">
         <p className="text-sm truncate">{order.doctor_name || "—"}</p>
         <p className="text-xs text-muted-foreground truncate">{order.practice || "—"}</p>
       </div>
 
       {/* Case Type & Lab */}
-      <div className="min-w-[160px] flex-1">
+      <div className="flex flex-col justify-center min-w-[160px] flex-1 px-3 py-2 border-r border-border/50">
         <p className="text-sm truncate">{order.case_type}{order.crown_type ? ` - ${order.crown_type}` : ""}</p>
         <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
       </div>
 
-      {/* Timeline Stepper */}
-      <div className="flex items-center min-w-[340px] flex-[1.5]">
+      {/* Timeline Stepper with ETA as last column */}
+      <div className="flex items-center px-3 py-2 min-w-[420px] flex-[1.5]">
         <div className="flex w-full gap-3">
           {orderStages.map((stage) => {
             const done = completedStages.has(stage as any);
@@ -107,15 +107,16 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
               </div>
             );
           })}
-        </div>
-      </div>
 
-      {/* ETA */}
-      <div className="shrink-0 text-right min-w-[90px]">
-        <p className="text-[10px] text-muted-foreground">Original ETA</p>
-        <p className={`text-sm font-semibold ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
-          {formattedDue}
-        </p>
+          {/* Original ETA as last step */}
+          <div className="flex-1 flex flex-col gap-1 text-right">
+            <div className="h-[3px] w-0" />
+            <span className="text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
+            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
+              {formattedDue}
+            </span>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
