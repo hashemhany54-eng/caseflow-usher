@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { AlertTriangle, RefreshCw } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InfoRow } from "@/components/task-details/InfoRow";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
@@ -112,32 +112,31 @@ export default function OriginalOrderPage() {
         <div className="flex flex-1 overflow-hidden">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
             <div className="max-w-5xl mx-auto space-y-4">
-              {/* Resubmitted banner - same style as TaskDetailsPage */}
-              <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-destructive text-sm font-medium">
-                  <RefreshCw className="h-4 w-4" />
-                  This order was canceled & resubmitted
+              {/* Resubmitted banner */}
+              <Alert variant="destructive" className="flex items-center justify-between">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 mt-0.5" />
+                  <div>
+                    <AlertTitle>This order was canceled & resubmitted</AlertTitle>
+                    <AlertDescription>This order was previously submitted and returned for revision.</AlertDescription>
+                  </div>
                 </div>
                 <Button
-                  variant="outline"
+                  variant="destructive"
                   size="sm"
-                  className="text-xs h-7"
+                  className="text-xs h-7 shrink-0 ml-4 bg-destructive/10 text-destructive hover:bg-destructive/20 border-0 shadow-none"
                   onClick={() => navigate(-1)}
                 >
                   View new
                 </Button>
-              </div>
+              </Alert>
 
               {/* Cancelled alert */}
-              <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
-                  <AlertTriangle className="h-5 w-5 text-destructive" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">This order was canceled</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Canceled by: {order.canceled_by}</p>
-                </div>
-              </div>
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>This order was canceled</AlertTitle>
+                <AlertDescription>Canceled by: {order.canceled_by}</AlertDescription>
+              </Alert>
 
               {/* Patient card */}
               <div className="rounded-lg border bg-card overflow-hidden">
