@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import {
   Calendar, Scissors, Tag, Building, MapPin,
-  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor } from
+  FlaskConical, Eye, Layers, Truck, Smartphone, ScanLine, Monitor, Copy } from
 "lucide-react";
 import { InfoRow } from "./InfoRow";
+import { toast } from "sonner";
 
 interface Props {
   order: Order;
