@@ -8,6 +8,7 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import TasksPage from "@/pages/TasksPage";
 import TaskDetailsPage from "@/pages/TaskDetailsPage";
 import OrdersPage from "@/pages/OrdersPage";
+import OriginalOrderPage from "@/pages/OriginalOrderPage";
 import CompletedPage from "@/pages/CompletedPage";
 import OnHoldPage from "@/pages/OnHoldPage";
 import NotFound from "./pages/NotFound";
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/tasks/:taskId" element={<TaskDetailsPage />} />
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/orders/:orderId" element={<TaskDetailsPage />} />
+              <Route path="/orders/:orderId/original" element={<OriginalOrderPage />} />
               <Route path="/completed" element={<CompletedPage />} />
               <Route path="/on-hold" element={<OnHoldPage />} />
             </Route>
