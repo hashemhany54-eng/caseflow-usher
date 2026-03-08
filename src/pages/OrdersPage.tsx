@@ -3,14 +3,14 @@ import { useOutletContext } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Package, Clock, RefreshCw, User } from "lucide-react";
+import { Package, Clock, RefreshCw, User, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { Order } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { mockTimeline } from "@/data/mockData";
 
 const statusGroups = [
   { key: "new", label: "New", color: "bg-primary/10 text-primary" },
