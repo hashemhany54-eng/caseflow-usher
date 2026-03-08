@@ -58,7 +58,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex flex-col md:flex-row md:items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
+      className="flex flex-col md:flex-row md:items-start rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
     >
       <div className="flex flex-col sm:flex-row sm:items-start flex-1 min-w-0">
         <div className="flex items-start px-3 py-2 sm:min-w-[140px] sm:w-[160px] md:w-[180px] shrink-0 border-b sm:border-b-0 sm:border-r border-border/50">
