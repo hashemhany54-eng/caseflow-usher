@@ -11,7 +11,7 @@ export function DashboardLayout() {
   const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <div className="h-screen flex w-full overflow-hidden">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 h-full">
