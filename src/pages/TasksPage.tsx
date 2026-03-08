@@ -5,34 +5,73 @@ import { useOutletContext } from "react-router-dom";
 import { ClipboardList } from "lucide-react";
 import { useMemo, useState } from "react";
 
+// Map sidebar tab keys to task_type values
+const taskTypeMap: Record<string, string> = {
+  design_prep: "Design Prep",
+  automate_review: "Automate Review",
+  dandy_design: "Dandy Design",
+  design_review: "Design Review",
+  double_design_qc: "Double Design QC",
+  design_preview_verification: "Design Preview Verification",
+  shade_design: "Shade Design",
+  resolve_hold: "Resolve Hold",
+  resolve_flagged_scan: "Resolve Flagged Scan",
+  scan_review: "Scan Review",
+  order_review: "Order Review",
+};
+
 export default function TasksPage() {
   const { tasks } = useApp();
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
+  const [activeTab, setActiveTab] = useState("my_tasks");
 
-  const [activeCategory, setActiveCategory] = useState("my_tasks");
-  const [taskTypeFilter, setTaskTypeFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [priorityFilter, setPriorityFilter] = useState("all");
-  const [labFilter, setLabFilter] = useState("all");
-  const [localSearch, setLocalSearch] = useState("");
+  // Compute counts for each tab
+  const tabCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    counts.my_tasks = tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped").length;
+    counts.completed = tasks.filter((t) => t.status === "completed" || t.status === "skipped").length;
+    counts.assigned_others = tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "").length;
+    counts.unassigned = tasks.filter((t) => !t.assigned_to || t.assigned_to === "").length;
+    counts.waiting_practice = tasks.filter((t) => t.order?.status === "on_hold").length;
 
-  const taskTypes = useMemo(() => [...new Set(tasks.map((t) => t.task_type).filter(Boolean) as string[])], [tasks]);
-  const labs = useMemo(() => [...new Set(tasks.map((t) => t.order?.lab_type).filter(Boolean) as string[])], [tasks]);
+    // Task type counts
+    Object.entries(taskTypeMap).forEach(([key, typeValue]) => {
+      counts[key] = tasks.filter((t) => t.task_type === typeValue).length;
+    });
 
-  const categoryFiltered = useMemo(() => {
-    switch (activeCategory) {
-      case "my_tasks": return tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
-      case "completed": return tasks.filter((t) => t.status === "completed" || t.status === "skipped");
-      case "assigned_others": return tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "");
-      case "waiting_practice": return tasks.filter((t) => t.order?.status === "on_hold");
-      case "all": return tasks;
-      default: return tasks;
+    return counts;
+  }, [tasks]);
+
+  const filteredTasks = useMemo(() => {
+    let filtered = tasks;
+
+    // Category filters
+    switch (activeTab) {
+      case "my_tasks":
+        filtered = tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
+        break;
+      case "completed":
+        filtered = tasks.filter((t) => t.status === "completed" || t.status === "skipped");
+        break;
+      case "assigned_others":
+        filtered = tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "");
+        break;
+      case "unassigned":
+        filtered = tasks.filter((t) => !t.assigned_to || t.assigned_to === "");
+        break;
+      case "waiting_practice":
+        filtered = tasks.filter((t) => t.order?.status === "on_hold");
+        break;
+      default:
+        // Task type filter
+        if (taskTypeMap[activeTab]) {
+          filtered = tasks.filter((t) => t.task_type === taskTypeMap[activeTab]);
+        }
+        break;
     }
-  }, [tasks, activeCategory]);
 
-  const sortedTasks = useMemo(() => {
-    let filtered = categoryFiltered;
-    const q = (searchQuery || localSearch).toLowerCase();
+    // Search
+    const q = (searchQuery || "").toLowerCase();
     if (q) {
       filtered = filtered.filter(
         (t) =>
@@ -41,40 +80,23 @@ export default function TasksPage() {
           t.order_id.toLowerCase().includes(q)
       );
     }
-    if (taskTypeFilter !== "all") filtered = filtered.filter((t) => t.task_type === taskTypeFilter);
-    if (statusFilter !== "all") filtered = filtered.filter((t) => t.status === statusFilter);
-    if (priorityFilter !== "all") filtered = filtered.filter((t) => t.order?.priority === priorityFilter);
-    if (labFilter !== "all") filtered = filtered.filter((t) => t.order?.lab_type === labFilter);
 
     return filtered.sort((a, b) => {
       const now = Date.now();
-      const aDiff = new Date(a.due_date).getTime() - now;
-      const bDiff = new Date(b.due_date).getTime() - now;
-      return aDiff - bDiff;
+      return new Date(a.due_date).getTime() - now - (new Date(b.due_date).getTime() - now);
     });
-  }, [categoryFiltered, searchQuery, localSearch, taskTypeFilter, statusFilter, priorityFilter, labFilter]);
+  }, [tasks, activeTab, searchQuery]);
 
   return (
     <div className="flex h-full -m-3 md:-m-4">
       <TaskFiltersSidebar
-        categoryFilter={activeCategory}
-        taskTypeFilter={taskTypeFilter}
-        statusFilter={statusFilter}
-        priorityFilter={priorityFilter}
-        labFilter={labFilter}
-        localSearch={localSearch}
-        onCategoryChange={setActiveCategory}
-        onTaskTypeChange={setTaskTypeFilter}
-        onStatusChange={setStatusFilter}
-        onPriorityChange={setPriorityFilter}
-        onLabChange={setLabFilter}
-        onLocalSearchChange={setLocalSearch}
-        taskTypes={taskTypes}
-        labs={labs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        tabCounts={tabCounts}
       />
 
       <div className="flex-1 overflow-auto p-3 md:p-4">
-        {sortedTasks.length === 0 ? (
+        {filteredTasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
             <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
             <p className="font-medium text-sm">No tasks found</p>
@@ -82,7 +104,7 @@ export default function TasksPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            {sortedTasks.map((task, i) => (
+            {filteredTasks.map((task, i) => (
               <TaskCard key={task.id} task={task} index={i} />
             ))}
           </div>
