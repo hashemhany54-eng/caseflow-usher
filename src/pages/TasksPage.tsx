@@ -1,8 +1,10 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 // Map sidebar tab keys to task_type values
 const taskTypeMap: Record<string, string> = {
@@ -21,7 +23,7 @@ const taskTypeMap: Record<string, string> = {
 
 export default function TasksPage() {
   const { tasks } = useApp();
-  const searchQuery = "";
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my_tasks");
 
   // Compute counts for each tab
@@ -94,20 +96,38 @@ export default function TasksPage() {
         tabCounts={tabCounts}
       />
 
-      <div className="flex-1 overflow-auto p-3 md:p-4">
-        {filteredTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-            <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
-            <p className="font-medium text-sm">No tasks found</p>
-            <p className="text-xs">Try adjusting your filters</p>
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex items-center h-14 border-b bg-card shrink-0 px-4 gap-4">
+          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <span>Focusing On:</span>
+            <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5">Design Anterior C&B Level 4</Badge>
           </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {filteredTasks.map((task, i) => (
-              <TaskCard key={task.id} task={task} index={i} />
-            ))}
+          <div className="flex-1" />
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Filter by task"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 h-8 bg-secondary border-0 text-sm"
+            />
           </div>
-        )}
+        </div>
+        <div className="flex-1 overflow-auto p-3 md:p-4">
+          {filteredTasks.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+              <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+              <p className="font-medium text-sm">No tasks found</p>
+              <p className="text-xs">Try adjusting your filters</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {filteredTasks.map((task, i) => (
+                <TaskCard key={task.id} task={task} index={i} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
