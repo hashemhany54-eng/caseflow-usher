@@ -211,34 +211,29 @@ export default function OriginalOrderPage() {
                   <TabsContent value="status" className="p-5 space-y-5">
                     <p className="text-destructive font-medium text-sm">{order.cancel_reason}</p>
 
-                    {/* Timeline stepper */}
-                    <div className="relative">
-                      <div className="flex items-center w-full">
-                        {order.timeline.map((step, i) => (
-                          <div key={step.stage} className="flex-1 flex flex-col items-start gap-1">
-                            {/* Progress bar */}
-                            <div className="w-full flex items-center">
-                              <div
-                                className={`h-[3px] w-full rounded-full ${
-                                  step.isCancelled
-                                    ? "bg-transparent"
-                                    : step.completed
-                                    ? "bg-foreground"
-                                    : "bg-muted"
-                                }`}
-                              />
-                            </div>
-                            <span
-                              className={`text-xs font-medium mt-1 ${
-                                step.isCancelled ? "text-destructive font-semibold" : "text-foreground"
-                              }`}
-                            >
-                              {step.stage}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground">{step.date}</span>
-                          </div>
-                        ))}
-                      </div>
+                    {/* Timeline stepper - matching DesignTimeline style */}
+                    <div className="flex w-full gap-3 py-[24px]">
+                      {order.timeline.map((step) => (
+                        <div key={step.stage} className="flex-1 flex flex-col gap-1">
+                          <div
+                            className={`h-[3px] w-full rounded-full ${
+                              step.isCancelled
+                                ? "bg-transparent"
+                                : step.completed
+                                ? "bg-foreground"
+                                : "bg-muted"
+                            }`}
+                          />
+                          <span
+                            className={`text-[11px] font-medium leading-tight ${
+                              step.isCancelled ? "text-destructive font-semibold" : "text-foreground"
+                            }`}
+                          >
+                            {step.stage}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground leading-none">{step.date}</span>
+                        </div>
+                      ))}
                     </div>
                   </TabsContent>
 
