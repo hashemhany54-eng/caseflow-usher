@@ -50,9 +50,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
   if (collapsed) {
     return (
       <div className="w-12 border-l bg-card flex flex-col items-center py-3 gap-3 shrink-0">
-        <button onClick={onToggle} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+        <Button variant="ghost" size="icon" className="h-9 w-9" onClick={onToggle}>
           <MessageSquare className="h-5 w-5 text-muted-foreground" />
-        </button>
+        </Button>
       </div>
     );
   }
