@@ -10,13 +10,15 @@ export function DashboardLayout() {
   const location = useLocation();
   const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
   const isTasksRoot = location.pathname === "/";
+  const isOrdersRoot = location.pathname === "/orders";
+  const isFullPageLayout = isTasksRoot || isOrdersRoot;
 
   return (
     <SidebarProvider>
       <div className="h-screen flex w-full overflow-hidden">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0 h-full">
-          {!isTasksRoot && (
+          {!isFullPageLayout && (
             <div className="flex items-center h-14 border-b bg-card shrink-0">
               <div className="flex-1 h-full">
                 <TopBar
@@ -28,11 +30,7 @@ export function DashboardLayout() {
               </div>
             </div>
           )}
-          {isTasksRoot ? (
-            <main className="flex-1 overflow-hidden">
-              <Outlet context={{ searchQuery, activeTab, setActiveTab }} />
-            </main>
-          ) : isTaskDetail ? (
+          {isFullPageLayout || isTaskDetail ? (
             <main className="flex-1 overflow-hidden">
               <Outlet context={{ searchQuery, activeTab, setActiveTab }} />
             </main>
