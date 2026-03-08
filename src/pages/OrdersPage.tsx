@@ -83,7 +83,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
         </div>
       </div>
 
-      <div className="flex items-center px-4 py-3 md:max-w-[360px] lg:max-w-[450px] md:flex-1 shrink-0">
+      <div className="flex items-start px-4 py-3 md:max-w-[360px] lg:max-w-[450px] md:flex-1 shrink-0">
         <div className="flex w-full gap-2 sm:gap-3">
           {orderStages.map((stage) => {
             const done = completedStages.has(stage as any);
