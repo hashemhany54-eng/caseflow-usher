@@ -299,7 +299,7 @@ export function DesignWorkspace() {
           <directionalLight position={[10, 10, 10]} intensity={0.8} />
           <directionalLight position={[-10, -5, -10]} intensity={0.3} />
           <Suspense fallback={null}>
-            <TeethModel />
+            <TeethModel heatmap={heatmapEnabled} />
           </Suspense>
           <OrbitControls enableDamping dampingFactor={0.1} />
         </Canvas>
