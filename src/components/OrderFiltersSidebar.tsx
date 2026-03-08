@@ -9,6 +9,7 @@ interface SidebarTab {
 }
 
 const reviewTabs: SidebarTab[] = [
+  { key: "all", label: "All" },
   { key: "unsubmitted_scans", label: "Unsubmitted scans" },
   { key: "needs_review", label: "Needs Review" },
   { key: "design_preview_review", label: "Design Preview Review" },
@@ -21,7 +22,6 @@ const statusTabs: SidebarTab[] = [
   { key: "shipped", label: "Shipped" },
   { key: "delivered", label: "Delivered" },
   { key: "canceled", label: "Canceled" },
-  { key: "all", label: "All" },
 ];
 
 function TabButton({
