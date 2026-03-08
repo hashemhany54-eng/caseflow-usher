@@ -63,12 +63,14 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
         <div className="flex items-center gap-2 px-3 h-full border-r border-border shrink-0 w-64">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 shrink-0"
             onClick={() => navigate("/")}
-            className="p-1 text-muted-foreground hover:text-foreground transition-colors shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
-          </button>
+          </Button>
           <div>
             <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
           </div>
