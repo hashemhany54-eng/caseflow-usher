@@ -74,9 +74,9 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
           <div>
             <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
           </div>
-          <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
+          <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto shrink-0">
             <RefreshCw className="h-3.5 w-3.5" />
-          </button>
+          </Button>
         </div>
         {/* Tabs */}
         <div className="flex items-center h-full">
