@@ -8,30 +8,20 @@ interface SidebarTab {
   count?: number;
 }
 
+const reviewTabs: SidebarTab[] = [
+  { key: "unsubmitted_scans", label: "Unsubmitted scans" },
+  { key: "needs_review", label: "Needs Review" },
+  { key: "design_preview_review", label: "Design Preview Review" },
+  { key: "on_hold", label: "On hold" },
+];
+
 const statusTabs: SidebarTab[] = [
-  { key: "all", label: "All orders" },
   { key: "new", label: "New" },
-  { key: "in_progress", label: "In Progress" },
-  { key: "waiting_review", label: "Waiting for Review" },
-  { key: "on_hold", label: "On Hold" },
-  { key: "completed", label: "Completed" },
+  { key: "fabrication", label: "Fabrication" },
   { key: "shipped", label: "Shipped" },
   { key: "delivered", label: "Delivered" },
   { key: "canceled", label: "Canceled" },
-];
-
-const priorityTabs: SidebarTab[] = [
-  { key: "p_all", label: "All priorities" },
-  { key: "p_high", label: "High" },
-  { key: "p_medium", label: "Medium" },
-  { key: "p_low", label: "Low" },
-];
-
-const labTabs: SidebarTab[] = [
-  { key: "l_all", label: "All labs" },
-  { key: "l_Zircon", label: "Zircon" },
-  { key: "l_E.Max", label: "E.Max" },
-  { key: "l_PFM", label: "PFM" },
+  { key: "all", label: "All" },
 ];
 
 function TabButton({
@@ -76,38 +66,19 @@ export function OrderFiltersSidebar({ activeTab, onTabChange, tabCounts }: Order
     <div className="w-64 border-r shrink-0 hidden lg:flex flex-col h-full bg-card">
       <ScrollArea className="flex-1">
         <div className="py-1">
-          <div className="px-3 py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Status
-          </div>
+          {reviewTabs.map((tab) => (
+            <TabButton
+              key={tab.key}
+              tab={tab}
+              active={activeTab === tab.key}
+              count={tabCounts[tab.key]}
+              onClick={() => onTabChange(tab.key)}
+            />
+          ))}
+
+          <Separator className="my-2" />
+
           {statusTabs.map((tab) => (
-            <TabButton
-              key={tab.key}
-              tab={tab}
-              active={activeTab === tab.key}
-              count={tabCounts[tab.key]}
-              onClick={() => onTabChange(tab.key)}
-            />
-          ))}
-
-          <Separator className="my-2" />
-          <div className="px-3 py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Priority
-          </div>
-          {priorityTabs.map((tab) => (
-            <TabButton
-              key={tab.key}
-              tab={tab}
-              active={activeTab === tab.key}
-              count={tabCounts[tab.key]}
-              onClick={() => onTabChange(tab.key)}
-            />
-          ))}
-
-          <Separator className="my-2" />
-          <div className="px-3 py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Lab Type
-          </div>
-          {labTabs.map((tab) => (
             <TabButton
               key={tab.key}
               tab={tab}
