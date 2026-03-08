@@ -84,17 +84,19 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
             const value = tab.toLowerCase();
             const isActive = activeTab === value;
             return (
-              <button
+              <Button
                 key={tab}
+                variant="ghost"
                 onClick={() => onTabChange(value)}
-                className={`text-sm px-5 h-full border-b-2 transition-colors ${
+                className={cn(
+                  "text-sm px-5 h-full rounded-none border-b-2 transition-colors",
                   isActive
                     ? "border-primary text-foreground font-medium"
                     : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
+                )}
               >
                 {tab}
-              </button>
+              </Button>
             );
           })}
         </div>
