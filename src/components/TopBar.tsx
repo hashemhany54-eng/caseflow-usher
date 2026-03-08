@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import { Search, RefreshCw, ArrowLeft, Download, Zap, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
