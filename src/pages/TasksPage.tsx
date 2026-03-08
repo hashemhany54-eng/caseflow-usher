@@ -1,10 +1,8 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
 import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
-import { ClipboardList, Search } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 
 // Map sidebar tab keys to task_type values
 const taskTypeMap: Record<string, string> = {
