@@ -13,24 +13,24 @@ import { Input } from "@/components/ui/input";
 import { mockTimeline } from "@/data/mockData";
 
 const statusGroups = [
-  { key: "new", label: "New", color: "bg-primary/10 text-primary" },
-  { key: "in_progress", label: "In Progress", color: "bg-primary/10 text-primary" },
-  { key: "waiting_review", label: "Waiting for Review", color: "bg-warning/10 text-warning" },
-  { key: "on_hold", label: "On Hold", color: "bg-muted text-muted-foreground" },
-  { key: "completed", label: "Completed", color: "bg-success/10 text-success" },
-  { key: "shipped", label: "Shipped", color: "bg-success/10 text-success" },
-  { key: "delivered", label: "Delivered", color: "bg-success/10 text-success" },
-  { key: "canceled", label: "Canceled", color: "bg-destructive/10 text-destructive" },
-];
+{ key: "new", label: "New", color: "bg-primary/10 text-primary" },
+{ key: "in_progress", label: "In Progress", color: "bg-primary/10 text-primary" },
+{ key: "waiting_review", label: "Waiting for Review", color: "bg-warning/10 text-warning" },
+{ key: "on_hold", label: "On Hold", color: "bg-muted text-muted-foreground" },
+{ key: "completed", label: "Completed", color: "bg-success/10 text-success" },
+{ key: "shipped", label: "Shipped", color: "bg-success/10 text-success" },
+{ key: "delivered", label: "Delivered", color: "bg-success/10 text-success" },
+{ key: "canceled", label: "Canceled", color: "bg-destructive/10 text-destructive" }];
+
 
 const orderStages = ["order_placed", "design", "preview"] as const;
 const orderStageLabels: Record<string, string> = {
   order_placed: "Placed",
   design: "Fabrication",
-  preview: "Shipped",
+  preview: "Shipped"
 };
 
-function OrderRow({ order, index }: { order: Order; index: number }) {
+function OrderRow({ order, index }: {order: Order;index: number;}) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(order.due_date);
 
@@ -59,17 +59,17 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="flex items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all"
-    >
+      className="flex items-stretch rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 cursor-pointer transition-all">
+      
       {/* Patient Name */}
       <div className="flex items-center min-w-[160px] w-[180px] shrink-0 px-3 py-2 border-r border-border/50">
         <div className="flex items-center gap-2">
           <p className="text-sm font-medium truncate">{order.patient_name}</p>
-          {order.is_resubmitted && (
-            <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
+          {order.is_resubmitted &&
+          <Badge variant="outline" className="text-[10px] px-1.5 py-0 bg-destructive/10 text-destructive border-destructive/20 gap-0.5 shrink-0">
               <RefreshCw className="h-2.5 w-2.5" /> Resub
             </Badge>
-          )}
+          }
         </div>
       </div>
 
@@ -95,21 +95,21 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
               <div key={stage} className="flex-1 flex flex-col gap-1">
                 <div
                   className={`h-[3px] w-full rounded-full ${
-                    done
-                      ? hasOverdueStage ? "bg-destructive" : "bg-foreground"
-                      : "bg-muted"
-                  }`}
-                />
+                  done ?
+                  hasOverdueStage ? "bg-destructive" : "bg-foreground" :
+                  "bg-muted"}`
+                  } />
+                
                 <span className="text-[11px] font-medium text-foreground leading-tight">
                   {orderStageLabels[stage]}
                 </span>
-                {stageEvent && (
-                  <span className="text-[10px] text-muted-foreground leading-none">
+                {stageEvent &&
+                <span className="text-[10px] text-muted-foreground leading-none">
                     {formatDate(stageEvent.timestamp)}
                   </span>
-                )}
-              </div>
-            );
+                }
+              </div>);
+
           })}
 
           {/* Original ETA as last step - part of the stepper */}
@@ -124,12 +124,12 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
           </div>
         </div>
       </div>
-    </motion.div>
-  );
+    </motion.div>);
+
 }
 export default function OrdersPage() {
   const { orders } = useApp();
-  const { searchQuery } = useOutletContext<{ searchQuery: string }>();
+  const { searchQuery } = useOutletContext<{searchQuery: string;}>();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [labFilter, setLabFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
@@ -157,7 +157,7 @@ export default function OrdersPage() {
   const grouped = useMemo(() => {
     return statusGroups.map((group) => ({
       ...group,
-      orders: filtered.filter((o) => o.status === group.key),
+      orders: filtered.filter((o) => o.status === group.key)
     })).filter((g) => g.orders.length > 0);
   }, [filtered]);
 
@@ -165,7 +165,7 @@ export default function OrdersPage() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-xl font-bold">Orders</h1>
+          
           <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} orders</p>
         </div>
       </div>
@@ -178,8 +178,8 @@ export default function OrdersPage() {
             placeholder="Search patient, order ID..."
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
-            className="pl-8 h-8 text-xs bg-secondary border-0"
-          />
+            className="pl-8 h-8 text-xs bg-secondary border-0" />
+          
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[140px] h-8 text-xs"><SelectValue placeholder="Status" /></SelectTrigger>
@@ -214,28 +214,28 @@ export default function OrdersPage() {
         </Select>
       </div>
 
-      {grouped.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+      {grouped.length === 0 ?
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
           <Package className="h-12 w-12 mb-3 opacity-30" />
           <p className="font-medium">No orders found</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {grouped.map((group) => (
-            <div key={group.key}>
+        </div> :
+
+      <div className="space-y-6">
+          {grouped.map((group) =>
+        <div key={group.key}>
               <div className="flex items-center gap-2 mb-3">
                 <Badge variant="secondary" className={`text-xs ${group.color}`}>{group.label}</Badge>
                 <span className="text-xs text-muted-foreground">{group.orders.length}</span>
               </div>
               <div className="space-y-2">
-                {group.orders.map((order, i) => (
-                  <OrderRow key={order.id} order={order} index={i} />
-                ))}
+                {group.orders.map((order, i) =>
+            <OrderRow key={order.id} order={order} index={i} />
+            )}
               </div>
             </div>
-          ))}
+        )}
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }
