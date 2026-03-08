@@ -163,12 +163,6 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          
-          <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} orders</p>
-        </div>
-      </div>
 
       {/* Filters */}
       <div className="flex items-center gap-2 flex-wrap mb-4">
