@@ -67,12 +67,14 @@ export function CaseNoteSummary() {
             ))}
           </ul>
           {mockDesignTask.items.length > 2 && (
-            <button
+            <Button
+              variant="link"
+              size="sm"
               onClick={() => setExpanded(!expanded)}
-              className="text-[10px] text-primary font-medium mt-2 flex items-center gap-0.5 hover:underline"
+              className="text-[10px] text-primary font-medium mt-2 h-auto p-0 gap-0.5"
             >
               {expanded ? <><ChevronUp className="h-3 w-3" /> Read Less</> : <><ChevronDown className="h-3 w-3" /> Read More</>}
-            </button>
+            </Button>
           )}
           <p className="text-[10px] text-muted-foreground mt-2">{mockDesignTask.timestamp}</p>
         </div>
