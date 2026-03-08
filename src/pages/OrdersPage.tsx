@@ -115,7 +115,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
 export default function OrdersPage() {
   const { orders } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("unsubmitted_scans");
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {};
