@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Link, X, FileUp } from "lucide-react";
+import { Upload, Link, X, FileUp, CheckCircle2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
