@@ -82,7 +82,7 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Patient */}
-        <div className="flex items-center gap-2.5 px-4 py-2.5 w-[170px] shrink-0 border-r border-border/50">
+        <div className="flex items-center gap-2.5 px-4 py-2.5 flex-[1.5] min-w-0 border-r border-border/50">
           <div className="h-8 w-8 rounded-full bg-success/20 text-success flex items-center justify-center text-[11px] font-semibold shrink-0">
             {order?.patient_name?.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
           </div>
