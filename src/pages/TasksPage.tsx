@@ -1,13 +1,13 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
-import { TaskFiltersBar } from "@/components/TaskFiltersBar";
+import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
 import { useOutletContext } from "react-router-dom";
 import { ClipboardList } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export default function TasksPage() {
   const { tasks } = useApp();
-  const { searchQuery } = useOutletContext<{searchQuery: string;}>();
+  const { searchQuery } = useOutletContext<{ searchQuery: string }>();
 
   const [activeCategory, setActiveCategory] = useState("my_tasks");
   const [taskTypeFilter, setTaskTypeFilter] = useState("all");
@@ -21,12 +21,12 @@ export default function TasksPage() {
 
   const categoryFiltered = useMemo(() => {
     switch (activeCategory) {
-      case "my_tasks":return tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
-      case "completed":return tasks.filter((t) => t.status === "completed" || t.status === "skipped");
-      case "assigned_others":return tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "");
-      case "waiting_practice":return tasks.filter((t) => t.order?.status === "on_hold");
-      case "all":return tasks;
-      default:return tasks;
+      case "my_tasks": return tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
+      case "completed": return tasks.filter((t) => t.status === "completed" || t.status === "skipped");
+      case "assigned_others": return tasks.filter((t) => t.assigned_to && t.assigned_to !== "u1" && t.assigned_to !== "");
+      case "waiting_practice": return tasks.filter((t) => t.order?.status === "on_hold");
+      case "all": return tasks;
+      default: return tasks;
     }
   }, [tasks, activeCategory]);
 
@@ -36,9 +36,9 @@ export default function TasksPage() {
     if (q) {
       filtered = filtered.filter(
         (t) =>
-        t.order?.patient_name.toLowerCase().includes(q) ||
-        t.order?.case_type.toLowerCase().includes(q) ||
-        t.order_id.toLowerCase().includes(q)
+          t.order?.patient_name.toLowerCase().includes(q) ||
+          t.order?.case_type.toLowerCase().includes(q) ||
+          t.order_id.toLowerCase().includes(q)
       );
     }
     if (taskTypeFilter !== "all") filtered = filtered.filter((t) => t.task_type === taskTypeFilter);
@@ -55,8 +55,8 @@ export default function TasksPage() {
   }, [categoryFiltered, searchQuery, localSearch, taskTypeFilter, statusFilter, priorityFilter, labFilter]);
 
   return (
-    <div className="flex flex-col">
-      <TaskFiltersBar
+    <div className="flex h-full -m-3 md:-m-4">
+      <TaskFiltersSidebar
         categoryFilter={activeCategory}
         taskTypeFilter={taskTypeFilter}
         statusFilter={statusFilter}
@@ -70,21 +70,24 @@ export default function TasksPage() {
         onLabChange={setLabFilter}
         onLocalSearchChange={setLocalSearch}
         taskTypes={taskTypes}
-        labs={labs} />
+        labs={labs}
+      />
 
-      {sortedTasks.length === 0 ?
-      <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-          <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
-          <p className="font-medium text-sm">No tasks found</p>
-          <p className="text-xs">Try adjusting your filters</p>
-        </div> :
-
-      <div className="flex flex-col gap-2">
-          {sortedTasks.map((task, i) =>
-        <TaskCard key={task.id} task={task} index={i} />
+      <div className="flex-1 overflow-auto p-3 md:p-4">
+        {sortedTasks.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+            <p className="font-medium text-sm">No tasks found</p>
+            <p className="text-xs">Try adjusting your filters</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {sortedTasks.map((task, i) => (
+              <TaskCard key={task.id} task={task} index={i} />
+            ))}
+          </div>
         )}
-        </div>
-      }
+      </div>
     </div>
   );
 }
