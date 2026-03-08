@@ -1,7 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Search, RefreshCw, ArrowLeft } from "lucide-react";
+import { Search, RefreshCw, ArrowLeft, Download, Zap, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useApp } from "@/context/AppContext";
+import { useState, useRef, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface TopBarProps {
   searchQuery: string;
@@ -19,6 +27,28 @@ const pageTitles: Record<string, string> = {
 };
 
 const detailTabs = ["Order", "Scan", "Editor", "Design"];
+
+const fileMenuItems = [
+  "Lab Slip (aka Order form)",
+  "STL",
+  "3oxz",
+  "CBCT Scan",
+  "Design file",
+  "Manufacturer Files",
+  "Manufacturer Files (Rotated)",
+  "Injection Mold Files",
+  "Merge and Stitch Files",
+  "Shade Design Files",
+  "Run STL Convert",
+  "Regenerate 3oxz",
+  "Send to Automate",
+  "Refresh Scan Images",
+  "Replace .3oxz File",
+  "Replace Scan STLs",
+  "Upload Design File",
+];
+
+const statusOptions = ["New", "In Progress", "On Hold", "Completed", "Cancelled"];
 
 export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: TopBarProps) {
   const location = useLocation();
@@ -40,7 +70,6 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
           </button>
           <div>
             <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
-            
           </div>
           <button className="p-1 text-muted-foreground hover:text-foreground transition-colors ml-auto shrink-0">
             <RefreshCw className="h-3.5 w-3.5" />
@@ -67,6 +96,46 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
           })}
         </div>
         <div className="flex-1" />
+
+        {/* Right action buttons */}
+        <div className="flex items-center gap-1 pr-3">
+          <Button variant="ghost" size="sm" className="gap-1.5 text-sm text-primary hover:text-primary">
+            <Zap className="h-4 w-4" />
+            Rush
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1.5 text-sm text-primary hover:text-primary">
+                <Download className="h-4 w-4" />
+                Files
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {fileMenuItems.map((item) => (
+                <DropdownMenuItem key={item} className="text-sm cursor-pointer">
+                  {item}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1 text-sm text-primary hover:text-primary">
+                Edit status
+                <ChevronDown className="h-3.5 w-3.5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              {statusOptions.map((s) => (
+                <DropdownMenuItem key={s} className="text-sm cursor-pointer">
+                  {s}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </header>
     );
   }
@@ -75,7 +144,6 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
     <header className="flex h-full items-center bg-card px-4 gap-4">
       <div>
         <h1 className="text-base font-bold leading-tight text-foreground">{pageTitle}</h1>
-        
       </div>
       <div className="flex-1" />
       <div className="relative w-full max-w-xs">
