@@ -142,14 +142,18 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
 
   return (
     <header className="flex h-full items-center bg-card px-4 gap-4">
-      <div>
+      <div className="flex items-center gap-3">
         <h1 className="text-base font-bold leading-tight text-foreground">{pageTitle}</h1>
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <span>Focusing On:</span>
+          <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5">Design Anterior C&B Level 4</Badge>
+        </div>
       </div>
       <div className="flex-1" />
       <div className="relative w-full max-w-xs">
         <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search patients, orders..."
+          placeholder="Filter by task"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className="pl-8 h-8 bg-secondary border-0 text-sm"
