@@ -21,6 +21,7 @@ import { SplitOrdersSection } from "@/components/task-details/SplitOrdersSection
 import { BillingSection } from "@/components/task-details/BillingSection";
 import { OrderScansSection } from "@/components/task-details/OrderScansSection";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
+import { DesignWorkspace } from "@/components/task-details/DesignWorkspace";
 
 interface OutletCtx {
   activeTab: string;
