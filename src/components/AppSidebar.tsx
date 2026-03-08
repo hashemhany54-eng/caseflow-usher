@@ -53,7 +53,7 @@ export function AppSidebar() {
   const current = statusConfig[user.status as UserStatus] || statusConfig.offline;
 
   return (
-    <Sidebar collapsible="icon" defaultOpen={false} className="!w-[var(--sidebar-width-icon)]">
+    <Sidebar collapsible="icon" className="!w-[var(--sidebar-width-icon)]">
       {/* Top: Logo */}
       <div className="flex h-14 items-center justify-center border-b border-sidebar-border">
         <img src={logoIcon} alt="Logo" className="w-7 h-7 opacity-70" />
