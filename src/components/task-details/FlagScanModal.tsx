@@ -31,7 +31,7 @@ export function FlagScanModal() {
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
-            <label className="text-sm font-medium mb-1.5 block">Issue Type</label>
+            <Label className="text-sm font-medium mb-1.5 block">Issue Type</Label>
             <Select value={reason} onValueChange={setReason}>
               <SelectTrigger>
                 <SelectValue placeholder="Select issue type" />
