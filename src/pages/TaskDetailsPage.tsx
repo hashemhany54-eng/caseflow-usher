@@ -73,20 +73,23 @@ export default function TaskDetailsPage() {
             <div className="max-w-5xl mx-auto">
               {/* Resubmitted Banner */}
               {order.is_resubmitted && (
-                <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/5 p-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-destructive text-sm font-medium">
-                    <RefreshCw className="h-4 w-4" />
-                    This order was resubmitted
+                <Alert variant="destructive" className="flex items-center justify-between">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5" />
+                    <div>
+                      <AlertTitle>This order was resubmitted</AlertTitle>
+                      <AlertDescription>This order was previously submitted and returned for revision.</AlertDescription>
+                    </div>
                   </div>
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="text-xs h-7" onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/orders/${order.original_order_id}/original`);
-                      }}>View Original Order</Button>
-                    </SheetTrigger>
-                  </Sheet>
-                </div>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="text-xs h-7 shrink-0 ml-4 bg-destructive/10 text-destructive hover:bg-destructive/20 border-0 shadow-none"
+                    onClick={() => navigate(`/orders/${order.original_order_id}/original`)}
+                  >
+                    View Original Order
+                  </Button>
+                </Alert>
               )}
 
               {activeTab === "order" && (
