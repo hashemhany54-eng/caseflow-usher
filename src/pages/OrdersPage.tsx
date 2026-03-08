@@ -23,13 +23,11 @@ const statusGroups = [
   { key: "canceled", label: "Canceled", color: "bg-destructive/10 text-destructive" },
 ];
 
-const orderStages = ["order_placed", "design", "qc", "preview", "model"] as const;
+const orderStages = ["order_placed", "design", "preview"] as const;
 const orderStageLabels: Record<string, string> = {
   order_placed: "Placed",
   design: "Fabrication",
-  qc: "QC",
   preview: "Shipped",
-  model: "Delivered",
 };
 
 function OrderRow({ order, index }: { order: Order; index: number }) {
@@ -38,6 +36,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
 
   const dueDate = new Date(order.due_date);
   const formattedDue = dueDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const formattedTime = dueDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
 
   const timeline = mockTimeline[order.id] || [];
   const completedStages = new Set(timeline.map((t) => t.stage));
@@ -46,8 +45,13 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
     return new Date(timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  // Check if any stage is overdue (red bar)
   const hasOverdueStage = isOverdue;
+
+  // Practice sees: simple relative label
+  const now = Date.now();
+  const dueTime = dueDate.getTime();
+  const diffDays = Math.round((dueTime - now) / 86400000);
+  const practiceSees = diffDays === 0 ? "Today" : diffDays === 1 ? "Tomorrow" : diffDays < 0 ? `${Math.abs(diffDays)}d ago` : formattedDue;
 
   return (
     <motion.div
@@ -81,7 +85,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
         <p className="text-xs text-muted-foreground truncate">{order.lab_type}</p>
       </div>
 
-      {/* Timeline Stepper with ETA as last column */}
+      {/* Timeline Stepper: Placed, Fabrication, Shipped + Original ETA */}
       <div className="flex items-center px-3 py-2 min-w-[420px] flex-[1.5]">
         <div className="flex w-full gap-3">
           {orderStages.map((stage) => {
@@ -112,9 +116,11 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
           <div className="flex-1 flex flex-col gap-1 text-right">
             <div className="h-[3px] w-0" />
             <span className="text-[11px] font-semibold text-foreground leading-tight">Original ETA</span>
-            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
-              {formattedDue}
+            <span className={`text-[10px] font-semibold leading-none ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : ""}`}>
+              {formattedTime}
             </span>
+            <span className="text-[10px] text-primary leading-none">Practice Sees</span>
+            <span className="text-[10px] font-semibold text-foreground leading-none">{practiceSees}</span>
           </div>
         </div>
       </div>
