@@ -88,7 +88,7 @@ export default function TasksPage() {
   }, [tasks, activeTab, searchQuery]);
 
   return (
-    <div className="flex h-full -m-3 md:-m-4">
+    <div className="flex h-full -m-3 md:-m-4 -mt-[calc(0.75rem+3.5rem)] md:-mt-[calc(1rem+3.5rem)]">
       <TaskFiltersSidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
