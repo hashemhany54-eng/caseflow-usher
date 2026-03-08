@@ -38,8 +38,6 @@ const statusConfig: Record<UserStatus, { label: string; dotClass: string }> = {
 const navItems = [
   { title: "Tasks", url: "/", icon: ClipboardList },
   { title: "Orders", url: "/orders", icon: Package },
-  { title: "Completed", url: "/completed", icon: CheckCircle2 },
-  { title: "On Hold", url: "/on-hold", icon: PauseCircle },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
