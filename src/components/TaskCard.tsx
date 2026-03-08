@@ -41,7 +41,6 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
   "bg-warning" :
   "bg-muted-foreground/30";
 
-  // Extract design level number
   const designLevel = order?.design_level || "Standard";
   const levelNum = designLevel === "Advanced" ? "4" : designLevel === "Standard" ? "2" : "1";
 
@@ -54,36 +53,28 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
       className={`group cursor-pointer rounded-lg border bg-card hover:shadow-sm hover:border-primary/20 transition-all ${borderClass}`}>
       
       {/* Desktop row */}
-      <div className="hidden lg:flex items-stretch min-h-[72px]">
-        {/* Designer Level */}
-        
-
-
-
-
-        
-
+      <div className="hidden lg:flex items-stretch min-h-[80px]">
         {/* Task Type + Due + Flags */}
-        <div className="flex flex-col justify-center gap-0.5 px-3 py-2 min-w-[164px] w-[180px] shrink-0 border-r border-border/50">
+        <div className="flex flex-col justify-center gap-0.5 px-4 py-2.5 w-[200px] shrink-0 border-r border-border/50">
           <div className="flex items-center gap-1.5">
             <span className={`h-2 w-2 rounded-full shrink-0 ${priorityDot}`} />
-            <span className="font-semibold text-xs text-foreground">{task.task_type || "Task"}</span>
+            <span className="font-semibold text-sm text-foreground">{task.task_type || "Task"}</span>
           </div>
-          <p className="text-[10px] text-muted-foreground leading-tight">
+          <p className="text-[11px] text-muted-foreground leading-tight">
             Due: {new Date(task.due_date).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" })}{" "}
             {new Date(task.due_date).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
           </p>
-          <p className={`text-[10px] font-medium leading-tight ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
+          <p className={`text-[11px] font-medium leading-tight ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
             {isOverdue ? timeLeft : isUrgent ? timeLeft : "On schedule"}
           </p>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5 mt-0.5">
             {order?.is_split &&
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-muted-foreground">
+            <span className="inline-flex items-center gap-0.5 text-[10px] text-muted-foreground">
                 <Scissors className="h-2.5 w-2.5" /> Split
               </span>
             }
             {order?.is_resubmitted &&
-            <span className="inline-flex items-center gap-0.5 text-[9px] text-destructive">
+            <span className="inline-flex items-center gap-0.5 text-[10px] text-destructive">
                 <RefreshCw className="h-2.5 w-2.5" /> Resub
               </span>
             }
@@ -91,36 +82,36 @@ export function TaskCard({ task, index }: {task: Task;index: number;}) {
         </div>
 
         {/* Patient */}
-        <div className="flex items-center gap-2 px-3 py-2 min-w-[132px] w-[148px] shrink-0 border-r border-border/50">
-          <div className="h-7 w-7 rounded-full bg-success/20 text-success flex items-center justify-center text-[10px] font-semibold shrink-0">
+        <div className="flex items-center gap-2.5 px-4 py-2.5 w-[170px] shrink-0 border-r border-border/50">
+          <div className="h-8 w-8 rounded-full bg-success/20 text-success flex items-center justify-center text-[11px] font-semibold shrink-0">
             {order?.patient_name?.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-medium truncate">{order?.patient_name}</p>
+            <p className="text-sm font-medium truncate">{order?.patient_name}</p>
             {order?.patient_age &&
-            <p className="text-[10px] text-muted-foreground">{order.patient_age}y</p>
+            <p className="text-[11px] text-muted-foreground">{order.patient_age}y</p>
             }
           </div>
         </div>
 
         {/* Case Details */}
-        <div className="flex flex-col justify-center px-3 py-2 min-w-[148px] flex-1 border-r border-border/50">
-          <span className="text-xs font-medium">
+        <div className="flex flex-col justify-center px-4 py-2.5 flex-1 min-w-[180px] border-r border-border/50">
+          <span className="text-sm font-medium">
             {order?.crown_type ? `${order.crown_type}` : order?.case_type}
           </span>
-          <p className="text-[10px] text-muted-foreground mt-0.5">
+          <p className="text-[11px] text-muted-foreground mt-0.5">
             {order?.case_type} • {order?.design_level || "Level 1"}
           </p>
         </div>
 
         {/* Lab */}
-        <div className="flex items-center justify-center px-2 py-2 w-[68px] shrink-0 border-r border-border/50">
-          <span className="text-[10px] text-muted-foreground font-medium">{order?.lab_type}</span>
+        <div className="flex items-center justify-center px-3 py-2.5 w-[80px] shrink-0 border-r border-border/50">
+          <span className="text-[11px] text-muted-foreground font-medium">{order?.lab_type}</span>
         </div>
 
-        {/* Timeline Stepper - bar style */}
-        <div className="flex items-center px-3 py-2 min-w-[340px] flex-[1.5]">
-          <div className="flex w-full gap-3">
+        {/* Timeline Stepper */}
+        <div className="flex items-center px-4 py-2.5 flex-[2] min-w-[380px]">
+          <div className="flex w-full gap-4">
             {stages.map((stage) => {
               const done = completedStages.has(stage as any);
               const stageEvent = timeline.find((t) => t.stage === stage);
