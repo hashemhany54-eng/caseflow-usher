@@ -63,9 +63,9 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
     <div className="w-80 border-l bg-card flex flex-col shrink-0 overflow-hidden">
       <div className="h-14 flex items-center justify-between px-3 border-b shrink-0">
         <span className="text-sm font-semibold">Activity</span>
-        <button onClick={onToggle} className="p-1.5 hover:bg-secondary rounded transition-colors">
+        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onToggle}>
           <X className="h-4 w-4 text-muted-foreground" />
-        </button>
+        </Button>
       </div>
 
       <Tabs defaultValue="activity" className="flex flex-col flex-1 min-h-0">
