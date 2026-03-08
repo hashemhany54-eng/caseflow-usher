@@ -289,6 +289,9 @@ export function DesignWorkspace() {
         </div>
       </div>
 
+      {/* Heatmap Legend */}
+      {heatmapEnabled && <HeatmapLegend />}
+
       {/* 3D Viewer */}
       <div className="flex-1">
         <Canvas
