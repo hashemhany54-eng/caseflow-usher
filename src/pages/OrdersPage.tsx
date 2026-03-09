@@ -55,7 +55,7 @@ function OrderRow({ order, index }: { order: Order; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02 }}
       onClick={() => navigate(`/orders/${order.id}`)}
-      className="group border-b border-border last:border-b-0 px-4 py-4 hover:bg-secondary/40 cursor-pointer transition-colors"
+      className="group px-5 py-4 hover:bg-secondary/40 cursor-pointer transition-colors"
     >
       {/* Title row */}
       <div className="flex items-start justify-between gap-4 mb-1">
@@ -212,8 +212,8 @@ export default function OrdersPage() {
                 <p className="font-medium">No orders found</p>
               </div>
             ) : (
-              <div className="divide-y divide-border">
-                {grouped.map((group) =>
+              <div className="divide-y divide-border border-b border-border">
+                {grouped.flatMap((group) =>
                   group.orders.map((order, i) => (
                     <OrderRow key={order.id} order={order} index={i} />
                   ))
