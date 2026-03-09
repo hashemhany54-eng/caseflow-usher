@@ -212,8 +212,8 @@ export default function OrdersPage() {
                 <p className="font-medium">No orders found</p>
               </div>
             ) : (
-              <div className="divide-y divide-border">
-                {grouped.map((group) =>
+              <div className="divide-y divide-border border-b border-border">
+                {grouped.flatMap((group) =>
                   group.orders.map((order, i) => (
                     <OrderRow key={order.id} order={order} index={i} />
                   ))
