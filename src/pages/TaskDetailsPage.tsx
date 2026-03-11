@@ -52,19 +52,19 @@ export default function TaskDetailsPage() {
       </div>
     );
   }
-  const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
+  const { timeLeft, isOverdue, isUrgent } = useCountdown(order.due_date);
   const timeline = mockTimeline[order.id] || [];
 
   const handleReview = () => {
-    completeTask(task.id);
+    if (task) completeTask(task.id);
     toast.success("Design review completed");
-    navigate("/");
+    navigate(orderId ? "/orders" : "/");
   };
 
   const handleSkip = () => {
-    skipTask(task.id);
+    if (task) skipTask(task.id);
     toast.info("Task skipped");
-    navigate("/");
+    navigate(orderId ? "/orders" : "/");
   };
 
   return (
