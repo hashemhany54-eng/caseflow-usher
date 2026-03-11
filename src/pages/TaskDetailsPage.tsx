@@ -43,7 +43,10 @@ export default function TaskDetailsPage() {
     : undefined;
 
   // If no task found but we have an orderId, find the order directly
-  const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
+  const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined;
+
+  const { timeLeft, isOverdue, isUrgent } = useCountdown(order?.due_date || "");
+  const timeline = mockTimeline[order?.id || ""] || [];
 
   if (!order) {
     return (
@@ -52,8 +55,6 @@ export default function TaskDetailsPage() {
       </div>
     );
   }
-  const { timeLeft, isOverdue, isUrgent } = useCountdown(order.due_date);
-  const timeline = mockTimeline[order.id] || [];
 
   const handleReview = () => {
     if (task) completeTask(task.id);
