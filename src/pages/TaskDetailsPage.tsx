@@ -29,35 +29,43 @@ interface OutletCtx {
 }
 
 export default function TaskDetailsPage() {
-  const { taskId } = useParams();
+  const { taskId, orderId } = useParams();
   const navigate = useNavigate();
-  const { tasks, completeTask, skipTask } = useApp();
+  const { tasks, orders, completeTask, skipTask } = useApp();
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
-  const task = tasks.find((t) => t.id === taskId);
   const [chatCollapsed, setChatCollapsed] = useState(false);
 
-  if (!task || !task.order) {
+  // Find task by taskId or by orderId
+  const task = taskId
+    ? tasks.find((t) => t.id === taskId)
+    : orderId
+    ? tasks.find((t) => t.order_id === orderId)
+    : undefined;
+
+  // If no task found but we have an orderId, find the order directly
+  const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
+
+  const { timeLeft, isOverdue, isUrgent } = useCountdown(order?.due_date || "");
+  const timeline = mockTimeline[order?.id || ""] || [];
+
+  if (!order) {
     return (
       <div className="flex items-center justify-center py-20 text-muted-foreground">
-        Task not found
+        Order not found
       </div>
     );
   }
 
-  const order = task.order;
-  const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
-  const timeline = mockTimeline[order.id] || [];
-
   const handleReview = () => {
-    completeTask(task.id);
+    if (task) completeTask(task.id);
     toast.success("Design review completed");
-    navigate("/");
+    navigate(orderId ? "/orders" : "/");
   };
 
   const handleSkip = () => {
-    skipTask(task.id);
+    if (task) skipTask(task.id);
     toast.info("Task skipped");
-    navigate("/");
+    navigate(orderId ? "/orders" : "/");
   };
 
   return (
@@ -117,7 +125,7 @@ export default function TaskDetailsPage() {
                           <TabsContent value="tat" className="p-5 space-y-6">
                             <DesignTimeline timeline={timeline} />
                             <div className="border-t border-border" />
-                            <DesignReviewCard onReview={handleReview} taskType={task.task_type} />
+                            <DesignReviewCard onReview={handleReview} taskType={task?.task_type || "Design Review"} />
                           </TabsContent>
                           <TabsContent value="status" className="p-5">
                             <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
