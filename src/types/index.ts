@@ -56,6 +56,8 @@ export interface TimelineEvent {
   stage: "order_placed" | "design" | "qc" | "preview" | "model";
   action_by: string;
   timestamp: string;
+  assignee?: string;
+  due?: string;
 }
 
 export interface DesignReview {
