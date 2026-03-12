@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -73,6 +74,7 @@ function DashField() {
 }
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -119,7 +121,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button className="w-full h-11 text-sm font-medium">
+            <Button className="w-full h-11 text-sm font-medium" onClick={() => navigate("/")}>
               Login
             </Button>
           </div>

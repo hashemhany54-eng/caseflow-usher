@@ -24,6 +24,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/login" element={<LoginPage />} />
             <Route element={<DashboardLayout />}>
               <Route path="/" element={<TasksPage />} />
               <Route path="/tasks/:taskId" element={<TaskDetailsPage />} />
@@ -33,7 +34,6 @@ const App = () => (
               <Route path="/completed" element={<CompletedPage />} />
               <Route path="/on-hold" element={<OnHoldPage />} />
             </Route>
-            <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

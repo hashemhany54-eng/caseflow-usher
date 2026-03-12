@@ -1,5 +1,6 @@
 import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings, ChevronsUpDown } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.svg";
@@ -45,6 +46,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { user, setStatus } = useApp();
+  const navigate = useNavigate();
   const initials = user.name.split(" ").map((n) => n[0]).join("");
   const current = statusConfig[user.status as UserStatus] || statusConfig.offline;
 
@@ -133,7 +135,10 @@ export function AppSidebar() {
       <div className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
+            <SidebarMenuButton
+              className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent"
+              onClick={() => navigate("/login")}
+            >
               <LogOut className="h-4 w-4 shrink-0" />
               <span className="ml-2">Logout</span>
             </SidebarMenuButton>
