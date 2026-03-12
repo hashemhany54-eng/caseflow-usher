@@ -11,6 +11,7 @@ import OrdersPage from "@/pages/OrdersPage";
 import OriginalOrderPage from "@/pages/OriginalOrderPage";
 import CompletedPage from "@/pages/CompletedPage";
 import OnHoldPage from "@/pages/OnHoldPage";
+import LoginPage from "@/pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/completed" element={<CompletedPage />} />
               <Route path="/on-hold" element={<OnHoldPage />} />
             </Route>
+            <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
