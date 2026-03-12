@@ -135,7 +135,10 @@ export function AppSidebar() {
       <div className="p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent">
+            <SidebarMenuButton
+              className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent"
+              onClick={() => navigate("/login")}
+            >
               <LogOut className="h-4 w-4 shrink-0" />
               <span className="ml-2">Logout</span>
             </SidebarMenuButton>
