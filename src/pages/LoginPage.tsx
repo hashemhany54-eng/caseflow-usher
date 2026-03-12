@@ -121,7 +121,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button className="w-full h-11 text-sm font-medium">
+            <Button className="w-full h-11 text-sm font-medium" onClick={() => navigate("/")}>
               Login
             </Button>
           </div>
