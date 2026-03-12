@@ -22,7 +22,6 @@ import { BillingSection } from "@/components/task-details/BillingSection";
 import { OrderScansSection } from "@/components/task-details/OrderScansSection";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
 import { DesignWorkspace } from "@/components/task-details/DesignWorkspace";
-import { OrderTasksPanel } from "@/components/task-details/OrderTasksPanel";
 
 interface OutletCtx {
   activeTab: string;
@@ -150,7 +149,6 @@ export default function TaskDetailsPage() {
                 </div>
               </motion.div>
 
-              <OrderTasksPanel orderId={order.id} />
               <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
             </>
           )}
