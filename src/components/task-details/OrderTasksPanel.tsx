@@ -167,13 +167,6 @@ export function OrderTasksPanel({ currentTaskId, className }: OrderTasksPanelPro
         className
       )}
     >
-      {/* Task count bar */}
-      <div className="px-4 py-2.5 border-b shrink-0">
-        <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
-          {allTasks.length} task{allTasks.length !== 1 ? "s" : ""}
-        </span>
-      </div>
-
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
         {loading &&
