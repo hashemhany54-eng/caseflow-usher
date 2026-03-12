@@ -43,7 +43,10 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
       className={`group cursor-pointer rounded-lg border bg-card hover:shadow-md hover:border-primary/20 transition-all duration-200 ${borderClass}`}
     >
       {/* Desktop row — shared grid */}
-      <div className={`hidden lg:${TASK_ROW_GRID.replace("grid ", "")} lg:grid items-center min-h-[68px]`}>
+      <div
+        className="hidden lg:grid items-center min-h-[68px]"
+        style={{ gridTemplateColumns: "200px 180px 1fr 120px minmax(280px, 2fr) 48px" }}
+      >
         {/* 1 · Status */}
         <div className="flex flex-col justify-center gap-0.5 px-4 py-3 border-r border-border/40 min-w-0">
           <div className="flex items-center gap-2 min-w-0">
