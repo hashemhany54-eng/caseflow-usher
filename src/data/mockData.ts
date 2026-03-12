@@ -262,12 +262,12 @@ export const mockTasks: Task[] = [
 export const mockTimeline: Record<string, TimelineEvent[]> = {
   "ORD-2024-001": [
     { id: "te1", order_id: "ORD-2024-001", stage: "order_placed", action_by: "System", timestamp: new Date(now - hour * 48).toISOString() },
-    { id: "te2", order_id: "ORD-2024-001", stage: "design", action_by: "Dr. Sarah Chen", timestamp: new Date(now - hour * 24).toISOString() },
-    { id: "te3", order_id: "ORD-2024-001", stage: "qc", action_by: "QC Team", timestamp: new Date(now - hour * 12).toISOString() },
+    { id: "te2", order_id: "ORD-2024-001", stage: "design", action_by: "Dr. Sarah Chen", timestamp: new Date(now - hour * 24).toISOString(), assignee: "Dr. James Wilson", due: "45m" },
+    { id: "te3", order_id: "ORD-2024-001", stage: "qc", action_by: "QC Team", timestamp: new Date(now - hour * 12).toISOString(), assignee: "William Carter" },
   ],
   "ORD-2024-002": [
     { id: "te4", order_id: "ORD-2024-002", stage: "order_placed", action_by: "System", timestamp: new Date(now - hour * 24).toISOString() },
-    { id: "te5", order_id: "ORD-2024-002", stage: "design", action_by: "Dr. Sarah Chen", timestamp: new Date(now - hour * 6).toISOString() },
+    { id: "te5", order_id: "ORD-2024-002", stage: "design", action_by: "Dr. Sarah Chen", timestamp: new Date(now - hour * 6).toISOString(), assignee: "Dr. Sarah Chen", due: "2h" },
   ],
   "ORD-2024-003": [
     { id: "te6", order_id: "ORD-2024-003", stage: "order_placed", action_by: "System", timestamp: new Date(now - hour * 12).toISOString() },
