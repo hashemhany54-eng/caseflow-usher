@@ -155,8 +155,12 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     setError("");
-    if (!email || !password) {
-      setError("Please enter email and password");
+    if (!email) {
+      setError("Please enter your email");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
       return;
     }
     setLoading(true);
