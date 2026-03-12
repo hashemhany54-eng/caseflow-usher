@@ -52,8 +52,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           <p className={`text-xs font-medium leading-tight ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
             {isOverdue ? timeLeft : isUrgent ? timeLeft : "On schedule"}
           </p>
-          {/* Hover-revealed details */}
-          <div className="hidden group-hover:block text-[11px] text-muted-foreground mt-0.5 transition-all">
+          <div className="text-[11px] text-muted-foreground mt-0.5">
             {new Date(task.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}{" "}
             {new Date(task.due_date).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
           </div>
