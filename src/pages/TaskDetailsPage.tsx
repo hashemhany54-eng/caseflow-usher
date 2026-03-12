@@ -71,6 +71,11 @@ export default function TaskDetailsPage() {
 
   return (
     <div className="flex h-full">
+      {/* Left: Tasks list panel */}
+      {activeTab !== "design" && (
+        <OrderTasksPanel currentTaskId={task?.id} className="hidden lg:flex" />
+      )}
+
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex flex-1 overflow-hidden">
           {activeTab === "design" ? (
@@ -150,7 +155,6 @@ export default function TaskDetailsPage() {
                 </div>
               </motion.div>
 
-              <OrderTasksPanel orderId={order.id} className="hidden lg:flex" />
               <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
             </>
           )}
