@@ -1,4 +1,5 @@
 import { TimelineEvent } from "@/types";
+import { Check } from "lucide-react";
 
 const stageLabels: Record<string, string> = {
   order_placed: "Order Placed",
@@ -17,6 +18,9 @@ export function DesignTimeline({ timeline }: Props) {
   const completedStages = new Set(timeline.map((t) => t.stage));
   const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
 
+  // Find latest completed stage
+  const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
+
   function relativeTime(ts: string) {
     const diff = Date.now() - new Date(ts).getTime();
     const hours = Math.floor(diff / 3600000);
@@ -26,24 +30,40 @@ export function DesignTimeline({ timeline }: Props) {
   }
 
   return (
-    <div className="flex w-full gap-3 py-[24px]">
+    <div className="flex w-full gap-4 py-6">
       {stages.map((stage) => {
         const done = completedStages.has(stage as any);
         const event = timelineByStage[stage];
+        const isLatest = stage === latestStage;
         return (
-          <div key={stage} className="flex-1 flex flex-col gap-1">
-            <div className={`h-[3px] w-full rounded-full ${done ? "bg-foreground" : "bg-muted"}`} />
-            <span className="text-[11px] font-medium text-foreground leading-tight">
-              {stageLabels[stage]}
-            </span>
-            {event &&
-            <span className="text-[10px] text-muted-foreground leading-none">
-                {event.action_by} • {relativeTime(event.timestamp)}
+          <div key={stage} className="flex-1 flex flex-col gap-1.5 group/stage">
+            <div className={`h-[3px] w-full rounded-full transition-colors ${done ? "bg-primary" : "bg-muted"}`} />
+            {isLatest ? (
+              <>
+                <span className="text-xs font-medium text-primary leading-tight">
+                  {stageLabels[stage]}
+                </span>
+                {event && (
+                  <span className="text-[10px] text-muted-foreground leading-none">
+                    {event.action_by} · {relativeTime(event.timestamp)}
+                  </span>
+                )}
+              </>
+            ) : done ? (
+              <div className="flex items-center gap-1">
+                <Check className="h-3 w-3 text-primary/50" />
+                <span className="text-[10px] text-muted-foreground/60 opacity-0 group-hover/stage:opacity-100 transition-opacity">
+                  {stageLabels[stage]}
+                </span>
+              </div>
+            ) : (
+              <span className="text-[10px] text-muted-foreground/40 leading-tight">
+                {stageLabels[stage]}
               </span>
-            }
-          </div>);
-
+            )}
+          </div>
+        );
       })}
-    </div>);
-
+    </div>
+  );
 }
