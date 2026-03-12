@@ -46,6 +46,7 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { user, setStatus } = useApp();
+  const navigate = useNavigate();
   const initials = user.name.split(" ").map((n) => n[0]).join("");
   const current = statusConfig[user.status as UserStatus] || statusConfig.offline;
 
