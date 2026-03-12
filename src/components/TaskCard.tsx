@@ -24,6 +24,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
 
   const timeline = mockTimeline[order?.id || ""] || [];
   const completedStages = new Set(timeline.map((t) => t.stage));
+  const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
   const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
 
   const borderClass = isOverdue ? "priority-overdue" : isUrgent ? "priority-urgent" : "priority-normal";
