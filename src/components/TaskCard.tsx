@@ -66,8 +66,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-medium truncate">{order?.patient_name}</p>
-            {/* Hover-revealed age */}
-            <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <p className="text-xs text-muted-foreground">
               {order?.patient_age && `${order.patient_age}y`}
             </p>
           </div>
