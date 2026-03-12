@@ -77,8 +77,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           <span className="text-sm font-medium">
             {order?.crown_type || order?.case_type}
           </span>
-          {/* Hover-revealed extra info */}
-          <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             {order?.case_type} · {order?.design_level || "Level 1"}
           </p>
         </div>
