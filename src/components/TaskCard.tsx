@@ -107,7 +107,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                     ) : done ? (
                       <Check className="h-3 w-3 text-primary/60" />
                     ) : (
-                      <span className="text-[10px] text-muted-foreground/40 leading-tight opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[10px] text-muted-foreground/40 leading-tight">
                         {stageLabels[stage]}
                       </span>
                     )}
