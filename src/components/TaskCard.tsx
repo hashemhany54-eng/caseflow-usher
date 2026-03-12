@@ -115,12 +115,12 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                   ) : done ? (
                     <>
                       <div className="flex items-center gap-0.5">
-                        <Check className="h-3 w-3 text-primary/50 block group-hover/step:hidden" />
-                        <span className="text-[9px] text-muted-foreground/60 hidden group-hover/step:block truncate">
+                        <Check className="h-3 w-3 text-primary/50 block group-hover:hidden" />
+                        <span className="text-[9px] text-muted-foreground/60 hidden group-hover:block truncate">
                           {stageLabels[stage]}
                         </span>
                       </div>
-                      <span className="text-[9px] text-muted-foreground/50 leading-none truncate opacity-0 group-hover/step:opacity-100 transition-opacity">
+                      <span className="text-[9px] text-muted-foreground/50 leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
                         {event?.assignee || event?.action_by || ""}
                       </span>
                     </>
