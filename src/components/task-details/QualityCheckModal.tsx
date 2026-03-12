@@ -62,7 +62,7 @@ export function QualityCheckModal({
               <p className="text-sm text-muted-foreground">
                 Deviation of{" "}
                 <span className="text-primary font-semibold">1.0 ΔE or less</span>{" "}
-                from the A2 reference shade
+                from the A2 reference
               </p>
 
               {/* Scanned color card */}
