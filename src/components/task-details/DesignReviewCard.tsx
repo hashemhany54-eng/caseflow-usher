@@ -49,22 +49,24 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
   return (
     <div>
       <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : "Internal Design"}</h2>
-      <p className="text-xs text-muted-foreground mb-3">{isReview ? "Design completed by internal designer" : "Upload completed design files"}</p>
-      <Button onClick={() => setOpen(true)} className="gap-2">
+      <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : "Upload completed design files"}</p>
+      
+      {/* Primary action: prominent */}
+      <Button onClick={() => setOpen(true)} size="lg" className="gap-2 shadow-sm">
         {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
         {isReview ? "Review Design" : "Upload Design"}
       </Button>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-[360px] sm:max-w-[360px] flex flex-col p-0">
-          <SheetHeader className="p-5 pb-3 border-b">
-            <SheetTitle className="text-base">Complete design</SheetTitle>
+          <SheetHeader className="p-6 pb-4 border-b">
+            <SheetTitle className="text-base font-display">Complete design</SheetTitle>
             <SheetDescription className="sr-only">Upload completed design files</SheetDescription>
           </SheetHeader>
 
-          <div className="flex-1 overflow-auto p-5 space-y-5">
+          <div className="flex-1 overflow-auto p-6 space-y-6">
             {/* Scan Quality */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Checkbox
                 id="scan-quality"
                 checked={scanQuality}
@@ -74,10 +76,10 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
             </div>
 
             {/* File Upload */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <Label className="text-sm font-medium">Completed design file</Label>
               <div
-                className="border-2 border-dashed border-border rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleFileDrop}
                 onClick={() => fileInputRef.current?.click()}
@@ -96,7 +98,7 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
                 ) : (
                   <>
                     <p className="text-sm text-muted-foreground">Drag & drop files here or</p>
-                    <Button variant="outline" size="sm" className="mt-2 gap-1.5">
+                    <Button variant="outline" size="sm" className="mt-3 gap-1.5">
                       <Upload className="h-3.5 w-3.5" /> Select files
                     </Button>
                   </>
@@ -114,7 +116,7 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
             </div>
 
             {/* Note */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Want to leave a note?</Label>
               <Textarea
                 placeholder="Note"
@@ -125,7 +127,7 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
             </div>
 
             {/* Video URL */}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Attach video to digital design preview</Label>
               <div className="relative">
                 <Input
@@ -138,12 +140,12 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="border-t p-5 flex items-center gap-3">
-            <Button variant="ghost" onClick={handleCancel} className="text-primary">
+          {/* Footer: clear primary vs secondary hierarchy */}
+          <div className="border-t p-6 flex items-center gap-3">
+            <Button variant="ghost" size="sm" onClick={handleCancel} className="text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleComplete} className="gap-1.5">
+            <Button onClick={handleComplete} className="gap-1.5 flex-1">
               Complete ✓
             </Button>
           </div>

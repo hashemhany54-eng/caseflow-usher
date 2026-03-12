@@ -28,7 +28,6 @@ export default function TasksPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my_tasks");
 
-  // Compute counts for each tab
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     counts.my_tasks = tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped").length;
@@ -37,7 +36,6 @@ export default function TasksPage() {
     counts.unassigned = tasks.filter((t) => !t.assigned_to || t.assigned_to === "").length;
     counts.waiting_practice = tasks.filter((t) => t.order?.status === "on_hold").length;
 
-    // Task type counts
     Object.entries(taskTypeMap).forEach(([key, typeValue]) => {
       counts[key] = tasks.filter((t) => t.task_type === typeValue).length;
     });
@@ -48,7 +46,6 @@ export default function TasksPage() {
   const filteredTasks = useMemo(() => {
     let filtered = tasks;
 
-    // Category filters
     switch (activeTab) {
       case "my_tasks":
         filtered = tasks.filter((t) => t.assigned_to === "u1" && t.status !== "completed" && t.status !== "skipped");
@@ -66,14 +63,12 @@ export default function TasksPage() {
         filtered = tasks.filter((t) => t.order?.status === "on_hold");
         break;
       default:
-        // Task type filter
         if (taskTypeMap[activeTab]) {
           filtered = tasks.filter((t) => t.task_type === taskTypeMap[activeTab]);
         }
         break;
     }
 
-    // Search
     const q = (searchQuery || "").toLowerCase();
     if (q) {
       filtered = filtered.filter(
@@ -92,34 +87,34 @@ export default function TasksPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Unified top bar */}
+      {/* Top bar */}
       <div className="flex items-center h-14 border-b bg-card shrink-0">
-        <div className="flex items-center gap-2 px-3 w-64 shrink-0 border-r h-full">
+        <div className="flex items-center gap-2 px-4 w-64 shrink-0 border-r h-full">
           <SidebarTrigger className="shrink-0" />
           <h2 className="text-sm font-semibold leading-tight flex-1">Tasks</h2>
-          <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0">
+          <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 opacity-50 hover:opacity-100">
             <RefreshCw className="h-3.5 w-3.5" />
           </Button>
         </div>
-        <div className="flex items-center flex-1 px-4 gap-4">
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+        <div className="flex items-center flex-1 px-5 gap-5">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Focusing On:</span>
             <Badge variant="secondary" className="text-xs font-medium px-2.5 py-0.5">Design Anterior C&B Level 4</Badge>
           </div>
           <div className="flex-1" />
           <div className="relative w-full max-w-xs">
-            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Filter by task"
+              placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 h-8 bg-secondary border-0 text-sm"
+              className="pl-9 h-9 bg-secondary border-0 text-sm"
             />
           </div>
         </div>
       </div>
 
-      {/* Content area */}
+      {/* Content */}
       <div className="flex flex-1 min-h-0">
         <TaskFiltersSidebar
           activeTab={activeTab}
@@ -128,15 +123,15 @@ export default function TasksPage() {
         />
 
         <div className="flex-1 flex flex-col min-w-0">
-          <div className="flex-1 overflow-auto p-3 md:p-4">
+          <div className="flex-1 overflow-auto p-4 md:p-6">
             {filteredTasks.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-                <ClipboardList className="h-10 w-10 mb-2 opacity-30" />
+              <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+                <ClipboardList className="h-10 w-10 mb-3 opacity-20" />
                 <p className="font-medium text-sm">No tasks found</p>
-                <p className="text-xs">Try adjusting your filters</p>
+                <p className="text-xs mt-1">Try adjusting your filters</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2.5">
                 {filteredTasks.map((task, i) => (
                   <TaskCard key={task.id} task={task} index={i} />
                 ))}
