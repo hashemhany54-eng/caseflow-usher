@@ -150,6 +150,7 @@ export default function TaskDetailsPage() {
                 </div>
               </motion.div>
 
+              <OrderTasksPanel orderId={order.id} />
               <ActivityPanel collapsed={chatCollapsed} onToggle={() => setChatCollapsed(!chatCollapsed)} />
             </>
           )}
