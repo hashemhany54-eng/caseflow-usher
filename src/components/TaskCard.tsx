@@ -24,6 +24,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
 
   const timeline = mockTimeline[order?.id || ""] || [];
   const completedStages = new Set(timeline.map((t) => t.stage));
+  const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
   const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
 
   const borderClass = isOverdue ? "priority-overdue" : isUrgent ? "priority-urgent" : "priority-normal";
@@ -90,21 +91,41 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
 
         {/* 5 · Timeline */}
         <div className="flex items-center px-4 py-3 min-w-0">
-          <div className="flex items-center w-full gap-1">
+          <div className="flex w-full gap-2">
             {stages.map((stage) => {
               const done = completedStages.has(stage as any);
               const isLatest = stage === latestStage;
+              const event = timelineByStage[stage];
               return (
-                <div key={stage} className="flex-1 flex flex-col items-center gap-1 min-w-0">
+                <div key={stage} className="flex-1 flex flex-col gap-1 min-w-0 group/step">
                   <div className={`h-[3px] w-full rounded-full ${done ? "bg-primary" : "bg-muted"}`} />
                   {isLatest ? (
-                    <span className="text-[11px] font-medium text-primary leading-tight whitespace-nowrap">
-                      {stageLabels[stage]}
-                    </span>
+                    <>
+                      <span className="text-[10px] font-medium text-primary leading-tight truncate">
+                        {stageLabels[stage]}
+                      </span>
+                      {event && (
+                        <span className="text-[9px] text-muted-foreground leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                          {event.assignee
+                            ? event.due ? `${event.assignee} — ${event.due}` : event.assignee
+                            : event.action_by}
+                        </span>
+                      )}
+                    </>
                   ) : done ? (
-                    <Check className="h-3 w-3 text-primary/60" />
+                    <>
+                      <div className="flex items-center gap-0.5">
+                        <Check className="h-3 w-3 text-primary/50 block group-hover/step:hidden" />
+                        <span className="text-[9px] text-muted-foreground/60 hidden group-hover/step:block truncate">
+                          {stageLabels[stage]}
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-muted-foreground/50 leading-none truncate opacity-0 group-hover/step:opacity-100 transition-opacity">
+                        {event?.assignee || event?.action_by || ""}
+                      </span>
+                    </>
                   ) : (
-                    <span className="text-[10px] text-muted-foreground/40 leading-tight opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[9px] text-muted-foreground/40 leading-tight truncate opacity-0 group-hover:opacity-100 transition-opacity">
                       {stageLabels[stage]}
                     </span>
                   )}
