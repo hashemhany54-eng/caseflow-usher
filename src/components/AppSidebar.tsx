@@ -139,7 +139,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent"
-              onClick={() => navigate("/login")}
+              onClick={() => { logout(); navigate("/login"); }}
             >
               <LogOut className="h-4 w-4 shrink-0" />
               <span className="ml-2">Logout</span>
