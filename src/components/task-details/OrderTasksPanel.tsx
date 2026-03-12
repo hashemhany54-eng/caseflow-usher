@@ -1,13 +1,33 @@
 import { useState, useEffect } from "react";
 import { Task } from "@/types";
 import { useApp } from "@/context/AppContext";
+import { useCountdown } from "@/hooks/useCountdown";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Scissors, Inbox, AlertCircle } from "lucide-react";
+import { Scissors, Inbox, AlertCircle, CircleDot, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+
+/* ------------------------------------------------------------------ */
+/* Due indicator                                                       */
+/* ------------------------------------------------------------------ */
+
+function TaskDueIndicator({ dueDate }: { dueDate: string }) {
+  const { timeLeft, isOverdue, isUrgent } = useCountdown(dueDate);
+  return (
+    <span
+      className={cn(
+        "text-xs font-medium whitespace-nowrap",
+        isOverdue && "text-destructive",
+        isUrgent && "text-warning",
+        !isOverdue && !isUrgent && "text-muted-foreground"
+      )}
+    >
+      {timeLeft}
+    </span>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Task Card                                                           */
@@ -23,9 +43,10 @@ function TaskCard({
   onSelect: (id: string) => void;
 }) {
   const order = task.order;
-  const dueFormatted = task.due_date
-    ? `Due: ${format(new Date(task.due_date), "M/d/yyyy")}`
-    : "";
+  const tags: string[] = [];
+  if (order?.is_split) tags.push("Split");
+  if (order?.qc_required) tags.push("QC");
+  if (order?.status === "on_hold") tags.push("Hold");
 
   return (
     <button
@@ -34,42 +55,57 @@ function TaskCard({
         "w-full text-left rounded-lg border bg-card p-4 transition-all",
         "hover:shadow-sm hover:border-primary/30",
         selected
-          ? "border-primary/40 ring-2 ring-primary/10 shadow-sm"
+          ? "border-primary/30 bg-accent/50 shadow-sm"
           : "border-border"
       )}
     >
-      {/* Row 1: Task type + Order ID */}
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="text-sm font-semibold truncate">
+      {/* Row 1: icon + task name + priority */}
+      <div className="flex items-center gap-2.5 mb-2">
+        <CircleDot className="h-4 w-4 text-primary shrink-0" />
+        <span className="text-sm font-semibold truncate flex-1">
           {task.task_type || "Task"}
         </span>
-        <span className="text-xs text-muted-foreground font-mono shrink-0">
-          {order?.id}
-        </span>
-      </div>
-
-      {/* Row 2: Priority + Patient name */}
-      <div className="flex items-center gap-2 mb-1.5">
         <PriorityBadge priority={order?.priority || "low"} />
-        <span className="text-sm text-foreground truncate">
-          {order?.patient_name}
-        </span>
       </div>
 
-      {/* Row 3: Due date + tags */}
-      <div className="flex items-center gap-2 flex-wrap">
-        {dueFormatted && (
-          <span className="text-xs text-muted-foreground">{dueFormatted}</span>
+      {/* Row 2: assignee + due + tags */}
+      <div className="flex items-center gap-2 pl-[26px] flex-wrap">
+        {task.assigned_to && (
+          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+            <User className="h-3 w-3" />
+            {task.assigned_to === "u1" ? "You" : task.assigned_to}
+          </span>
         )}
-        {order?.is_split && (
+        <TaskDueIndicator dueDate={task.due_date} />
+        {tags.map((t) => (
           <Badge
+            key={t}
             variant="outline"
-            className="text-[10px] px-1.5 py-0 gap-0.5 bg-secondary text-secondary-foreground"
+            className={cn(
+              "text-[10px] px-1.5 py-0 leading-4",
+              t === "Hold" && "bg-warning/10 text-warning border-warning/20",
+              t === "QC" && "bg-muted text-muted-foreground border-border",
+              t === "Split" && "bg-secondary text-secondary-foreground"
+            )}
           >
-            <Scissors className="h-2.5 w-2.5" /> Split
+            {t === "Split" && <Scissors className="h-2.5 w-2.5 mr-0.5" />}
+            {t}
           </Badge>
-        )}
+        ))}
       </div>
+
+      {/* Progressive disclosure: case details on select */}
+      {selected && order && (
+        <div className="mt-3 pl-[26px] text-xs text-muted-foreground space-y-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
+          <p>
+            {order.case_type}
+            {order.crown_type && <> · {order.crown_type}</>}
+          </p>
+          <p>
+            {order.lab_type} · {order.design_level}
+          </p>
+        </div>
+      )}
     </button>
   );
 }
@@ -81,15 +117,15 @@ function TaskCard({
 function TaskCardSkeleton() {
   return (
     <div className="rounded-lg border bg-card p-4 space-y-2.5">
-      <div className="flex items-center justify-between">
-        <Skeleton className="h-4 w-24" />
+      <div className="flex items-center gap-2.5">
+        <Skeleton className="h-4 w-4 rounded-full" />
+        <Skeleton className="h-4 w-28" />
+        <Skeleton className="h-4 w-12 ml-auto rounded-full" />
+      </div>
+      <div className="flex items-center gap-2 pl-[26px]">
+        <Skeleton className="h-3 w-12" />
         <Skeleton className="h-3 w-20" />
       </div>
-      <div className="flex items-center gap-2">
-        <Skeleton className="h-4 w-14 rounded-full" />
-        <Skeleton className="h-4 w-28" />
-      </div>
-      <Skeleton className="h-3 w-24" />
     </div>
   );
 }
@@ -110,7 +146,6 @@ export function OrderTasksPanel({ currentTaskId, className }: OrderTasksPanelPro
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Simulate async load
   useEffect(() => {
     setLoading(true);
     setError(false);
@@ -128,48 +163,39 @@ export function OrderTasksPanel({ currentTaskId, className }: OrderTasksPanelPro
   return (
     <div
       className={cn(
-        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-full lg:w-80 xl:w-[340px]",
+        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-64",
         className
       )}
     >
-      {/* Header */}
-      <div className="px-5 pt-6 pb-4 shrink-0">
-        <h2 className="text-xl font-bold font-display">Your Tasks</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">
+      {/* Task count bar */}
+      <div className="px-4 py-2.5 border-b shrink-0">
+        <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
           {allTasks.length} task{allTasks.length !== 1 ? "s" : ""}
-        </p>
+        </span>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
-        {/* Loading */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
         {loading &&
-          [1, 2, 3, 4].map((i) => <TaskCardSkeleton key={i} />)
+          [1, 2, 3].map((i) => <TaskCardSkeleton key={i} />)
         }
 
-        {/* Error */}
         {!loading && error && (
-          <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <AlertCircle className="h-8 w-8 text-destructive/60 mb-3" />
-            <p className="text-sm font-medium mb-1">Failed to load tasks</p>
-            <p className="text-xs text-muted-foreground">
-              Something went wrong. Please try again.
-            </p>
+          <div className="flex flex-col items-center justify-center py-12 px-3 text-center">
+            <AlertCircle className="h-7 w-7 text-destructive/60 mb-2" />
+            <p className="text-sm font-medium mb-1">Failed to load</p>
+            <p className="text-xs text-muted-foreground">Please try again.</p>
           </div>
         )}
 
-        {/* Empty */}
         {!loading && !error && allTasks.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <Inbox className="h-8 w-8 text-muted-foreground/40 mb-3" />
+          <div className="flex flex-col items-center justify-center py-12 px-3 text-center">
+            <Inbox className="h-7 w-7 text-muted-foreground/40 mb-2" />
             <p className="text-sm font-medium mb-1">No tasks</p>
-            <p className="text-xs text-muted-foreground">
-              You have no tasks assigned yet.
-            </p>
+            <p className="text-xs text-muted-foreground">Nothing assigned yet.</p>
           </div>
         )}
 
-        {/* Task cards */}
         {!loading &&
           !error &&
           allTasks.map((task) => (
