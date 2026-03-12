@@ -56,16 +56,18 @@ export function DesignTimeline({ timeline }: Props) {
             ) : done ? (
               <>
                 <div className="flex items-center gap-1">
-                  <Check className="h-3 w-3 text-primary/50" />
+                  <Check className="h-3 w-3 text-primary/50 block group-hover/stage:hidden" />
                   <span className="text-[10px] text-muted-foreground/60 opacity-0 group-hover/stage:opacity-100 transition-opacity">
                     {stageLabels[stage]}
                   </span>
                 </div>
-                {event?.assignee && (
-                  <span className="text-[10px] text-muted-foreground/50 leading-none">
-                    {event.assignee}
-                  </span>
-                )}
+                <span className="text-[10px] text-muted-foreground/50 leading-none opacity-0 group-hover/stage:opacity-100 transition-opacity">
+                  {event?.assignee
+                    ? event.due
+                      ? `${event.assignee} — Due in ${event.due}`
+                      : event.assignee
+                    : event ? `${event.action_by} · ${relativeTime(event.timestamp)}` : ""}
+                </span>
               </>
             ) : (
               <>
