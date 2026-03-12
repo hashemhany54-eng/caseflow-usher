@@ -12,15 +12,18 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import { QualityCheckModal } from "./QualityCheckModal";
 
 interface Props {
   onReview: () => void;
   taskType?: string;
+  patientName?: string;
 }
 
-export function DesignReviewCard({ onReview, taskType }: Props) {
+export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
   const isReview = taskType === "Design Review";
-  const [open, setOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [qcOpen, setQcOpen] = useState(false);
   const [scanQuality, setScanQuality] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [note, setNote] = useState("");
@@ -29,7 +32,8 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
 
   const handleComplete = () => {
     onReview();
-    setOpen(false);
+    setQcOpen(false);
+    setSheetOpen(false);
   };
 
   const handleCancel = () => {
@@ -37,7 +41,7 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
     setNote("");
     setVideoUrl("");
     setScanQuality(false);
-    setOpen(false);
+    setSheetOpen(false);
   };
 
   const handleFileDrop = (e: React.DragEvent) => {
@@ -51,13 +55,26 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
       <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : "Internal Design"}</h2>
       <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : "Upload completed design files"}</p>
       
-      {/* Primary action: prominent */}
-      <Button onClick={() => setOpen(true)} size="lg" className="gap-2 shadow-sm">
+      {/* Primary action */}
+      <Button
+        onClick={() => isReview ? setQcOpen(true) : setSheetOpen(true)}
+        size="lg"
+        className="gap-2 shadow-sm"
+      >
         {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
         {isReview ? "Review Design" : "Upload Design"}
       </Button>
 
-      <Sheet open={open} onOpenChange={setOpen}>
+      {/* QC Modal for Design Review */}
+      <QualityCheckModal
+        open={qcOpen}
+        onOpenChange={setQcOpen}
+        patientName={patientName}
+        onComplete={handleComplete}
+      />
+
+      {/* Sheet for Upload Design */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent side="left" className="w-[360px] sm:max-w-[360px] flex flex-col p-0">
           <SheetHeader className="p-6 pb-4 border-b">
             <SheetTitle className="text-base font-display">Complete design</SheetTitle>
@@ -65,7 +82,6 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
           </SheetHeader>
 
           <div className="flex-1 overflow-auto p-6 space-y-6">
-            {/* Scan Quality */}
             <div className="flex items-center gap-2.5">
               <Checkbox
                 id="scan-quality"
@@ -75,7 +91,6 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
               <Label htmlFor="scan-quality" className="text-sm font-medium">Scan Quality</Label>
             </div>
 
-            {/* File Upload */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">Completed design file</Label>
               <div
@@ -115,7 +130,6 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
               </div>
             </div>
 
-            {/* Note */}
             <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Want to leave a note?</Label>
               <Textarea
@@ -126,7 +140,6 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
               />
             </div>
 
-            {/* Video URL */}
             <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Attach video to digital design preview</Label>
               <div className="relative">
@@ -140,7 +153,6 @@ export function DesignReviewCard({ onReview, taskType }: Props) {
             </div>
           </div>
 
-          {/* Footer: clear primary vs secondary hierarchy */}
           <div className="border-t p-6 flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={handleCancel} className="text-muted-foreground">
               Cancel
