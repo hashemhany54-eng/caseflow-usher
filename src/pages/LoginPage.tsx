@@ -1,82 +1,177 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
 import atomicaLogo from "@/assets/atomica-logo.svg";
 
-function DashField() {
-  const cols = 20;
-  const rows = 18;
-  const spacingX = 28;
-  const spacingY = 24;
-  const dashLen = 10;
-  const width = cols * spacingX;
-  const height = rows * spacingY;
+/* ── Animated Dash Field ── */
 
-  const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+const COLS = 20;
+const ROWS = 18;
+const SPACING_X = 28;
+const SPACING_Y = 24;
+const DASH_LEN = 10;
+const WIDTH = COLS * SPACING_X;
+const HEIGHT = ROWS * SPACING_Y;
 
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const cx = c * spacingX + spacingX / 2;
-      const cy = r * spacingY + spacingY / 2;
+interface DashDatum {
+  cx: number;
+  cy: number;
+  baseAngle: number;
+}
 
-      // Normalize row position (0 = top, 1 = bottom)
-      const t = r / (rows - 1);
-
-      // Base angle: slight diagonal at top, curving into an arch at bottom
-      // Column position relative to center (-1 to 1)
-      const colNorm = (c - (cols - 1) / 2) / ((cols - 1) / 2);
-
-      // Top rows: uniform slight slant (~60deg from horizontal = ~-30deg tilt)
-      const baseAngle = -Math.PI / 6; // ~-30 degrees (slight diagonal)
-
-      // Bottom rows: dashes bend into a bowl/arch shape
-      // The arch effect: dashes on left lean right, center are vertical, right lean left
+function buildGrid(): DashDatum[] {
+  const data: DashDatum[] = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cx = c * SPACING_X + SPACING_X / 2;
+      const cy = r * SPACING_Y + SPACING_Y / 2;
+      const t = r / (ROWS - 1);
+      const colNorm = (c - (COLS - 1) / 2) / ((COLS - 1) / 2);
+      const baseAngle = -Math.PI / 6;
       const archAngle = -colNorm * (Math.PI / 2.5);
-
-      // Blend from base to arch based on row
-      const easedT = t * t * t; // cubic ease for gradual transition
+      const easedT = t * t * t;
       const angle = baseAngle * (1 - easedT) + archAngle * easedT;
-
-      const dx = (dashLen / 2) * Math.cos(angle);
-      const dy = (dashLen / 2) * Math.sin(angle);
-
-      lines.push({
-        x1: cx - dx,
-        y1: cy - dy,
-        x2: cx + dx,
-        y2: cy + dy,
-      });
+      data.push({ cx, cy, baseAngle: angle });
     }
   }
+  return data;
+}
+
+const GRID = buildGrid();
+
+function AnimatedDashField() {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const mouseRef = useRef<{ x: number; y: number } | null>(null);
+  const currentAngles = useRef<number[]>(GRID.map((d) => d.baseAngle));
+  const rafRef = useRef<number>(0);
+
+  const animate = useCallback(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const lines = svg.querySelectorAll("line");
+    const mouse = mouseRef.current;
+    const angles = currentAngles.current;
+
+    for (let i = 0; i < GRID.length; i++) {
+      const d = GRID[i];
+      let targetAngle = d.baseAngle;
+
+      if (mouse) {
+        const dx = mouse.x - d.cx;
+        const dy = mouse.y - d.cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const influence = Math.max(0, 1 - dist / 160);
+        const mouseAngle = Math.atan2(dy, dx);
+        targetAngle = d.baseAngle + (mouseAngle - d.baseAngle) * influence * 0.35;
+      }
+
+      // Smooth interpolation
+      angles[i] += (targetAngle - angles[i]) * 0.08;
+
+      const half = DASH_LEN / 2;
+      const cos = Math.cos(angles[i]);
+      const sin = Math.sin(angles[i]);
+      const line = lines[i];
+      if (line) {
+        line.setAttribute("x1", String(d.cx - half * cos));
+        line.setAttribute("y1", String(d.cy - half * sin));
+        line.setAttribute("x2", String(d.cx + half * cos));
+        line.setAttribute("y2", String(d.cy + half * sin));
+      }
+    }
+
+    rafRef.current = requestAnimationFrame(animate);
+  }, []);
+
+  useEffect(() => {
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [animate]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const scaleX = WIDTH / rect.width;
+    const scaleY = HEIGHT / rect.height;
+    mouseRef.current = {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
+    };
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    mouseRef.current = null;
+  }, []);
 
   return (
     <svg
-      viewBox={`0 0 ${width} ${height}`}
+      ref={svgRef}
+      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       className="w-full h-full"
       preserveAspectRatio="xMidYMid meet"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      {lines.map((l, i) => (
-        <line
-          key={i}
-          x1={l.x1}
-          y1={l.y1}
-          x2={l.x2}
-          y2={l.y2}
-          stroke="hsl(220 9% 70%)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      ))}
+      {GRID.map((d, i) => {
+        const half = DASH_LEN / 2;
+        const cos = Math.cos(d.baseAngle);
+        const sin = Math.sin(d.baseAngle);
+        return (
+          <line
+            key={i}
+            x1={d.cx - half * cos}
+            y1={d.cy - half * sin}
+            x2={d.cx + half * cos}
+            y2={d.cy + half * sin}
+            stroke="hsl(220 9% 70%)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        );
+      })}
     </svg>
   );
 }
 
+/* ── Login Page ── */
+
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Already authenticated → go to dashboard
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  const handleLogin = async () => {
+    setError("");
+    if (!email || !password) {
+      setError("Please enter email and password");
+      return;
+    }
+    setLoading(true);
+    const result = await login(email, password);
+    setLoading(false);
+    if (result.success) {
+      navigate("/", { replace: true });
+    } else {
+      setError(result.error || "Login failed");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleLogin();
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/40 p-4">
@@ -88,7 +183,7 @@ export default function LoginPage() {
             Login to your Atomica account
           </p>
 
-          <div className="space-y-5">
+          <div className="space-y-5" onKeyDown={handleKeyDown}>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 Email
@@ -98,7 +193,7 @@ export default function LoginPage() {
                 type="email"
                 placeholder="m@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => { setEmail(e.target.value); setError(""); }}
                 className="h-11"
               />
             </div>
@@ -116,13 +211,28 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 className="h-11"
               />
             </div>
 
-            <Button className="w-full h-11 text-sm font-medium" onClick={() => navigate("/")}>
-              Login
+            {error && (
+              <p className="text-sm text-destructive text-center">{error}</p>
+            )}
+
+            <Button
+              className="w-full h-11 text-sm font-medium"
+              onClick={handleLogin}
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                  Logging in…
+                </span>
+              ) : (
+                "Login"
+              )}
             </Button>
           </div>
 
@@ -170,9 +280,9 @@ export default function LoginPage() {
             <img src={atomicaLogo} alt="Atomica" className="h-4" />
           </div>
 
-          {/* Dash Field */}
+          {/* Animated Dash Field */}
           <div className="flex-1 flex items-center justify-center">
-            <DashField />
+            <AnimatedDashField />
           </div>
 
           {/* Caption */}
