@@ -1,5 +1,6 @@
 import { ClipboardList, Package, CheckCircle2, PauseCircle, LogOut, Settings, ChevronsUpDown } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { motion } from "framer-motion";
 import logo from "@/assets/logo.svg";
