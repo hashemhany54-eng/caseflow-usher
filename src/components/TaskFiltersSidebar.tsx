@@ -19,7 +19,7 @@ const categoryTabs: SidebarTab[] = [
 const scanReviewTabs: SidebarTab[] = [
   { key: "design_prep", label: "Design prep" },
   { key: "automate_review", label: "Automate review" },
-  { key: "dandy_design", label: "Dandy design" },
+  { key: "dandy_design", label: "Atomica design" },
   { key: "design_review", label: "Design review" },
   { key: "double_design_qc", label: "Double Design QC" },
   { key: "design_preview_verification", label: "Design Preview verification" },
