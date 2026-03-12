@@ -115,7 +115,7 @@ export function QualityCheckModal({
             </div>
 
             {/* Geometry */}
-            <div className="space-y-4">
+            <div className="flex flex-col space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold">Geometry</h3>
                 <CheckCircle2 className="h-5 w-5 text-primary" />
@@ -127,11 +127,11 @@ export function QualityCheckModal({
                 from the original 3D designs
               </p>
 
-              <div className="rounded-xl overflow-hidden bg-accent/30 border">
+              <div className="rounded-xl overflow-hidden bg-accent/30 border flex-1">
                 <img
                   src={qcGeometry}
                   alt="3D geometry comparison"
-                  className="w-full h-56 object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
