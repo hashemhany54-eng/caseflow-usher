@@ -52,7 +52,8 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           <p className={`text-xs font-medium leading-tight ${isOverdue ? "text-destructive" : isUrgent ? "text-warning" : "text-muted-foreground"}`}>
             {isOverdue ? timeLeft : isUrgent ? timeLeft : "On schedule"}
           </p>
-          <div className="text-[11px] text-muted-foreground mt-0.5">
+          {/* Hover-revealed details */}
+          <div className="hidden group-hover:block text-[11px] text-muted-foreground mt-0.5 transition-all">
             {new Date(task.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}{" "}
             {new Date(task.due_date).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })}
           </div>
@@ -65,7 +66,8 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-medium truncate">{order?.patient_name}</p>
-            <p className="text-xs text-muted-foreground">
+            {/* Hover-revealed age */}
+            <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               {order?.patient_age && `${order.patient_age}y`}
             </p>
           </div>
@@ -76,7 +78,8 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
           <span className="text-sm font-medium">
             {order?.crown_type || order?.case_type}
           </span>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          {/* Hover-revealed extra info */}
+          <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
             {order?.case_type} · {order?.design_level || "Level 1"}
           </p>
         </div>
@@ -106,7 +109,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                     ) : done ? (
                       <Check className="h-3 w-3 text-primary/60" />
                     ) : (
-                      <span className="text-[10px] text-muted-foreground/40 leading-tight">
+                      <span className="text-[10px] text-muted-foreground/40 leading-tight opacity-0 group-hover:opacity-100 transition-opacity">
                         {stageLabels[stage]}
                       </span>
                     )}
