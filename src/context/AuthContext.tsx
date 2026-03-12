@@ -35,19 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 800));
+  const login = useCallback(async (email: string, _password: string) => {
+    await new Promise((r) => setTimeout(r, 600));
 
-    const found = MOCK_USERS.find(
-      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-    );
-
-    if (!found) {
-      return { success: false, error: "Invalid email or password" };
-    }
-
-    const user: User = { email: found.email, name: found.name };
+    const name = email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    const user: User = { email, name };
     setCurrentUser(user);
     localStorage.setItem(SESSION_KEY, JSON.stringify(user));
     return { success: true };
