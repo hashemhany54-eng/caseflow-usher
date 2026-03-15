@@ -70,7 +70,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
             variant="ghost"
             size="icon"
             className="h-7 w-7 shrink-0"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(isOrderDetail ? "/orders" : "/")}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
