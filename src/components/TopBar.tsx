@@ -60,7 +60,8 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
   const isOrderDetail = location.pathname.startsWith("/orders/");
   const pageTitle = pageTitles[location.pathname] || "Tasks";
 
-  if (isTaskDetail) {
+  if (isTaskDetail || isOrderDetail) {
+    const sidebarTitle = isOrderDetail ? "Your Orders" : "Your Tasks";
     return (
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
