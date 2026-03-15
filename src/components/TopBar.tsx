@@ -57,9 +57,11 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
   const navigate = useNavigate();
   const { tasks } = useApp();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
+  const isOrderDetail = location.pathname.startsWith("/orders/");
   const pageTitle = pageTitles[location.pathname] || "Tasks";
 
-  if (isTaskDetail) {
+  if (isTaskDetail || isOrderDetail) {
+    const sidebarTitle = isOrderDetail ? "Your Orders" : "Your Tasks";
     return (
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
@@ -68,12 +70,12 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
             variant="ghost"
             size="icon"
             className="h-7 w-7 shrink-0"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(isOrderDetail ? "/orders" : "/")}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h2 className="text-sm font-semibold leading-tight">Your Tasks</h2>
+            <h2 className="text-sm font-semibold leading-tight">{sidebarTitle}</h2>
           </div>
           <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto shrink-0">
             <RefreshCw className="h-3.5 w-3.5" />
