@@ -57,6 +57,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
   const navigate = useNavigate();
   const { tasks } = useApp();
   const isTaskDetail = location.pathname.startsWith("/tasks/");
+  const isOrderDetail = location.pathname.startsWith("/orders/");
   const pageTitle = pageTitles[location.pathname] || "Tasks";
 
   if (isTaskDetail) {
