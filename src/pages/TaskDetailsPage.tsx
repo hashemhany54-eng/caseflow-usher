@@ -2,7 +2,7 @@ import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
@@ -23,6 +23,7 @@ import { OrderScansSection } from "@/components/task-details/OrderScansSection";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
 import { DesignWorkspace } from "@/components/task-details/DesignWorkspace";
 import { OrderTasksPanel } from "@/components/task-details/OrderTasksPanel";
+import { UploadDrawer } from "@/components/UploadDrawer";
 
 interface OutletCtx {
   activeTab: string;
@@ -35,6 +36,8 @@ export default function TaskDetailsPage() {
   const { tasks, orders, completeTask, skipTask } = useApp();
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
   const [chatCollapsed, setChatCollapsed] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const isTreatmentPlan = task?.task_type === "Treatment Plan";
 
   // Find task by taskId or by orderId
   const task = taskId
