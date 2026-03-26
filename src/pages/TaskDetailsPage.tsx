@@ -134,7 +134,7 @@ export default function TaskDetailsPage() {
                           <TabsContent value="tat" className="p-5 space-y-6">
                             <DesignTimeline timeline={timeline} />
                             <div className="border-t border-border" />
-                            <DesignReviewCard onReview={handleReview} taskType={task?.task_type || "Design Review"} patientName={order.patient_name} />
+                            <DesignReviewCard onReview={handleReview} taskType={task?.task_type || "Design Review"} patientName={order.patient_name} isUnassigned={isUnassigned} />
                             {isUnassigned && (
                               <div className="pt-2">
                                 <Button onClick={() => setAssignOpen(true)} className="gap-2 shadow-sm">
