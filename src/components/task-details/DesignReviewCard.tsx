@@ -191,6 +191,7 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
               </Button>
             </div>
 
+            <div className="space-y-2">
               <Label className="text-sm text-muted-foreground">Attach video to digital design preview</Label>
               <div className="relative">
                 <Input
