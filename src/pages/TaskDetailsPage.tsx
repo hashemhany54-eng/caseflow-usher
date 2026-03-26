@@ -34,13 +34,11 @@ interface OutletCtx {
 export default function TaskDetailsPage() {
   const { taskId, orderId } = useParams();
   const navigate = useNavigate();
-  const { tasks, orders, completeTask, skipTask } = useApp();
+  const { tasks, orders, completeTask, skipTask, assignTask } = useApp();
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
-
-  const isUnassigned = task && !task.assigned_to && !!task.task_group;
 
   // Find task by taskId or by orderId
   const task = taskId
@@ -50,6 +48,7 @@ export default function TaskDetailsPage() {
     : undefined;
 
   const isTreatmentPlan = task?.task_type === "Treatment Plan";
+  const isUnassigned = !!task && !task.assigned_to && !!task.task_group;
 
   // If no task found but we have an orderId, find the order directly
   const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
