@@ -266,6 +266,48 @@ export const mockTasks: Task[] = [
     task_type: "Treatment Plan",
     order: mockOrders[1],
   },
+  // Unassigned Treatment Plan tasks
+  {
+    id: "TSK-008",
+    order_id: "ORD-2024-003",
+    assigned_to: "",
+    status: "pending",
+    due_date: mockOrders[2].due_date,
+    task_type: "Treatment Plan",
+    task_group: "treatment_plan",
+    order: mockOrders[2],
+  },
+  {
+    id: "TSK-009",
+    order_id: "ORD-2024-006",
+    assigned_to: "",
+    status: "pending",
+    due_date: mockOrders[5].due_date,
+    task_type: "Treatment Plan",
+    task_group: "treatment_plan",
+    order: mockOrders[5],
+  },
+  // Unassigned Preparing tasks
+  {
+    id: "TSK-010",
+    order_id: "ORD-2024-001",
+    assigned_to: "",
+    status: "pending",
+    due_date: mockOrders[0].due_date,
+    task_type: "Design Prep",
+    task_group: "preparing",
+    order: mockOrders[0],
+  },
+  {
+    id: "TSK-011",
+    order_id: "ORD-2024-002",
+    assigned_to: "",
+    status: "pending",
+    due_date: mockOrders[1].due_date,
+    task_type: "Scan Review",
+    task_group: "preparing",
+    order: mockOrders[1],
+  },
 ];
 
 export const mockTimeline: Record<string, TimelineEvent[]> = {
