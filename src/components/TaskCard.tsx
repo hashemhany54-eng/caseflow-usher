@@ -36,22 +36,13 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
 
-  const isTreatmentPlan = task.task_type === "Treatment Plan";
-  const stages = isTreatmentPlan ? treatmentPlanStages : defaultStages;
-  const stageLabels = isTreatmentPlan ? treatmentPlanLabels : defaultStageLabels;
+  const stages = defaultStages;
+  const stageLabels = defaultStageLabels;
 
-  const timeline = isTreatmentPlan
-    ? treatmentPlanTimeline.default
-    : mockTimeline[order?.id || ""] || [];
-  const completedStages = new Set(
-    isTreatmentPlan
-      ? ["intake", "treatment_plan"]
-      : (mockTimeline[order?.id || ""] || []).map((t) => t.stage)
-  );
+  const timeline = mockTimeline[order?.id || ""] || [];
+  const completedStages = new Set(timeline.map((t) => t.stage));
   const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
-  const latestStage = isTreatmentPlan
-    ? "treatment_plan"
-    : [...stages].reverse().find((s) => completedStages.has(s as any));
+  const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
 
   const borderClass = isOverdue ? "priority-overdue" : isUrgent ? "priority-urgent" : "priority-normal";
 
@@ -66,7 +57,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02, duration: 0.15 }}
-      onClick={() => navigate(isTreatmentPlan ? "/treatment-plan" : `/tasks/${task.id}`)}
+      onClick={() => navigate(`/tasks/${task.id}`)}
       className={`group cursor-pointer rounded-lg border bg-card hover:shadow-md hover:border-primary/20 transition-all duration-200 ${borderClass}`}
     >
       {/* Desktop row — shared grid */}
