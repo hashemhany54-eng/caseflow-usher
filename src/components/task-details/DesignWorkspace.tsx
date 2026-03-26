@@ -357,10 +357,6 @@ function TreatmentPlanSidebar() {
             <MessageSquare className="h-3.5 w-3.5" />
             Add Comment
           </Button>
-          <Button size="sm" className="w-full text-xs h-8 gap-1.5">
-            <Check className="h-3.5 w-3.5" />
-            Approve Design
-          </Button>
         </div>
       </div>
 
