@@ -154,7 +154,43 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
               />
             </div>
 
-            <div className="space-y-2">
+            {/* Implant Notes */}
+            <div className="space-y-3">
+              {implantNotes.map((item, index) => (
+                <div key={index} className="space-y-2 rounded-md border border-border p-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-medium text-muted-foreground">Implant Note {index + 1}</Label>
+                    <button
+                      onClick={() => removeImplantNote(index)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-medium">Implant title</Label>
+                    <Input
+                      placeholder="Implant title"
+                      value={item.implantTitle}
+                      onChange={(e) => updateImplantNote(index, "implantTitle", e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-medium">Implant note</Label>
+                    <Textarea
+                      placeholder="Implant note"
+                      value={item.implantNote}
+                      onChange={(e) => updateImplantNote(index, "implantNote", e.target.value)}
+                      className="min-h-[80px] resize-none"
+                    />
+                  </div>
+                </div>
+              ))}
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={addImplantNote}>
+                <Plus className="h-3 w-3" /> Add Implant Note
+              </Button>
+            </div>
+
               <Label className="text-sm text-muted-foreground">Attach video to digital design preview</Label>
               <div className="relative">
                 <Input
