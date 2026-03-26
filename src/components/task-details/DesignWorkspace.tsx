@@ -356,8 +356,24 @@ export function DesignWorkspace() {
         )}
       </div>
 
+      {/* Toolbar - only for Wax Up and Surgical Guide */}
+      {mode !== "treatment-plan" && (
+        <div className="absolute top-3 z-10" style={{ left: `${toolbarLeft}px` }}>
+          <ToolbarPanel
+            heatmapEnabled={heatmapEnabled}
+            setHeatmapEnabled={setHeatmapEnabled}
+            activeTool={activeTool}
+            setActiveTool={setActiveTool}
+          />
+        </div>
+      )}
 
-
+      {/* Heatmap Legend */}
+      {heatmapEnabled && mode !== "treatment-plan" && (
+        <div className="absolute top-3 z-10" style={{ left: `${heatmapLegendLeft}px` }}>
+          <HeatmapLegend />
+        </div>
+      )}
 
       {/* 3D Viewer */}
       <div className="flex-1">
