@@ -22,6 +22,7 @@ interface Props {
 
 export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
   const isReview = taskType === "Design Review";
+  const isTreatmentPlan = taskType === "Treatment Plan";
   const [sheetOpen, setSheetOpen] = useState(false);
   const [qcOpen, setQcOpen] = useState(false);
   const [scanQuality, setScanQuality] = useState(false);
