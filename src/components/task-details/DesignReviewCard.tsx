@@ -53,8 +53,8 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
 
   return (
     <div>
-      <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : "Internal Design"}</h2>
-      <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : "Upload completed design files"}</p>
+      <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : isTreatmentPlan ? "Treatment Plan" : "Internal Design"}</h2>
+      <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : isTreatmentPlan ? "Upload treatment plan files" : "Upload completed design files"}</p>
       
       {/* Primary action */}
       <Button
@@ -63,7 +63,7 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
         className="gap-2 shadow-sm"
       >
         {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
-        {isReview ? "Review Design" : "Upload Design"}
+        {isReview ? "Review Design" : isTreatmentPlan ? "Upload Plan" : "Upload Design"}
       </Button>
 
       {/* QC Modal for Design Review */}
