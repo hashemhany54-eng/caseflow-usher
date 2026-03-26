@@ -108,6 +108,15 @@ export default function TaskDetailsPage() {
                   {activeTab === "order" && (
                     <div className="space-y-4">
                       <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
+
+                      {/* Upload Design button for Treatment Plan tasks */}
+                      {isTreatmentPlan && (
+                        <Button size="sm" className="h-8 text-xs gap-1.5" onClick={() => setUploadOpen(true)}>
+                          <Upload className="h-3.5 w-3.5" />
+                          Upload Design
+                        </Button>
+                      )}
+
                       <div className="rounded-lg border bg-card">
                         <Tabs defaultValue="tat">
                           <div className="flex items-center border-b overflow-x-auto">
