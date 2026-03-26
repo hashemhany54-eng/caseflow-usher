@@ -173,6 +173,10 @@ export default function TaskDetailsPage() {
           )}
         </div>
       </div>
+
+      {isTreatmentPlan && (
+        <UploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} title="Upload Design / Upload Plan" />
+      )}
     </div>
   );
 }
