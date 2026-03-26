@@ -18,9 +18,10 @@ interface Props {
   onReview: () => void;
   taskType?: string;
   patientName?: string;
+  isUnassigned?: boolean;
 }
 
-export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
+export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned }: Props) {
   const isReview = taskType === "Design Review";
   const isTreatmentPlan = taskType === "Treatment Plan";
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -70,14 +71,16 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
       <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : isTreatmentPlan ? "Upload treatment plan files" : "Upload completed design files"}</p>
       
       {/* Primary action */}
-      <Button
-        onClick={() => isReview ? setQcOpen(true) : setSheetOpen(true)}
-        size="lg"
-        className="gap-2 shadow-sm"
-      >
-        {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
-        {isReview ? "Review Design" : isTreatmentPlan ? "Upload Plan" : "Upload Design"}
-      </Button>
+      {!isUnassigned && (
+        <Button
+          onClick={() => isReview ? setQcOpen(true) : setSheetOpen(true)}
+          size="lg"
+          className="gap-2 shadow-sm"
+        >
+          {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
+          {isReview ? "Review Design" : isTreatmentPlan ? "Upload Plan" : "Upload Design"}
+        </Button>
+      )}
 
       {/* QC Modal for Design Review */}
       <QualityCheckModal
