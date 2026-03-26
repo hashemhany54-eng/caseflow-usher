@@ -10,6 +10,7 @@ interface AppState {
   setStatus: (status: User["status"]) => void;
   completeTask: (taskId: string) => void;
   skipTask: (taskId: string) => void;
+  assignTask: (taskId: string, doctorId: string) => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -35,8 +36,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, status: "skipped" as const } : t)));
   }, []);
 
+  const assignTask = useCallback((taskId: string, doctorId: string) => {
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, assigned_to: doctorId, task_group: undefined } : t)));
+  }, []);
+
   return (
-    <AppContext.Provider value={{ user, tasks, orders, toggleStatus, setStatus, completeTask, skipTask }}>
+    <AppContext.Provider value={{ user, tasks, orders, toggleStatus, setStatus, completeTask, skipTask, assignTask }}>
       {children}
     </AppContext.Provider>
   );
