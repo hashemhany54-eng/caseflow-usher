@@ -1,7 +1,5 @@
 import { useApp } from "@/context/AppContext";
 import { TaskCard } from "@/components/TaskCard";
-import { OnsiteTaskCard } from "@/components/OnsiteTaskCard";
-import { AssignTaskModal } from "@/components/AssignTaskModal";
 import { TaskFiltersSidebar } from "@/components/TaskFiltersSidebar";
 import { ClipboardList, Search, RefreshCw } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -9,9 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { mockOnsiteTasks } from "@/data/mockData";
-import { Task, Priority } from "@/types";
-import { toast } from "sonner";
 
 // Map sidebar tab keys to task_type values
 const taskTypeMap: Record<string, string> = {
@@ -28,19 +23,10 @@ const taskTypeMap: Record<string, string> = {
   order_review: "Order Review",
 };
 
-const treatmentPlanTasks = mockOnsiteTasks.filter((t) =>
-  t.task_type?.includes("Treatment Plan")
-);
-const preparingTasks = mockOnsiteTasks.filter((t) =>
-  t.task_type?.includes("Preparation")
-);
-
 export default function TasksPage() {
   const { tasks } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my_tasks");
-  const [assignTask, setAssignTask] = useState<Task | null>(null);
-  const [assignModalOpen, setAssignModalOpen] = useState(false);
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -99,23 +85,6 @@ export default function TasksPage() {
     });
   }, [tasks, activeTab, searchQuery]);
 
-  const handleAssign = (task: Task) => {
-    setAssignTask(task);
-    setAssignModalOpen(true);
-  };
-
-  const handleAssignSubmit = (data: {
-    taskId: string;
-    doctorId: string;
-    estimatedTime: string;
-    priority: Priority;
-    note: string;
-  }) => {
-    toast.success("Task assigned successfully");
-    setAssignModalOpen(false);
-    setAssignTask(null);
-  };
-
   return (
     <div className="flex flex-col h-full">
       {/* Top bar */}
@@ -155,80 +124,22 @@ export default function TasksPage() {
 
         <div className="flex-1 flex flex-col min-w-0">
           <div className="flex-1 overflow-auto p-4 md:p-6">
-            {filteredTasks.length === 0 && mockOnsiteTasks.length === 0 ? (
+            {filteredTasks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                 <ClipboardList className="h-10 w-10 mb-3 opacity-20" />
                 <p className="font-medium text-sm">No tasks found</p>
                 <p className="text-xs mt-1">Try adjusting your filters</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-6">
-                {/* Existing tasks */}
-                {filteredTasks.length > 0 && (
-                  <div className="flex flex-col gap-2.5">
-                    {filteredTasks.map((task, i) => (
-                      <TaskCard key={task.id} task={task} index={i} />
-                    ))}
-                  </div>
-                )}
-
-                {/* Onsite Tasks section */}
-                {activeTab === "my_tasks" && (
-                  <div className="flex flex-col gap-5">
-                    <h3 className="text-sm font-semibold text-foreground">Onsite Tasks</h3>
-
-                    {/* Treatment Plan Tasks */}
-                    {treatmentPlanTasks.length > 0 && (
-                      <div className="flex flex-col gap-2">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-1">
-                          Treatment Plan Tasks
-                        </p>
-                        <div className="flex flex-col gap-2.5">
-                          {treatmentPlanTasks.map((task, i) => (
-                            <OnsiteTaskCard
-                              key={task.id}
-                              task={task}
-                              index={i}
-                              onAssign={handleAssign}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Preparing Tasks */}
-                    {preparingTasks.length > 0 && (
-                      <div className="flex flex-col gap-2">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-1">
-                          Preparing Tasks
-                        </p>
-                        <div className="flex flex-col gap-2.5">
-                          {preparingTasks.map((task, i) => (
-                            <OnsiteTaskCard
-                              key={task.id}
-                              task={task}
-                              index={i}
-                              onAssign={handleAssign}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+              <div className="flex flex-col gap-2.5">
+                {filteredTasks.map((task, i) => (
+                  <TaskCard key={task.id} task={task} index={i} />
+                ))}
               </div>
             )}
           </div>
         </div>
       </div>
-
-      {/* Assign Modal */}
-      <AssignTaskModal
-        task={assignTask}
-        open={assignModalOpen}
-        onOpenChange={setAssignModalOpen}
-        onSubmit={handleAssignSubmit}
-      />
     </div>
   );
 }
