@@ -62,7 +62,7 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
         className="gap-2 shadow-sm"
       >
         {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
-        {isReview ? "Review Design" : "Upload Plan"}
+        {isReview ? "Review Design" : "Upload Design"}
       </Button>
 
       {/* QC Modal for Design Review */}
