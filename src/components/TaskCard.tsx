@@ -133,8 +133,8 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                       {event && (
                         <span className="text-[9px] text-muted-foreground leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
                           {event.assignee
-                            ? event.due ? `${event.assignee} — ${event.due}` : event.assignee
-                            : event.action_by}
+                            ? ('due' in event && event.due) ? `${event.assignee} — ${event.due}` : event.assignee
+                            : ('action_by' in event ? (event as any).action_by : "")}
                         </span>
                       )}
                     </>
@@ -147,7 +147,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                         </span>
                       </div>
                       <span className="text-[9px] text-muted-foreground/50 leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                        {event?.assignee || event?.action_by || ""}
+                        {event?.assignee || ('action_by' in (event || {}) ? (event as any).action_by : "") || ""}
                       </span>
                     </>
                   ) : (
