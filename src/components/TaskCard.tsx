@@ -36,13 +36,15 @@ export function TaskCard({ task, index, showAssign, onAssign }: { task: Task; in
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
 
+  const isUnassigned = !task.assigned_to && !!task.task_group;
+
   const stages = defaultStages;
   const stageLabels = defaultStageLabels;
 
   const timeline = mockTimeline[order?.id || ""] || [];
-  const completedStages = new Set(timeline.map((t) => t.stage));
-  const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
-  const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
+  const completedStages = isUnassigned ? new Set<string>() : new Set(timeline.map((t) => t.stage));
+  const timelineByStage = isUnassigned ? {} as Record<string, any> : Object.fromEntries(timeline.map((t) => [t.stage, t]));
+  const latestStage = isUnassigned ? undefined : [...stages].reverse().find((s) => completedStages.has(s as any));
 
   const borderClass = isOverdue ? "priority-overdue" : isUrgent ? "priority-urgent" : "priority-normal";
 

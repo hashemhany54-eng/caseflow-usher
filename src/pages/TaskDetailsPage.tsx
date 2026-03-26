@@ -2,13 +2,14 @@ import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Upload } from "lucide-react";
+import { AlertCircle, Upload, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useState } from "react";
+import { AssignTaskModal } from "@/components/AssignTaskModal";
 
 import { UnifiedPatientCard } from "@/components/task-details/UnifiedPatientCard";
 import { TaskListSidebar } from "@/components/task-details/TaskListSidebar";
@@ -37,6 +38,9 @@ export default function TaskDetailsPage() {
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [assignOpen, setAssignOpen] = useState(false);
+
+  const isUnassigned = task && !task.assigned_to && !!task.task_group;
 
   // Find task by taskId or by orderId
   const task = taskId
@@ -132,6 +136,14 @@ export default function TaskDetailsPage() {
                             <DesignTimeline timeline={timeline} />
                             <div className="border-t border-border" />
                             <DesignReviewCard onReview={handleReview} taskType={task?.task_type || "Design Review"} patientName={order.patient_name} />
+                            {isUnassigned && (
+                              <div className="pt-2">
+                                <Button onClick={() => setAssignOpen(true)} className="gap-2 shadow-sm">
+                                  <UserPlus className="h-4 w-4" />
+                                  Assign
+                                </Button>
+                              </div>
+                            )}
                           </TabsContent>
                           <TabsContent value="status" className="p-5">
                             <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
@@ -169,6 +181,20 @@ export default function TaskDetailsPage() {
 
       {isTreatmentPlan && (
         <UploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} title="Upload Design / Upload Plan" />
+      )}
+
+      {isUnassigned && task && (
+        <AssignTaskModal
+          open={assignOpen}
+          onClose={() => setAssignOpen(false)}
+          onSubmit={(data) => {
+            assignTask(task.id, data.doctorId);
+            toast.success("Task assigned successfully");
+            setAssignOpen(false);
+            navigate("/");
+          }}
+          taskType={task.task_type}
+        />
       )}
     </div>
   );
