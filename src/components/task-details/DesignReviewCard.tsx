@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Link, X, FileUp, CheckCircle2 } from "lucide-react";
+import { Upload, Link, X, FileUp, CheckCircle2, Plus } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -29,6 +29,19 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [note, setNote] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [implantNotes, setImplantNotes] = useState<{ implantTitle: string; implantNote: string }[]>([]);
+
+  const addImplantNote = () => {
+    setImplantNotes((prev) => [...prev, { implantTitle: "", implantNote: "" }]);
+  };
+
+  const updateImplantNote = (index: number, field: "implantTitle" | "implantNote", value: string) => {
+    setImplantNotes((prev) => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  };
+
+  const removeImplantNote = (index: number) => {
+    setImplantNotes((prev) => prev.filter((_, i) => i !== index));
+  };
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleComplete = () => {
@@ -139,6 +152,43 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
                 onChange={(e) => setNote(e.target.value)}
                 className="min-h-[80px] resize-none"
               />
+            </div>
+
+            {/* Implant Notes */}
+            <div className="space-y-3">
+              {implantNotes.map((item, index) => (
+                <div key={index} className="space-y-2 rounded-md border border-border p-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-medium text-muted-foreground">Implant Note {index + 1}</Label>
+                    <button
+                      onClick={() => removeImplantNote(index)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-medium">Implant title</Label>
+                    <Input
+                      placeholder="Implant title"
+                      value={item.implantTitle}
+                      onChange={(e) => updateImplantNote(index, "implantTitle", e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-medium">Implant note</Label>
+                    <Textarea
+                      placeholder="Implant note"
+                      value={item.implantNote}
+                      onChange={(e) => updateImplantNote(index, "implantNote", e.target.value)}
+                      className="min-h-[80px] resize-none"
+                    />
+                  </div>
+                </div>
+              ))}
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={addImplantNote}>
+                <Plus className="h-3 w-3" /> Add Implant Note
+              </Button>
             </div>
 
             <div className="space-y-2">
