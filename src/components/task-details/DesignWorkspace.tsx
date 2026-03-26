@@ -228,12 +228,12 @@ function NotesSidebar() {
         </div>
         <div className="px-3 pb-3 space-y-2">
           {comments.map((c, i) => (
-            <div key={i} className="text-[11px] text-muted-foreground leading-relaxed border-b border-border pb-2 last:border-0">
+            <div key={i} className="text-[11px] text-muted-foreground leading-relaxed border-b border-border pb-2">
               {c}
             </div>
           ))}
-          <div className="border-t border-border pt-2">
-            <div className="text-[10px] font-medium text-foreground mb-1">Doctor Notes</div>
+          <div className="pt-1">
+            <div className="text-sm font-semibold text-foreground mb-1">Doctor Notes</div>
             <div className="text-[11px] text-muted-foreground leading-relaxed">
               Patient requires special attention on margins. Verify contacts with adjacent teeth before finalizing.
             </div>
