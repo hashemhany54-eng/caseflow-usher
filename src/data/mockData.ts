@@ -268,6 +268,54 @@ export const mockTasks: Task[] = [
   },
 ];
 
+export const mockOnsiteTasks: Task[] = [
+  {
+    id: "ONSITE-001",
+    order_id: "ORD-2024-001",
+    assigned_to: "",
+    status: "pending",
+    due_date: new Date(now + hour * 3).toISOString(),
+    task_type: "Treatment Plan Review",
+    order: mockOrders[0],
+  },
+  {
+    id: "ONSITE-002",
+    order_id: "ORD-2024-002",
+    assigned_to: "",
+    status: "pending",
+    due_date: new Date(now + hour * 5).toISOString(),
+    task_type: "Treatment Plan Approval",
+    order: mockOrders[1],
+  },
+  {
+    id: "ONSITE-003",
+    order_id: "ORD-2024-003",
+    assigned_to: "",
+    status: "pending",
+    due_date: new Date(now + hour * 6).toISOString(),
+    task_type: "Scan Preparation",
+    order: mockOrders[2],
+  },
+  {
+    id: "ONSITE-004",
+    order_id: "ORD-2024-004",
+    assigned_to: "",
+    status: "pending",
+    due_date: new Date(now + hour * 7).toISOString(),
+    task_type: "Model Preparation",
+    order: mockOrders[3],
+  },
+];
+
+export const mockDoctors = [
+  { id: "d1", name: "Dr. Mark Evans" },
+  { id: "d2", name: "Dr. Lisa Park" },
+  { id: "d3", name: "Dr. James Wright" },
+  { id: "d4", name: "Dr. Ana Gomez" },
+  { id: "d5", name: "Dr. Sarah Chen" },
+  { id: "d6", name: "Dr. Tom Harris" },
+];
+
 export const mockTimeline: Record<string, TimelineEvent[]> = {
   "ORD-2024-001": [
     { id: "te1", order_id: "ORD-2024-001", stage: "order_placed", action_by: "System", timestamp: new Date(now - hour * 48).toISOString() },
