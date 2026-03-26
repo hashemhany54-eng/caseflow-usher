@@ -1,10 +1,12 @@
 import { useState, Suspense, useRef, useMemo } from "react";
-import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare } from "lucide-react";
+import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Center } from "@react-three/drei";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
@@ -207,24 +209,70 @@ function NotesSidebar() {
     "Please check occlusal contacts on #14 and #15.",
     "Material preference: Zirconia multi-layered.",
   ]);
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [newComment, setNewComment] = useState("");
+
+  const handleSubmit = () => {
+    if (newComment.trim()) {
+      setComments((prev) => [...prev, newComment.trim()]);
+      setNewComment("");
+      setCommentOpen(false);
+    }
+  };
 
   return (
-    <div className="bg-card rounded-lg border shadow-sm w-[220px]">
-      <div className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold">
-        General Notes
+    <>
+      <div className="bg-card rounded-lg border shadow-sm w-[220px]">
+        <div className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold">
+          General Notes
+        </div>
+        <div className="px-3 pb-3 space-y-2">
+          {comments.map((c, i) => (
+            <div key={i} className="text-[11px] text-muted-foreground leading-relaxed border-b border-border pb-2 last:border-0">
+              {c}
+            </div>
+          ))}
+          <Button variant="secondary" size="sm" className="w-full text-xs h-7 gap-1.5 mt-1" onClick={() => setCommentOpen(true)}>
+            <MessageSquare className="h-3 w-3" />
+            Add Comment
+          </Button>
+        </div>
       </div>
-      <div className="px-3 pb-3 space-y-2">
-        {comments.map((c, i) => (
-          <div key={i} className="text-[11px] text-muted-foreground leading-relaxed border-b border-border pb-2 last:border-0">
-            {c}
+
+      {/* Doctor Notes section */}
+      <div className="bg-card rounded-lg border shadow-sm w-[220px] mt-2">
+        <div className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold">
+          Doctor Notes
+        </div>
+        <div className="px-3 pb-3 space-y-2">
+          <div className="text-[11px] text-muted-foreground leading-relaxed">
+            Patient requires special attention on margins. Verify contacts with adjacent teeth before finalizing.
           </div>
-        ))}
-        <Button variant="secondary" size="sm" className="w-full text-xs h-7 gap-1.5 mt-1">
-          <MessageSquare className="h-3 w-3" />
-          Add Comment
-        </Button>
+        </div>
       </div>
-    </div>
+
+      {/* Add Comment Dialog */}
+      <Dialog open={commentOpen} onOpenChange={setCommentOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="text-sm">Add Comment</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            placeholder="Write your comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="min-h-[100px] text-sm"
+          />
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setCommentOpen(false)}>Cancel</Button>
+            <Button size="sm" onClick={handleSubmit} className="gap-1.5">
+              <Send className="h-3 w-3" />
+              Submit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -351,7 +399,7 @@ export function DesignWorkspace() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="design">Design</SelectItem>
+            <SelectItem value="design">Wax Up</SelectItem>
             <SelectItem value="treatment-plan">Treatment Plan</SelectItem>
             <SelectItem value="surgical-guide">Surgical Guide</SelectItem>
           </SelectContent>
