@@ -1,5 +1,5 @@
 import { useState, Suspense, useRef, useMemo } from "react";
-import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare, Send, Check } from "lucide-react";
+import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare, Send, Check, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -270,6 +270,18 @@ function NotesSidebar() {
   );
 }
 
+interface ImplantNote {
+  id: string;
+  title: string;
+  note: string;
+}
+
+const defaultImplantNotes: ImplantNote[] = [
+  { id: "imp-13", title: "Implant #13", note: "" },
+  { id: "imp-16", title: "Implant #16", note: "" },
+  { id: "imp-32", title: "Implant #32", note: "" },
+];
+
 interface NoteSection {
   title: string;
   notes: string[];
@@ -284,36 +296,19 @@ const treatmentPlanNotes: NoteSection[] = [
       "We added 2 Nobel fixation pins to stabilize the guide. Do you have the pins and drill?",
     ],
   },
-  {
-    title: "Implant #18",
-    notes: [
-      "XIITP 5/4x8.5",
-      "Buccal graft is recommended",
-      "Floating sleeve, as the soft tissue is not captured",
-    ],
-  },
-  {
-    title: "Implant #20",
-    notes: [
-      "XIITP 4/3x10",
-      "Buccal graft is recommended",
-      "Implant is deep from the adjacent CEJ by 6.8 mm",
-      "The angle difference between #20 and #18 is almost 9 degrees",
-    ],
-  },
 ];
 
 function TreatmentPlanSidebar() {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     "General Notes": true,
-    "Implant #18": true,
-    "Implant #20": true,
   });
+  const [implantNotes, setImplantNotes] = useState<ImplantNote[]>(defaultImplantNotes);
   const [commentOpen, setCommentOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [implantCounter, setImplantCounter] = useState(4);
 
-  const toggleSection = (title: string) => {
-    setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
+  const toggleSection = (key: string) => {
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const handleSubmit = () => {
@@ -323,10 +318,26 @@ function TreatmentPlanSidebar() {
     }
   };
 
+  const handleImplantNoteChange = (id: string, value: string) => {
+    setImplantNotes((prev) => prev.map((n) => (n.id === id ? { ...n, note: value } : n)));
+  };
+
+  const addImplantNote = () => {
+    const newNote: ImplantNote = {
+      id: `imp-new-${implantCounter}`,
+      title: "Implant #",
+      note: "",
+    };
+    setImplantNotes((prev) => [...prev, newNote]);
+    setOpenSections((prev) => ({ ...prev, [newNote.id]: true }));
+    setImplantCounter((c) => c + 1);
+  };
+
   return (
     <>
-      <div className="bg-card rounded-lg border shadow-sm w-[280px] flex flex-col">
+      <div className="bg-card rounded-lg border shadow-sm w-[280px] flex flex-col max-h-[calc(100vh-120px)]">
         <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+          {/* General Notes */}
           {treatmentPlanNotes.map((section) => (
             <div key={section.title}>
               <button
@@ -351,8 +362,39 @@ function TreatmentPlanSidebar() {
               )}
             </div>
           ))}
+
+          {/* Implant Notes */}
+          {implantNotes.map((implant) => (
+            <div key={implant.id}>
+              <button
+                onClick={() => toggleSection(implant.id)}
+                className="flex items-center gap-1.5 w-full text-left mb-2"
+              >
+                {openSections[implant.id] !== false ? (
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                ) : (
+                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
+                <span className="text-sm font-semibold text-foreground">{implant.title}</span>
+              </button>
+              {openSections[implant.id] !== false && (
+                <div className="ml-5">
+                  <Textarea
+                    placeholder="Add note for this implant..."
+                    value={implant.note}
+                    onChange={(e) => handleImplantNoteChange(implant.id, e.target.value)}
+                    className="min-h-[60px] text-xs resize-none"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
         <div className="px-3 pb-3 space-y-2">
+          <Button variant="outline" size="sm" className="w-full text-xs h-8 gap-1.5" onClick={addImplantNote}>
+            <Plus className="h-3.5 w-3.5" />
+            Add Implant Note
+          </Button>
           <Button variant="outline" size="sm" className="w-full text-xs h-8 gap-1.5" onClick={() => setCommentOpen(true)}>
             <MessageSquare className="h-3.5 w-3.5" />
             Add Comment
