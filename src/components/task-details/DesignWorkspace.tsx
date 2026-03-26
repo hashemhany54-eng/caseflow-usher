@@ -1,5 +1,5 @@
 import { useState, Suspense, useRef, useMemo } from "react";
-import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare, Send } from "lucide-react";
+import { ChevronDown, ChevronRight, Eye, Save, Download, Rotate3D, Move, ZoomIn, Crosshair, Box, ScanLine, Flame, ArrowUp, ArrowDown, MessageSquare, Send, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -270,21 +270,121 @@ function NotesSidebar() {
   );
 }
 
-function GeneralNotesSection() {
+interface NoteSection {
+  title: string;
+  notes: string[];
+}
+
+const treatmentPlanNotes: NoteSection[] = [
+  {
+    title: "General Notes",
+    notes: [
+      "Here is a high scatter image that may result in minor inaccuracies in the model matching.",
+      "Tapered Navigator fully guided",
+      "We added 2 Nobel fixation pins to stabilize the guide. Do you have the pins and drill?",
+    ],
+  },
+  {
+    title: "Implant #18",
+    notes: [
+      "XIITP 5/4x8.5",
+      "Buccal graft is recommended",
+      "Floating sleeve, as the soft tissue is not captured",
+    ],
+  },
+  {
+    title: "Implant #20",
+    notes: [
+      "XIITP 4/3x10",
+      "Buccal graft is recommended",
+      "Implant is deep from the adjacent CEJ by 6.8 mm",
+      "The angle difference between #20 and #18 is almost 9 degrees",
+    ],
+  },
+];
+
+function TreatmentPlanSidebar() {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    "General Notes": true,
+    "Implant #18": true,
+    "Implant #20": true,
+  });
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [newComment, setNewComment] = useState("");
+
+  const toggleSection = (title: string) => {
+    setOpenSections((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
+
+  const handleSubmit = () => {
+    if (newComment.trim()) {
+      setNewComment("");
+      setCommentOpen(false);
+    }
+  };
+
   return (
-    <div className="bg-card rounded-lg border shadow-sm w-[220px] mt-2">
-      <div className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold">
-        General Notes
-      </div>
-      <div className="px-3 pb-3 space-y-2">
-        <div>
-          <div className="text-[10px] font-medium text-foreground mb-1">Doctor Notes</div>
-          <div className="text-[11px] text-muted-foreground leading-relaxed">
-            Patient requires special attention on margins. Verify contacts with adjacent teeth before finalizing.
-          </div>
+    <>
+      <div className="bg-card rounded-lg border shadow-sm w-[280px] flex flex-col">
+        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+          {treatmentPlanNotes.map((section) => (
+            <div key={section.title}>
+              <button
+                onClick={() => toggleSection(section.title)}
+                className="flex items-center gap-1.5 w-full text-left mb-2"
+              >
+                {openSections[section.title] ? (
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                ) : (
+                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
+                <span className="text-sm font-semibold text-foreground">{section.title}</span>
+              </button>
+              {openSections[section.title] && (
+                <div className="ml-5 space-y-2">
+                  {section.notes.map((note, idx) => (
+                    <p key={idx} className="text-[13px] text-muted-foreground leading-relaxed">
+                      {note}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="px-3 pb-3 space-y-2">
+          <Button variant="outline" size="sm" className="w-full text-xs h-8 gap-1.5" onClick={() => setCommentOpen(true)}>
+            <MessageSquare className="h-3.5 w-3.5" />
+            Add Comment
+          </Button>
+          <Button size="sm" className="w-full text-xs h-8 gap-1.5">
+            <Check className="h-3.5 w-3.5" />
+            Approve Design
+          </Button>
         </div>
       </div>
-    </div>
+
+      <Dialog open={commentOpen} onOpenChange={setCommentOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="text-sm">Add Comment</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            placeholder="Write your comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="min-h-[100px] text-sm"
+          />
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setCommentOpen(false)}>Cancel</Button>
+            <Button size="sm" onClick={handleSubmit} className="gap-1.5">
+              <Send className="h-3 w-3" />
+              Submit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -345,12 +445,7 @@ export function DesignWorkspace() {
       {/* Left Sidebar - varies by mode */}
       <div className="absolute top-3 left-3 z-10">
         {mode === "design" && <NotesSidebar />}
-        {mode === "treatment-plan" && (
-          <>
-            <ViewsSidebar openSections={openSections} toggleSection={toggleSection} />
-            <GeneralNotesSection />
-          </>
-        )}
+        {mode === "treatment-plan" && <TreatmentPlanSidebar />}
         {mode === "surgical-guide" && (
           <ViewsSidebar openSections={openSections} toggleSection={toggleSection} />
         )}
