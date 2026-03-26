@@ -2,7 +2,7 @@ import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
@@ -23,6 +23,7 @@ import { OrderScansSection } from "@/components/task-details/OrderScansSection";
 import { ActivityPanel } from "@/components/task-details/ActivityPanel";
 import { DesignWorkspace } from "@/components/task-details/DesignWorkspace";
 import { OrderTasksPanel } from "@/components/task-details/OrderTasksPanel";
+import { UploadDrawer } from "@/components/UploadDrawer";
 
 interface OutletCtx {
   activeTab: string;
@@ -35,6 +36,7 @@ export default function TaskDetailsPage() {
   const { tasks, orders, completeTask, skipTask } = useApp();
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
   const [chatCollapsed, setChatCollapsed] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   // Find task by taskId or by orderId
   const task = taskId
@@ -42,6 +44,8 @@ export default function TaskDetailsPage() {
     : orderId
     ? tasks.find((t) => t.order_id === orderId)
     : undefined;
+
+  const isTreatmentPlan = task?.task_type === "Treatment Plan";
 
   // If no task found but we have an orderId, find the order directly
   const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
@@ -104,6 +108,15 @@ export default function TaskDetailsPage() {
                   {activeTab === "order" && (
                     <div className="space-y-4">
                       <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
+
+                      {/* Upload Design button for Treatment Plan tasks */}
+                      {isTreatmentPlan && (
+                        <Button size="sm" className="h-8 text-xs gap-1.5" onClick={() => setUploadOpen(true)}>
+                          <Upload className="h-3.5 w-3.5" />
+                          Upload Design
+                        </Button>
+                      )}
+
                       <div className="rounded-lg border bg-card">
                         <Tabs defaultValue="tat">
                           <div className="flex items-center border-b overflow-x-auto">
@@ -160,6 +173,10 @@ export default function TaskDetailsPage() {
           )}
         </div>
       </div>
+
+      {isTreatmentPlan && (
+        <UploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} title="Upload Design / Upload Plan" />
+      )}
     </div>
   );
 }
