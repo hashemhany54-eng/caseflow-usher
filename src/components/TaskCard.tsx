@@ -1,6 +1,6 @@
 import { Task } from "@/types";
 import { useCountdown } from "@/hooks/useCountdown";
-import { Scissors, RefreshCw, Check, MoreVertical } from "lucide-react";
+import { Scissors, RefreshCw, Check, MoreVertical, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { mockTimeline } from "@/data/mockData";
@@ -31,7 +31,7 @@ const treatmentPlanTimeline: Record<string, { stage: string; assignee?: string }
 /** Shared grid for every row – import in header if needed */
 export const TASK_ROW_GRID = "grid grid-cols-[200px_180px_1fr_120px_minmax(280px,2fr)_48px]";
 
-export function TaskCard({ task, index }: { task: Task; index: number }) {
+export function TaskCard({ task, index, showAssign, onAssign }: { task: Task; index: number; showAssign?: boolean; onAssign?: () => void }) {
   const navigate = useNavigate();
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
@@ -154,7 +154,14 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
 
         {/* 6 · Action icon (always reserved) */}
         <div className="flex items-center justify-center py-3">
-          {(order?.is_split || order?.is_resubmitted) ? (
+          {showAssign ? (
+            <button
+              onClick={(e) => { e.stopPropagation(); onAssign?.(); }}
+              className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-secondary transition-colors"
+            >
+              <UserPlus className="h-3.5 w-3.5 text-muted-foreground hover:text-primary transition-colors" />
+            </button>
+          ) : (order?.is_split || order?.is_resubmitted) ? (
             <div className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
               {order?.is_split && <Scissors className="h-3.5 w-3.5 text-muted-foreground" />}
               {order?.is_resubmitted && <RefreshCw className="h-3.5 w-3.5 text-destructive" />}

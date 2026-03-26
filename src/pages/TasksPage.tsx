@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { AssignTaskModal } from "@/components/AssignTaskModal";
+import { Task } from "@/types";
 
 // Map sidebar tab keys to task_type values
 const taskTypeMap: Record<string, string> = {
@@ -24,9 +26,10 @@ const taskTypeMap: Record<string, string> = {
 };
 
 export default function TasksPage() {
-  const { tasks } = useApp();
+  const { tasks, assignTask } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("my_tasks");
+  const [assignModalTask, setAssignModalTask] = useState<Task | null>(null);
 
   const tabCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -85,6 +88,21 @@ export default function TasksPage() {
     });
   }, [tasks, activeTab, searchQuery]);
 
+  const isUnassignedTab = activeTab === "unassigned";
+
+  const groupedUnassigned = useMemo(() => {
+    if (!isUnassignedTab) return null;
+    const treatmentPlan = filteredTasks.filter((t) => t.task_group === "treatment_plan");
+    const preparing = filteredTasks.filter((t) => t.task_group === "preparing");
+    const other = filteredTasks.filter((t) => !t.task_group);
+    return { treatmentPlan, preparing, other };
+  }, [filteredTasks, isUnassignedTab]);
+
+  const handleAssign = (taskId: string, data: { doctorId: string; estimatedTime: string; priority: string; notes: string }) => {
+    assignTask(taskId, data.doctorId);
+    setAssignModalTask(null);
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Top bar */}
@@ -130,6 +148,36 @@ export default function TasksPage() {
                 <p className="font-medium text-sm">No tasks found</p>
                 <p className="text-xs mt-1">Try adjusting your filters</p>
               </div>
+            ) : isUnassignedTab && groupedUnassigned ? (
+              <div className="space-y-6">
+                {groupedUnassigned.other.length > 0 && (
+                  <div className="flex flex-col gap-2.5">
+                    {groupedUnassigned.other.map((task, i) => (
+                      <TaskCard key={task.id} task={task} index={i} showAssign onAssign={() => setAssignModalTask(task)} />
+                    ))}
+                  </div>
+                )}
+                {groupedUnassigned.treatmentPlan.length > 0 && (
+                  <div>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Treatment Plan Tasks</p>
+                    <div className="flex flex-col gap-2.5">
+                      {groupedUnassigned.treatmentPlan.map((task, i) => (
+                        <TaskCard key={task.id} task={task} index={i} showAssign onAssign={() => setAssignModalTask(task)} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {groupedUnassigned.preparing.length > 0 && (
+                  <div>
+                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-1">Preparing Tasks</p>
+                    <div className="flex flex-col gap-2.5">
+                      {groupedUnassigned.preparing.map((task, i) => (
+                        <TaskCard key={task.id} task={task} index={i} showAssign onAssign={() => setAssignModalTask(task)} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="flex flex-col gap-2.5">
                 {filteredTasks.map((task, i) => (
@@ -140,6 +188,13 @@ export default function TasksPage() {
           </div>
         </div>
       </div>
+
+      <AssignTaskModal
+        open={!!assignModalTask}
+        onClose={() => setAssignModalTask(null)}
+        onSubmit={(data) => assignModalTask && handleAssign(assignModalTask.id, data)}
+        taskType={assignModalTask?.task_type}
+      />
     </div>
   );
 }

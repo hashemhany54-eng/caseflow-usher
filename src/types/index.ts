@@ -47,6 +47,7 @@ export interface Task {
   status: "pending" | "in_progress" | "completed" | "skipped";
   due_date: string;
   task_type?: string;
+  task_group?: "treatment_plan" | "preparing";
   order?: Order;
 }
 
