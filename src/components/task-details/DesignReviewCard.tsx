@@ -174,14 +174,7 @@ export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned
                       <X className="h-3.5 w-3.5" />
                     </button>
                   </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-sm font-medium">Implant title</Label>
-                    <Input
-                      placeholder="Implant title"
-                      value={item.implantTitle}
-                      onChange={(e) => updateImplantNote(index, "implantTitle", e.target.value)}
-                    />
-                  </div>
+                  <Label className="text-sm font-semibold">{item.implantTitle}</Label>
                   <div className="space-y-1.5">
                     <Label className="text-sm font-medium">Implant note</Label>
                     <Textarea
