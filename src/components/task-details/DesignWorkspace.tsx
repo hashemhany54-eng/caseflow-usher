@@ -232,22 +232,16 @@ function NotesSidebar() {
               {c}
             </div>
           ))}
+          <div className="border-t border-border pt-2">
+            <div className="text-[10px] font-medium text-foreground mb-1">Doctor Notes</div>
+            <div className="text-[11px] text-muted-foreground leading-relaxed">
+              Patient requires special attention on margins. Verify contacts with adjacent teeth before finalizing.
+            </div>
+          </div>
           <Button variant="secondary" size="sm" className="w-full text-xs h-7 gap-1.5 mt-1" onClick={() => setCommentOpen(true)}>
             <MessageSquare className="h-3 w-3" />
             Add Comment
           </Button>
-        </div>
-      </div>
-
-      {/* Doctor Notes section */}
-      <div className="bg-card rounded-lg border shadow-sm w-[220px] mt-2">
-        <div className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-semibold">
-          Doctor Notes
-        </div>
-        <div className="px-3 pb-3 space-y-2">
-          <div className="text-[11px] text-muted-foreground leading-relaxed">
-            Patient requires special attention on margins. Verify contacts with adjacent teeth before finalizing.
-          </div>
         </div>
       </div>
 
@@ -362,22 +356,8 @@ export function DesignWorkspace() {
         )}
       </div>
 
-      {/* Toolbar */}
-      <div className="absolute top-3 z-10" style={{ left: `${toolbarLeft}px` }}>
-        <ToolbarPanel
-          heatmapEnabled={heatmapEnabled}
-          setHeatmapEnabled={setHeatmapEnabled}
-          activeTool={activeTool}
-          setActiveTool={setActiveTool}
-        />
-      </div>
 
-      {/* Heatmap Legend */}
-      {heatmapEnabled && (
-        <div className="absolute top-3 z-10" style={{ left: `${heatmapLegendLeft}px` }}>
-          <HeatmapLegend />
-        </div>
-      )}
+
 
       {/* 3D Viewer */}
       <div className="flex-1">
