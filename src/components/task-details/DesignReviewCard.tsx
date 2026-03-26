@@ -30,7 +30,11 @@ export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned
   const [file, setFile] = useState<File | null>(null);
   const [note, setNote] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
-  const [implantNotes, setImplantNotes] = useState<{ implantTitle: string; implantNote: string }[]>([]);
+  const [implantNotes, setImplantNotes] = useState<{ implantTitle: string; implantNote: string }[]>([
+    { implantTitle: "Implant 16", implantNote: "" },
+    { implantTitle: "Implant 13", implantNote: "" },
+    { implantTitle: "Implant 32", implantNote: "" },
+  ]);
 
   const addImplantNote = () => {
     setImplantNotes((prev) => [...prev, { implantTitle: "", implantNote: "" }]);
