@@ -29,6 +29,19 @@ export function DesignReviewCard({ onReview, taskType, patientName }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [note, setNote] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [implantNotes, setImplantNotes] = useState<{ implantTitle: string; implantNote: string }[]>([]);
+
+  const addImplantNote = () => {
+    setImplantNotes((prev) => [...prev, { implantTitle: "", implantNote: "" }]);
+  };
+
+  const updateImplantNote = (index: number, field: "implantTitle" | "implantNote", value: string) => {
+    setImplantNotes((prev) => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  };
+
+  const removeImplantNote = (index: number) => {
+    setImplantNotes((prev) => prev.filter((_, i) => i !== index));
+  };
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleComplete = () => {
