@@ -11,7 +11,8 @@ export function DashboardLayout() {
   const isTaskDetail = location.pathname.startsWith("/tasks/") || location.pathname.startsWith("/orders/");
   const isTasksRoot = location.pathname === "/";
   const isOrdersRoot = location.pathname === "/orders";
-  const isFullPageLayout = isTasksRoot || isOrdersRoot;
+  const isTreatmentPlan = location.pathname === "/treatment-plan";
+  const isFullPageLayout = isTasksRoot || isOrdersRoot || isTreatmentPlan;
 
   return (
     <SidebarProvider>
