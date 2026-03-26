@@ -257,6 +257,15 @@ export const mockTasks: Task[] = [
     task_type: "Design Preview Verification",
     order: mockOrders[4],
   },
+  {
+    id: "TSK-007",
+    order_id: "ORD-2024-002",
+    assigned_to: "u1",
+    status: "in_progress",
+    due_date: mockOrders[1].due_date,
+    task_type: "Treatment Plan",
+    order: mockOrders[1],
+  },
 ];
 
 export const mockTimeline: Record<string, TimelineEvent[]> = {

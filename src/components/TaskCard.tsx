@@ -5,13 +5,27 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { mockTimeline } from "@/data/mockData";
 
-const stages = ["order_placed", "design", "qc", "preview", "model"];
-const stageLabels: Record<string, string> = {
+const defaultStages = ["order_placed", "design", "qc", "preview", "model"];
+const defaultStageLabels: Record<string, string> = {
   order_placed: "Ordered",
   design: "Design",
   qc: "QC",
   preview: "Preview",
   model: "Model"
+};
+
+const treatmentPlanStages = ["intake", "treatment_plan"];
+const treatmentPlanLabels: Record<string, string> = {
+  intake: "Intake",
+  treatment_plan: "Treatment Plan",
+};
+
+// Mock timeline data for treatment plan tasks
+const treatmentPlanTimeline: Record<string, { stage: string; assignee?: string }[]> = {
+  default: [
+    { stage: "intake", assignee: "Dr. Sarah Chen" },
+    { stage: "treatment_plan", assignee: "Dr. James Wilson" },
+  ],
 };
 
 /** Shared grid for every row – import in header if needed */
@@ -22,10 +36,22 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
   const { timeLeft, isOverdue, isUrgent } = useCountdown(task.due_date);
   const order = task.order;
 
-  const timeline = mockTimeline[order?.id || ""] || [];
-  const completedStages = new Set(timeline.map((t) => t.stage));
+  const isTreatmentPlan = task.task_type === "Treatment Plan";
+  const stages = isTreatmentPlan ? treatmentPlanStages : defaultStages;
+  const stageLabels = isTreatmentPlan ? treatmentPlanLabels : defaultStageLabels;
+
+  const timeline = isTreatmentPlan
+    ? treatmentPlanTimeline.default
+    : mockTimeline[order?.id || ""] || [];
+  const completedStages = new Set(
+    isTreatmentPlan
+      ? ["intake", "treatment_plan"]
+      : (mockTimeline[order?.id || ""] || []).map((t) => t.stage)
+  );
   const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
-  const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
+  const latestStage = isTreatmentPlan
+    ? "treatment_plan"
+    : [...stages].reverse().find((s) => completedStages.has(s as any));
 
   const borderClass = isOverdue ? "priority-overdue" : isUrgent ? "priority-urgent" : "priority-normal";
 
@@ -40,7 +66,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.02, duration: 0.15 }}
-      onClick={() => navigate(`/tasks/${task.id}`)}
+      onClick={() => navigate(isTreatmentPlan ? "/treatment-plan" : `/tasks/${task.id}`)}
       className={`group cursor-pointer rounded-lg border bg-card hover:shadow-md hover:border-primary/20 transition-all duration-200 ${borderClass}`}
     >
       {/* Desktop row — shared grid */}
@@ -107,8 +133,8 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                       {event && (
                         <span className="text-[9px] text-muted-foreground leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
                           {event.assignee
-                            ? event.due ? `${event.assignee} — ${event.due}` : event.assignee
-                            : event.action_by}
+                            ? ('due' in event && event.due) ? `${event.assignee} — ${event.due}` : event.assignee
+                            : ('action_by' in event ? (event as any).action_by : "")}
                         </span>
                       )}
                     </>
@@ -121,7 +147,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                         </span>
                       </div>
                       <span className="text-[9px] text-muted-foreground/50 leading-none truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                        {event?.assignee || event?.action_by || ""}
+                        {event?.assignee || ('action_by' in (event || {}) ? (event as any).action_by : "") || ""}
                       </span>
                     </>
                   ) : (
