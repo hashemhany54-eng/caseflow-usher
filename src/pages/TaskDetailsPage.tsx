@@ -37,7 +37,6 @@ export default function TaskDetailsPage() {
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
-  const isTreatmentPlan = task?.task_type === "Treatment Plan";
 
   // Find task by taskId or by orderId
   const task = taskId
@@ -45,6 +44,8 @@ export default function TaskDetailsPage() {
     : orderId
     ? tasks.find((t) => t.order_id === orderId)
     : undefined;
+
+  const isTreatmentPlan = task?.task_type === "Treatment Plan";
 
   // If no task found but we have an orderId, find the order directly
   const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
