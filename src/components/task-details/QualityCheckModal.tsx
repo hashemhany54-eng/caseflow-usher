@@ -181,6 +181,14 @@ export function QualityCheckModal({
             >
               Close
             </Button>
+            <Button
+              variant="destructive"
+              onClick={() => onOpenChange(false)}
+              className="gap-1.5"
+            >
+              <X className="h-4 w-4" />
+              Disapprove
+            </Button>
             <Button onClick={onComplete} className="gap-1.5">
               <CheckCircle2 className="h-4 w-4" />
               Approve & Complete
