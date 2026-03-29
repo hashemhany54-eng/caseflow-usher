@@ -172,7 +172,7 @@ export function QualityCheckModal({
           </div>
 
           {/* Footer action */}
-          <div className="flex items-center justify-end gap-3 border-t pt-5">
+          <div className="flex items-center justify-between border-t pt-5">
             <Button
               variant="ghost"
               size="sm"
@@ -181,18 +181,20 @@ export function QualityCheckModal({
             >
               Close
             </Button>
-            <Button
-              variant="destructive"
-              onClick={() => onOpenChange(false)}
-              className="gap-1.5"
-            >
-              <X className="h-4 w-4" />
-              Disapprove
-            </Button>
-            <Button onClick={onComplete} className="gap-1.5">
-              <CheckCircle2 className="h-4 w-4" />
-              Approve & Complete
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                className="gap-1.5"
+              >
+                <X className="h-4 w-4" />
+                Disapprove
+              </Button>
+              <Button onClick={onComplete} className="gap-1.5">
+                <CheckCircle2 className="h-4 w-4" />
+                Approve & Complete
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
