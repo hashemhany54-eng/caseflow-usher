@@ -77,7 +77,6 @@ export default function TaskDetailsPage() {
     navigate(orderId ? "/orders" : "/");
   };
 
-  const [qcOpen, setQcOpen] = useState(false);
 
   return (
     <div className="flex h-full">
