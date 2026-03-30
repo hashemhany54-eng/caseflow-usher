@@ -65,7 +65,7 @@ export function TopBar({ searchQuery, onSearchChange, activeTab, onTabChange }: 
     return (
       <header className="flex h-full items-center bg-card">
         {/* Left section: back + title */}
-        <div className="flex items-center gap-2 px-3 h-full border-r border-border shrink-0 w-64">
+        <div className="flex items-center gap-2 px-2 h-full border-r border-border shrink-0 w-64">
           <Button
             variant="ghost"
             size="icon"
