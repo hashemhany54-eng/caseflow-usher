@@ -40,6 +40,7 @@ export default function TaskDetailsPage() {
   const [chatCollapsed, setChatCollapsed] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
+  const [qcOpen, setQcOpen] = useState(false);
 
   const task = taskId
     ? tasks.find((t) => t.id === taskId)
