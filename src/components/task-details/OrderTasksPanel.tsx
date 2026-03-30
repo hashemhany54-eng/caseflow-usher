@@ -141,7 +141,7 @@ export function OrderTasksPanel({ currentTaskId, className }: OrderTasksPanelPro
   return (
     <div
       className={cn(
-        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-56",
+        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-64",
         className
       )}
     >
