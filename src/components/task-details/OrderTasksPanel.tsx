@@ -6,7 +6,7 @@ import { PriorityBadge } from "@/components/PriorityBadge";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Scissors, Inbox, AlertCircle, CircleDot, User } from "lucide-react";
+import { Scissors, Inbox, AlertCircle, CircleDot, User, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 /* ------------------------------------------------------------------ */
@@ -30,7 +30,7 @@ function TaskDueIndicator({ dueDate }: { dueDate: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Task Card                                                           */
+/* Task Card - Compact for non-active, expanded for active             */
 /* ------------------------------------------------------------------ */
 
 function TaskCard({
@@ -43,67 +43,50 @@ function TaskCard({
   onSelect: (id: string) => void;
 }) {
   const order = task.order;
-  const tags: string[] = [];
-  if (order?.is_split) tags.push("Split");
-  if (order?.qc_required) tags.push("QC");
-  if (order?.status === "on_hold") tags.push("Hold");
 
   return (
     <button
       onClick={() => onSelect(task.id)}
       className={cn(
-        "w-full text-left rounded-lg border bg-card p-4 transition-all",
-        "hover:shadow-sm hover:border-primary/30",
+        "w-full text-left rounded-md border transition-all",
         selected
-          ? "border-primary/30 bg-accent/50 shadow-sm"
-          : "border-border"
+          ? "border-primary/30 bg-accent/60 shadow-sm p-3.5"
+          : "border-transparent bg-transparent hover:bg-muted/50 p-2.5"
       )}
     >
-      {/* Row 1: icon + task name + priority */}
-      <div className="flex items-center gap-2.5 mb-2">
-        <CircleDot className="h-4 w-4 text-primary shrink-0" />
-        <span className="text-sm font-semibold truncate flex-1">
-          {task.task_type || "Task"}
-        </span>
-        <PriorityBadge priority={order?.priority || "low"} />
-      </div>
-
-      {/* Row 2: assignee + due + tags */}
-      <div className="flex items-center gap-2 pl-[26px] flex-wrap">
-        {task.assigned_to && (
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <User className="h-3 w-3" />
-            {task.assigned_to === "u1" ? "You" : task.assigned_to}
-          </span>
-        )}
-        <TaskDueIndicator dueDate={task.due_date} />
-        {tags.map((t) => (
-          <Badge
-            key={t}
-            variant="outline"
-            className={cn(
-              "text-[10px] px-1.5 py-0 leading-4",
-              t === "Hold" && "bg-warning/10 text-warning border-warning/20",
-              t === "QC" && "bg-muted text-muted-foreground border-border",
-              t === "Split" && "bg-secondary text-secondary-foreground"
+      {selected ? (
+        <>
+          {/* Active task: full details */}
+          <div className="flex items-center gap-2 mb-1.5">
+            <CircleDot className="h-3.5 w-3.5 text-primary shrink-0" />
+            <span className="text-sm font-semibold truncate flex-1">
+              {task.task_type || "Task"}
+            </span>
+            <PriorityBadge priority={order?.priority || "low"} />
+          </div>
+          <div className="flex items-center gap-2 pl-[22px] flex-wrap">
+            {task.assigned_to && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <User className="h-3 w-3" />
+                {task.assigned_to === "u1" ? "You" : task.assigned_to}
+              </span>
             )}
-          >
-            {t === "Split" && <Scissors className="h-2.5 w-2.5 mr-0.5" />}
-            {t}
-          </Badge>
-        ))}
-      </div>
-
-      {/* Progressive disclosure: case details on select */}
-      {selected && order && (
-        <div className="mt-3 pl-[26px] text-xs text-muted-foreground space-y-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
-          <p>
-            {order.case_type}
-            {order.crown_type && <> · {order.crown_type}</>}
-          </p>
-          <p>
-            {order.lab_type} · {order.design_level}
-          </p>
+            <TaskDueIndicator dueDate={task.due_date} />
+          </div>
+          {order && (
+            <div className="mt-2 pl-[22px] text-[11px] text-muted-foreground space-y-0.5 animate-in fade-in duration-150">
+              <p>{order.case_type}{order.crown_type && <> · {order.crown_type}</>}</p>
+            </div>
+          )}
+        </>
+      ) : (
+        /* Non-active task: minimal row */
+        <div className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0" />
+          <span className="text-xs text-muted-foreground truncate flex-1">
+            {task.task_type || "Task"}
+          </span>
+          <ChevronRight className="h-3 w-3 text-muted-foreground/30 shrink-0" />
         </div>
       )}
     </button>
@@ -116,15 +99,10 @@ function TaskCard({
 
 function TaskCardSkeleton() {
   return (
-    <div className="rounded-lg border bg-card p-4 space-y-2.5">
-      <div className="flex items-center gap-2.5">
-        <Skeleton className="h-4 w-4 rounded-full" />
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-4 w-12 ml-auto rounded-full" />
-      </div>
-      <div className="flex items-center gap-2 pl-[26px]">
-        <Skeleton className="h-3 w-12" />
-        <Skeleton className="h-3 w-20" />
+    <div className="rounded-md p-2.5 space-y-2">
+      <div className="flex items-center gap-2">
+        <Skeleton className="h-3 w-3 rounded-full" />
+        <Skeleton className="h-3 w-24" />
       </div>
     </div>
   );
@@ -163,12 +141,12 @@ export function OrderTasksPanel({ currentTaskId, className }: OrderTasksPanelPro
   return (
     <div
       className={cn(
-        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-64",
+        "border-r bg-card flex flex-col shrink-0 overflow-hidden w-56",
         className
       )}
     >
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {loading &&
           [1, 2, 3].map((i) => <TaskCardSkeleton key={i} />)
         }

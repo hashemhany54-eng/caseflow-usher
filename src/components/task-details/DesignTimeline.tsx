@@ -1,5 +1,6 @@
 import { TimelineEvent } from "@/types";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const stageLabels: Record<string, string> = {
   order_placed: "Order Placed",
@@ -18,7 +19,6 @@ export function DesignTimeline({ timeline }: Props) {
   const completedStages = new Set(timeline.map((t) => t.stage));
   const timelineByStage = Object.fromEntries(timeline.map((t) => [t.stage, t]));
 
-  // Find latest completed stage
   const latestStage = [...stages].reverse().find((s) => completedStages.has(s as any));
 
   function relativeTime(ts: string) {
@@ -30,21 +30,27 @@ export function DesignTimeline({ timeline }: Props) {
   }
 
   return (
-    <div className="flex w-full gap-4 py-6">
+    <div className="flex w-full gap-3">
       {stages.map((stage) => {
         const done = completedStages.has(stage as any);
         const event = timelineByStage[stage];
         const isLatest = stage === latestStage;
         return (
-          <div key={stage} className="flex-1 flex flex-col gap-1.5 group/stage">
-            <div className={`h-[3px] w-full rounded-full transition-colors ${done ? "bg-primary" : "bg-muted"}`} />
+          <div key={stage} className={cn(
+            "flex-1 flex flex-col gap-1.5 group/stage rounded-md px-3 py-2.5 transition-colors",
+            isLatest && "bg-accent/80 border border-primary/10"
+          )}>
+            <div className={cn(
+              "h-[3px] w-full rounded-full transition-colors",
+              isLatest ? "bg-primary" : done ? "bg-primary/40" : "bg-muted"
+            )} />
             {isLatest ? (
               <>
-                <span className="text-xs font-medium text-primary leading-tight">
+                <span className="text-xs font-semibold text-primary leading-tight">
                   {stageLabels[stage]}
                 </span>
                 {event && (
-                  <span className="text-[10px] text-muted-foreground leading-none">
+                  <span className="text-[10px] text-foreground/70 leading-none">
                     {event.assignee
                       ? event.due
                         ? `${event.assignee} — Due in ${event.due}`
@@ -56,30 +62,16 @@ export function DesignTimeline({ timeline }: Props) {
             ) : done ? (
               <>
                 <div className="flex items-center gap-1">
-                  <Check className="h-3 w-3 text-primary/50" />
-                  <span className="text-[10px] text-muted-foreground/60">
+                  <Check className="h-3 w-3 text-primary/40" />
+                  <span className="text-[10px] text-muted-foreground/50">
                     {stageLabels[stage]}
                   </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground/50 leading-none">
-                  {event?.assignee
-                    ? event.due
-                      ? `${event.assignee} — Due in ${event.due}`
-                      : event.assignee
-                    : event ? `${event.action_by} · ${relativeTime(event.timestamp)}` : ""}
-                </span>
               </>
             ) : (
-              <>
-                <span className="text-[10px] text-muted-foreground/40 leading-tight">
-                  {stageLabels[stage]}
-                </span>
-                {event?.assignee && (
-                  <span className="text-[10px] text-muted-foreground/30 leading-none">
-                    {event.due ? `${event.assignee} — Due in ${event.due}` : event.assignee}
-                  </span>
-                )}
-              </>
+              <span className="text-[10px] text-muted-foreground/30 leading-tight">
+                {stageLabels[stage]}
+              </span>
             )}
           </div>
         );

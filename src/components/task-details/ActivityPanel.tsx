@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "@/types";
 import { mockChatMessages } from "@/data/mockData";
-import { MessageSquare, Send, Paperclip, X, FileText, Info, Clock } from "lucide-react";
+import { MessageSquare, Send, Paperclip, X, FileText, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>(mockChatMessages["room-1"] || []);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const unreadCount = 3;
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -50,8 +52,13 @@ export function ActivityPanel({ collapsed, onToggle }: { collapsed: boolean; onT
   if (collapsed) {
     return (
       <div className="w-12 border-l bg-card flex flex-col items-center py-3 gap-3 shrink-0">
-        <Button variant="ghost" size="icon" className="h-9 w-9" onClick={onToggle}>
+        <Button variant="ghost" size="icon" className="h-9 w-9 relative" onClick={onToggle}>
           <MessageSquare className="h-5 w-5 text-muted-foreground" />
+          {unreadCount > 0 && (
+            <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[9px] bg-primary text-primary-foreground">
+              {unreadCount}
+            </Badge>
+          )}
         </Button>
       </div>
     );

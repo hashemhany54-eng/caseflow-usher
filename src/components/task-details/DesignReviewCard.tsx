@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,13 +19,15 @@ interface Props {
   taskType?: string;
   patientName?: string;
   isUnassigned?: boolean;
+  externalQcOpen?: boolean;
+  onExternalQcChange?: (open: boolean) => void;
 }
 
-export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned }: Props) {
+export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned, externalQcOpen, onExternalQcChange }: Props) {
   const isReview = taskType === "Design Review";
   const isTreatmentPlan = taskType === "Treatment Plan";
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [qcOpen, setQcOpen] = useState(false);
+  const [internalQcOpen, setInternalQcOpen] = useState(false);
   const [scanQuality, setScanQuality] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [note, setNote] = useState("");
@@ -35,6 +37,10 @@ export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned
     { implantTitle: "Implant 13", implantNote: "" },
     { implantTitle: "Implant 32", implantNote: "" },
   ]);
+
+  // Support external QC control from parent
+  const qcOpen = externalQcOpen !== undefined ? externalQcOpen : internalQcOpen;
+  const setQcOpen = onExternalQcChange || setInternalQcOpen;
 
   const addImplantNote = () => {
     setImplantNotes((prev) => [...prev, { implantTitle: "", implantNote: "" }]);
@@ -69,23 +75,9 @@ export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned
     if (dropped) setFile(dropped);
   };
 
+  // Hidden render - only modals, no visible card
   return (
-    <div>
-      <h2 className="text-sm font-semibold mb-1">{isReview ? "Design Review" : isTreatmentPlan ? "Treatment Plan" : "Internal Design"}</h2>
-      <p className="text-xs text-muted-foreground mb-4">{isReview ? "Design completed by internal designer" : isTreatmentPlan ? "Upload treatment plan files" : "Upload completed design files"}</p>
-      
-      {/* Primary action */}
-      {!isUnassigned && (
-        <Button
-          onClick={() => isReview ? setQcOpen(true) : setSheetOpen(true)}
-          size="lg"
-          className="gap-2 shadow-sm"
-        >
-          {isReview ? <CheckCircle2 className="h-4 w-4" /> : <Upload className="h-4 w-4" />}
-          {isReview ? "Review Design" : isTreatmentPlan ? "Upload Plan" : "Upload Design"}
-        </Button>
-      )}
-
+    <>
       {/* QC Modal for Design Review */}
       <QualityCheckModal
         open={qcOpen}
@@ -214,6 +206,6 @@ export function DesignReviewCard({ onReview, taskType, patientName, isUnassigned
           </div>
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   );
 }

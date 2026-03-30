@@ -1,9 +1,10 @@
 import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Upload, UserPlus } from "lucide-react";
+import { AlertCircle, Upload, UserPlus, CheckCircle2, PlayCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useCountdown } from "@/hooks/useCountdown";
 import { mockTimeline } from "@/data/mockData";
 import { motion } from "framer-motion";
@@ -36,11 +37,11 @@ export default function TaskDetailsPage() {
   const navigate = useNavigate();
   const { tasks, orders, completeTask, skipTask, assignTask } = useApp();
   const { activeTab, setActiveTab } = useOutletContext<OutletCtx>();
-  const [chatCollapsed, setChatCollapsed] = useState(false);
+  const [chatCollapsed, setChatCollapsed] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [assignOpen, setAssignOpen] = useState(false);
+  const [qcOpen, setQcOpen] = useState(false);
 
-  // Find task by taskId or by orderId
   const task = taskId
     ? tasks.find((t) => t.id === taskId)
     : orderId
@@ -49,8 +50,8 @@ export default function TaskDetailsPage() {
 
   const isTreatmentPlan = task?.task_type === "Treatment Plan";
   const isUnassigned = !!task && !task.assigned_to && !!task.task_group;
+  const isReview = task?.task_type === "Design Review";
 
-  // If no task found but we have an orderId, find the order directly
   const order = task?.order || (orderId ? orders.find((o) => o.id === orderId) : undefined);
 
   const { timeLeft, isOverdue, isUrgent } = useCountdown(order?.due_date || "");
@@ -76,6 +77,7 @@ export default function TaskDetailsPage() {
     navigate(orderId ? "/orders" : "/");
   };
 
+
   return (
     <div className="flex h-full">
       {/* Left: Tasks list panel */}
@@ -84,6 +86,69 @@ export default function TaskDetailsPage() {
       )}
 
       <div className="flex-1 flex flex-col min-w-0">
+        {/* Sticky Action Bar - Level 1 Priority */}
+        {activeTab === "order" && (
+          <div className="shrink-0 border-b bg-card px-4 md:px-6 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-base font-bold font-display truncate">{order.patient_name}</h1>
+                  <Badge
+                    variant="outline"
+                    className={`text-[10px] px-1.5 py-0 shrink-0 ${
+                      isOverdue
+                        ? "bg-destructive/10 text-destructive border-destructive/20"
+                        : isUrgent
+                        ? "bg-warning/10 text-warning border-warning/20"
+                        : "bg-muted text-muted-foreground border-border"
+                    }`}
+                  >
+                    {timeLeft}
+                  </Badge>
+                  {order.qc_required && (
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 shrink-0">QC</Badge>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground truncate mt-0.5">
+                  {task?.task_type || "Design Review"} · {order.doctor_name} · {order.practice}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <FlagScanModal />
+              {!isUnassigned && (
+                <Button
+                  onClick={() => isReview ? setQcOpen(true) : setUploadOpen(true)}
+                  className="gap-2 shadow-sm"
+                >
+                  {isReview ? (
+                    <>
+                      <PlayCircle className="h-4 w-4" />
+                      Start Review
+                    </>
+                  ) : isTreatmentPlan ? (
+                    <>
+                      <Upload className="h-4 w-4" />
+                      Upload Plan
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4" />
+                      Upload Design
+                    </>
+                  )}
+                </Button>
+              )}
+              {isUnassigned && (
+                <Button onClick={() => setAssignOpen(true)} className="gap-2 shadow-sm">
+                  <UserPlus className="h-4 w-4" />
+                  Assign
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-1 overflow-hidden">
           {activeTab === "design" ? (
             <DesignWorkspace />
@@ -91,72 +156,41 @@ export default function TaskDetailsPage() {
             <>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 overflow-auto p-4 md:p-6">
                 <div className="max-w-5xl mx-auto">
-                  {/* Resubmitted Banner */}
+                  {/* Resubmitted Banner - more prominent */}
                   {order.is_resubmitted && (
-                    <Alert variant="destructive" className="flex items-center justify-between py-2.5 px-4 mb-4">
-                      <div className="flex items-center">
-                        <AlertTitle className="mb-0 text-sm font-medium">This order was resubmitted</AlertTitle>
+                    <Alert variant="destructive" className="flex items-center justify-between py-3 px-4 mb-4 border-destructive/30 bg-destructive/5">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="h-4 w-4 text-destructive shrink-0" />
+                        <AlertTitle className="mb-0 text-sm font-semibold">This order was resubmitted — review changes carefully</AlertTitle>
                       </div>
                       <Button
-                        variant="destructive"
+                        variant="outline"
                         size="sm"
-                        className="text-xs h-7 shrink-0 ml-4 bg-destructive/10 text-destructive hover:bg-destructive/20 border-0 shadow-none"
+                        className="text-xs h-7 shrink-0 ml-4 border-destructive/20 text-destructive hover:bg-destructive/10"
                         onClick={() => navigate(`/orders/${order.original_order_id}/original`)}
                       >
-                        View Original Order
+                        View Changes
                       </Button>
                     </Alert>
                   )}
 
                   {activeTab === "order" && (
                     <div className="space-y-4">
+                      {/* Timeline - Level 2: Workflow visibility */}
+                      <div className="rounded-lg border bg-card p-5">
+                        <DesignTimeline timeline={timeline} />
+                      </div>
+
+                      {/* Patient & Order Details - Level 3 */}
                       <UnifiedPatientCard order={order} timeLeft={timeLeft} isOverdue={isOverdue} isUrgent={isUrgent} />
 
-
-                      <div className="rounded-lg border bg-card">
-                        <Tabs defaultValue="tat">
-                          <div className="flex items-center border-b overflow-x-auto">
-                            <TabsList className="h-10 bg-transparent rounded-none justify-start gap-0 p-0 px-5 flex-1 min-w-0">
-                              {["TAT", "Status", "Tickets", "Review", "Design"].map((tab) => (
-                                <TabsTrigger
-                                  key={tab}
-                                  value={tab.toLowerCase()}
-                                  className="text-sm h-10 rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-foreground px-4 text-muted-foreground"
-                                >
-                                  {tab}
-                                </TabsTrigger>
-                              ))}
-                            </TabsList>
-                            <div className="pr-5 shrink-0">
-                              <FlagScanModal />
-                            </div>
-                          </div>
-                          <TabsContent value="tat" className="p-5 space-y-6">
-                            <DesignTimeline timeline={timeline} />
-                            <div className="border-t border-border" />
-                            <DesignReviewCard onReview={handleReview} taskType={task?.task_type || "Design Review"} patientName={order.patient_name} isUnassigned={isUnassigned} />
-                            {isUnassigned && (
-                              <div className="pt-2">
-                                <Button onClick={() => setAssignOpen(true)} className="gap-2 shadow-sm">
-                                  <UserPlus className="h-4 w-4" />
-                                  Assign
-                                </Button>
-                              </div>
-                            )}
-                          </TabsContent>
-                          <TabsContent value="status" className="p-5">
-                            <div className="text-center text-muted-foreground text-sm py-6">Status tracking view coming soon</div>
-                          </TabsContent>
-                          <TabsContent value="review" className="p-5">
-                            <div className="text-center text-muted-foreground text-sm py-6">Review history coming soon</div>
-                          </TabsContent>
-                          <TabsContent value="design" className="p-5">
-                            <div className="text-center text-muted-foreground text-sm py-6">Design iterations coming soon</div>
-                          </TabsContent>
-                        </Tabs>
-                      </div>
+                      {/* Case Notes - Level 4 */}
                       <CaseNoteSummary />
+
+                      {/* Summary & Items - Level 4 */}
                       <SummaryAndItems />
+
+                      {/* Lower priority sections - Level 5 */}
                       <SplitOrdersSection />
                       <BillingSection />
                       <OrderScansSection />
@@ -180,6 +214,18 @@ export default function TaskDetailsPage() {
 
       {isTreatmentPlan && (
         <UploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} title="Upload Design / Upload Plan" />
+      )}
+
+      {/* QC Modal for reviews triggered from action bar */}
+      {isReview && (
+        <DesignReviewCard
+          onReview={handleReview}
+          taskType={task?.task_type || "Design Review"}
+          patientName={order.patient_name}
+          isUnassigned={isUnassigned}
+          externalQcOpen={qcOpen}
+          onExternalQcChange={setQcOpen}
+        />
       )}
 
       {isUnassigned && task && (
